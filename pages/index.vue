@@ -1,19 +1,22 @@
 <template>
   <div>
-    <h1>Hello</h1>
-    <v-btn>
-      Button
+    <h1>{{testStore.upper}}</h1>
+    <v-btn @click="testStore.setMessage('New message!')">
+      Set new message
     </v-btn>
-    <v-list lines="one">
-      <v-list-item v-for="n in 3" :key="n" :title="'Item ' + n"
-        subtitle="Lorem ipsum dolor sit amet consectetur adipisicing elit"></v-list-item>
-    </v-list>
   </div>
-
 </template>
 
 <script lang="ts" setup>
+import { useTestStore } from '~/store/TestStore';
+
+const testStore = useTestStore()
 const x: number = 0
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+div {
+  margin: 50px auto;
+  text-align: center;
+}
+</style>
