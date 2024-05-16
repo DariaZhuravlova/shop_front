@@ -9,8 +9,12 @@
 
 <script lang="ts" setup>
 import { useTestStore } from "~/store/TestStore";
+import { useProductStore } from "~/store/Product";
 
 const testStore = useTestStore();
+const productStore = useProductStore();
+
+productStore.getProducts()
 const x: number = 0;
 </script>
 
