@@ -1,22 +1,32 @@
 <template>
   <v-container>
+    <v-form validate-on="submit lazy"  @submit.prevent="submit">
     <v-row justify="center">
       <v-col cols="12" md="6">
         <v-text-field
+         :rules="rules"
           variant="solo"
           v-model="productName"
           label="Product Name"
         ></v-text-field>
         <v-text-field
+         :rules="rules"
           variant="solo"
           v-model="productPrice"
           label="Product Price"
           type="number"
           min="0"
         ></v-text-field>
-        <v-btn @click="submitForm" :disabled="!productName.trim()" color="primary">Add Product</v-btn>
+        <v-btn
+        :loading="loading"
+        class="mt-2"
+        text="Submit"
+        type="submit"
+        block
+      ></v-btn>
       </v-col>
     </v-row>
+  </v-form>
 
     <v-row>
       <v-col v-for="product in productStore.products" :key="product._id" cols="12" md="4">
@@ -43,15 +53,36 @@ onMounted(() => {
 const productName = ref("");
 const productPrice = ref(0);
 
-const submitForm = () => {
-  productStore.postProduct(productName.value, productPrice.value);
-  productName.value = "";
-  productPrice.value = 0;
-};
-
 const deleteProduct = (productId: string) => {
   productStore.deleteProduct(productId);
 };
+
+const loading = ref(false)
+const userName = ref('')
+
+const validation = (userName: string) => { 
+      if (!userName) return 'Please enter a user name.'
+      return true
+}
+
+const rules = [(value: string) => validation(value)]
+const isFormValid = () => {
+//  return productName.value? true : false
+  return rules.every((rule) => {
+    const result = rule(productName.value)
+    console.log("result", result)
+    return typeof result !== 'string'
+  })
+}
+const submit = async (event: SubmitEvent) => {
+  console.log(isFormValid())
+  if (!isFormValid()) return
+  loading.value = true
+  await productStore.postProduct(productName.value, productPrice.value);
+  productName.value = "";
+  productPrice.value = 0;
+  loading.value = false
+}
 </script>
 
 <style scoped lang="scss">
