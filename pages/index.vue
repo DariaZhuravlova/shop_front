@@ -54,9 +54,9 @@ onMounted(() => {
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     productName(value: string) {
-      if (value?.length >= 2) return true;
-
-      return "Имя содержит минимум 2 символа";
+      if (!value?.length) return "Введите название";
+      else if (value?.length >= 2) return true;
+      else return "Имя содержит минимум 2 символа";
     },
     productPrice(value: number) {
       if (value > 0) return true;
@@ -70,11 +70,7 @@ const productName = useField("productName");
 const productPrice = useField("productPrice");
 
 const submit = handleSubmit(async (values: any) => {
-  await productStore.postProduct(
-    productName.value.value,
-    productPrice.value.value
-  );
-  console.log(values.productPrice, values.productName);
+  await productStore.postProduct(values.productName, values.productPrice);
   handleReset();
 });
 const deleteProduct = (productId: string) => {
