@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import vuetify, {transformAssetUrls} from "vite-plugin-vuetify";
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 export default defineNuxtConfig({
-    devtools: {enabled: true},
+    devtools: { enabled: true },
     css: ["~/assets/scss/main.scss"],
     build: {
         transpile: ["vuetify"],
@@ -10,7 +10,7 @@ export default defineNuxtConfig({
         (_options, nuxt) => {
             nuxt.hooks.hook("vite:extendConfig", (config) => {
                 // @ts-expect-error
-                config.plugins.push(vuetify({autoImport: true}));
+                config.plugins.push(vuetify({ autoImport: true }));
             });
         },
         //...
@@ -23,4 +23,7 @@ export default defineNuxtConfig({
             },
         },
     },
+    // $env: {
+    //     apiUrl: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3000'
+    //   }
 });
