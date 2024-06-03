@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
-const apiUrl = process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001'
+import apiService from "@/services/api";
+const apiUrl = apiService.apiUrl;
 export const useProductStore = defineStore("product", {
     state: () => ({
         products: [],
@@ -8,7 +9,7 @@ export const useProductStore = defineStore("product", {
     actions: {
         async getProducts() {
             try {
-                const result = await axios.get(`${apiUrl}/product`);
+                const result = await apiService.getProducts();
                 console.log(process.env.NODE_ENV);
 
                 this.products = result.data;
