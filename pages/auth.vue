@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <h2>Регистрация</h2>
     <v-form @submit.prevent="submit">
       <v-row justify="center">
         <v-col cols="12" md="6">
@@ -22,27 +23,25 @@
       </v-row>
     </v-form>
 
-    <!-- <v-row>
+    <h2>Все пользователи</h2>
+    <v-row>
       <v-col
-        v-for="product in productStore.products"
-        :key="product._id"
+        v-for="user in appStore.users"
+        :key="user._id"
         cols="12"
         md="4"
       >
-        <v-card class="product-card">
-          <v-card-title>{{ product.name }}</v-card-title>
-          <p>Price: ${{ product.price }}</p>
-          <v-btn color="error" @click="deleteProduct(product._id)"
-            >Delete</v-btn
-          >
+        <v-card >
+          <v-card-title>{{ user.username }}</v-card-title>
+      
         </v-card>
       </v-col>
-    </v-row> -->
+    </v-row>
+
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import type { RegisterData } from "../types";
 import { ref, onMounted } from "vue";
 import { useAppStore } from "../stores/AppStore";
 import { useField, useForm } from "vee-validate";
@@ -50,6 +49,7 @@ const appStore = useAppStore();
 
 onMounted(() => {
   // appStore.checkAuth();
+  appStore.getUsers();
 });
 
 const { handleSubmit, handleReset } = useForm({
@@ -80,12 +80,18 @@ const submit = handleSubmit(async (values) => {
 
   await appStore.register({ username, password });
   handleReset();
+  appStore.getUsers();
 });
 
 
 </script>
 
 <style scoped lang="scss">
+h2 {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
 .product-card {
   margin: 20px;
   border-radius: 8px;

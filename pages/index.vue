@@ -77,31 +77,6 @@ const deleteProduct = (productId: string) => {
   productStore.deleteProduct(productId);
 };
 
-// const loading = ref(false);
-// const userName = ref("");
-
-// const validation = (userName: string) => {
-//   if (!userName) return "Please enter a user name.";
-//   return true;
-// };
-
-// const rules = [(value: string) => validation(value)];
-// const isFormValid = () => {
-//   return rules.every((rule) => {
-//     const result = rule(productName.value);
-//     console.log("result", result);
-//     return typeof result !== "string";
-//   });
-// };
-// const submit = async (event: SubmitEvent) => {
-//   console.log(isFormValid());
-//   if (!isFormValid()) return;
-//   loading.value = true;
-//   await productStore.postProduct(productName.value, productPrice.value);
-//   productName.value = "";
-//   productPrice.value = 0;
-//   loading.value = false;
-// };
 </script>
 
 <style scoped lang="scss">
