@@ -43,7 +43,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { useProductStore } from "../stores/ProductStore";
+import { useProductStore } from '../../stores/ProductStore';
 import { useField, useForm } from "vee-validate";
 const productStore = useProductStore();
 
@@ -98,5 +98,3 @@ const deleteProduct = (productId: string) => {
   }
 }
 </style>
-
-
