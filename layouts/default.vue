@@ -5,6 +5,5 @@
 </template>
 
 <script setup>
-import organizmHeader from "@/components/organizm/header.vue"
-
+import Header from '~/components/organizm/Header.vue';
 </script>
