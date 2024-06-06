@@ -1,10 +1,72 @@
+import axios from 'axios';
+import type { RegisterData } from "@/types/registerData";
+import type { LoginData } from "@/types/loginData";
+
 const apiService = {
     apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
+    
     async getProducts() {
-        const response = await fetch(this.apiUrl + '/api/products');
-        const data = await response.json();
-        return data;
+        try {
+            const response = await axios.get(`${this.apiUrl}/api/products`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch products:', error);
+            throw error;
+        }
+    },
+
+    async postProduct(productName: string, productPrice: number) {
+        try {
+            await axios.post(`${this.apiUrl}/api/product`, 
+                {
+                    name: productName,
+                    price: productPrice
+                }, 
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+        } catch (error) {
+            console.error('Failed to post product:', error);
+            throw error;
+        }
+    },
+
+    async deleteProduct(productId: string) {
+        try {
+            await axios.delete(`${this.apiUrl}/api/product/${productId}`);
+        } catch (error) {
+            console.error('Failed to delete product:', error);
+            throw error;
+        }
+    },
+
+    async register (registerData: RegisterData) {
+        try {
+            await axios.post(`${this.apiUrl}/api/register`, registerData);
+        } catch (error) {
+            console.error('Failed to register:', error);
+            throw error;
+        }
+    },
+
+    async login (loginData: LoginData) {
+        try {
+            const response = await axios.post(`${this.apiUrl}/api/login`, loginData);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to login:', error);
+            throw error;
+        }
+    },
+
+    async getUsers () {
+        try {
+            const response = await axios.get(`${this.apiUrl}/api/users`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+            throw error;
+        }
     }
 }
 
-export default apiService
+export default apiService;
