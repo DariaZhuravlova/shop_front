@@ -1,7 +1,6 @@
 <template>
   <v-container>
-    <v-card>
-      <v-tabs v-model="tab" align-tabs="center" color="deep-purple-accent-4">
+      <v-tabs v-model="tab" align-tabs="center" color="primary">
         <v-tab :value="1">Login</v-tab>
         <v-tab :value="2">Registration</v-tab>
 
@@ -42,7 +41,6 @@
           </v-container>
         </v-tabs-window-item>
       </v-tabs-window>
-    </v-card>
 
 
     <h2>Все пользователи</h2>
