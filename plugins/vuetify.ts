@@ -6,7 +6,23 @@ import {createVuetify} from "vuetify";
 
 export default defineNuxtPlugin((app) => {
     const vuetify = createVuetify({
-        // ... your configuration
+        theme: {
+            defaultTheme: 'customTheme',
+            themes: {
+                customTheme: {
+                    dark: false,
+                    colors: {
+                        primary: '#221f1f',
+                        secondary: '#424242',
+                        accent: '#82B1FF',
+                        error: '#FF5252',
+                        info: '#2196F3',
+                        success: '#4CAF50',
+                        warning: '#FB8C00',
+                    },
+                },
+            },
+        },
     });
     app.vueApp.use(vuetify);
 });

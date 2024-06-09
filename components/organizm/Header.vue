@@ -3,7 +3,7 @@
     <v-layout>
       <v-app-bar color="primary" prominent>
         <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-toolbar-title>My files</v-toolbar-title>
+        <Nuxt-Link to="/" class="icon-link"><v-toolbar-title>SHOP</v-toolbar-title></Nuxt-Link>
         <v-spacer></v-spacer>
 
         <template v-if="$vuetify.display.mdAndUp">
@@ -12,17 +12,18 @@
         </template>
 
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
-        <Nuxt-Link to="/auth">
-          <v-btn icon="mdi-account-circle-outline" variant="text">
+        <Nuxt-Link to="/auth" class="icon-link">
+          <v-btn icon="mdi-account-outline" variant="text">
           </v-btn>
         </Nuxt-Link>
+        <v-btn icon="mdi-cart-outline" variant="text"></v-btn>
       </v-app-bar>
 
       <v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary>
         <v-list :items="items"></v-list>
       </v-navigation-drawer>
 
-      <v-main style="height: 500px;">
+      <v-main >
         <v-card-text>
           <slot />
         </v-card-text>
@@ -47,3 +48,10 @@ watch(group, () => {
   drawer.value = false;
 });
 </script>
+
+<style scoped lang="scss">
+.icon-link {
+  color: white;
+  text-decoration: none;
+}
+</style>
