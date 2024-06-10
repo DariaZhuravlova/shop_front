@@ -4,7 +4,7 @@ import type { LoginData } from "@/types/loginData";
 
 const apiService = {
     apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
-    
+
     async getProducts() {
         try {
             const response = await axios.get(`${this.apiUrl}/api/products`);
@@ -17,11 +17,11 @@ const apiService = {
 
     async postProduct(productName: string, productPrice: number) {
         try {
-            await axios.post(`${this.apiUrl}/api/product`, 
+            await axios.post(`${this.apiUrl}/api/product`,
                 {
                     name: productName,
                     price: productPrice
-                }, 
+                },
                 { headers: { 'Content-Type': 'application/json' } }
             );
         } catch (error) {
@@ -39,7 +39,7 @@ const apiService = {
         }
     },
 
-    async register (registerData: RegisterData) {
+    async register(registerData: RegisterData) {
         try {
             await axios.post(`${this.apiUrl}/api/register`, registerData);
         } catch (error) {
@@ -47,8 +47,10 @@ const apiService = {
             throw error;
         }
     },
-
-    async login (loginData: LoginData) {
+    // выработать подход для реагирования на коду ошибок из апи
+    // воссоздать на беке ошибку с несколькими статус-кодами
+    // проработать индикацию загрузки и добавить искуств задержки в роутах 
+    async login(loginData: LoginData) {
         try {
             const response = await axios.post(`${this.apiUrl}/api/login`, loginData);
             return response.data;
@@ -58,7 +60,7 @@ const apiService = {
         }
     },
 
-    async getUsers () {
+    async getUsers() {
         try {
             const response = await axios.get(`${this.apiUrl}/api/users`);
             return response.data;

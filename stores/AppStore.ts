@@ -6,7 +6,7 @@ import apiService from "@/services/api";
 
 export const useAppStore = defineStore("app", {
     state: () => ({
-        profile: {},
+        profile: null as userData | null,
         users: [] as userData[],
     }),
     actions: {
@@ -14,6 +14,9 @@ export const useAppStore = defineStore("app", {
             try {
                 const result = await apiService.register(registerData);
                 console.log(result);
+
+
+
             } catch (error) {
                 console.error('Failed to register:', error);
             }
@@ -22,7 +25,12 @@ export const useAppStore = defineStore("app", {
         async login(loginData: LoginData) {
             try {
                 const result = await apiService.login(loginData);
+                if (result.ok) {
+                    this.profile = result.user;
+                    console.log(this.profile);
+                }
                 console.log(result);
+                return result;
             } catch (error) {
                 console.error('Failed to login:', error);
             }

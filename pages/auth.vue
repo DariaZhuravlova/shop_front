@@ -1,65 +1,79 @@
 <template>
   <v-container>
-      <v-tabs v-model="tab" align-tabs="center" color="primary">
-        <v-tab :value="1">Login</v-tab>
-        <v-tab :value="2">Registration</v-tab>
+    <v-tabs v-model="tab" align-tabs="center" color="primary">
+      <v-tab :value="1">Login</v-tab>
+      <v-tab :value="2">Registration</v-tab>
+    </v-tabs>
 
-      </v-tabs>
-
-      <v-tabs-window v-model="tab">
-        <v-tabs-window-item :key="1" :value="1">
-          <v-container fluid>
-            <v-form @submit.prevent="submitRegister">
-              <v-row justify="center">
-                <v-col cols="12" md="6">
-                  <v-text-field variant="solo" v-model="username.value.value"
-                    :error-messages="username.errorMessage.value" label="User Name"></v-text-field>
-                  <v-text-field variant="solo" v-model="password.value.value"
-                    :error-messages="password.errorMessage.value" label="password" type="password"
-                    min="0"></v-text-field>
-                  <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-        </v-tabs-window-item>
-        <v-tabs-window-item :key="2" :value="2">
-          <v-container fluid>
-
-            <v-form @submit.prevent="submitLogin">
-              <v-row justify="center">
-                <v-col cols="12" md="6">
-                  <v-text-field variant="solo" v-model="username.value.value"
-                    :error-messages="username.errorMessage.value" label="User Name"></v-text-field>
-                  <v-text-field variant="solo" v-model="password.value.value"
-                    :error-messages="password.errorMessage.value" label="password" type="password"
-                    min="0"></v-text-field>
-                  <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-        </v-tabs-window-item>
-      </v-tabs-window>
-
+    <v-tabs-window v-model="tab">
+      <v-tabs-window-item :key="2" :value="2">
+        <v-container fluid>
+          <v-form @submit.prevent="submitRegister">
+            <v-row justify="center">
+              <v-col cols="12" md="6">
+                <v-text-field
+                  variant="solo"
+                  v-model="username.value.value"
+                  :error-messages="username.errorMessage.value"
+                  label="User Name"
+                ></v-text-field>
+                <v-text-field
+                  variant="solo"
+                  v-model="password.value.value"
+                  :error-messages="password.errorMessage.value"
+                  label="password"
+                  type="password"
+                  min="0"
+                ></v-text-field>
+                <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-container>
+      </v-tabs-window-item>
+      <v-tabs-window-item :key="1" :value="1">
+        <v-container fluid>
+          <v-form @submit.prevent="submitLogin">
+            <v-row justify="center">
+              <v-col cols="12" md="6">
+                <v-text-field
+                  variant="solo"
+                  v-model="username.value.value"
+                  :error-messages="username.errorMessage.value"
+                  label="User Name"
+                ></v-text-field>
+                <v-text-field
+                  variant="solo"
+                  v-model="password.value.value"
+                  :error-messages="password.errorMessage.value"
+                  label="password"
+                  type="password"
+                  min="0"
+                ></v-text-field>
+                <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-container>
+      </v-tabs-window-item>
+    </v-tabs-window>
 
     <h2>Все пользователи</h2>
     <v-row>
       <v-col v-for="user in appStore.users" :key="user._id" cols="12" md="4">
         <v-card>
           <v-card-title>{{ user.username }}</v-card-title>
-
         </v-card>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import { useAppStore } from "../stores/AppStore";
-import { useField, useForm } from "vee-validate";
+import { ref, onMounted } from 'vue';
+import { useAppStore } from '../stores/AppStore';
+import { useField, useForm } from 'vee-validate';
+import type { dtoResponse } from '@/types/dtoResponse';
 const appStore = useAppStore();
 const tab = ref(null);
 onMounted(() => {
@@ -70,47 +84,59 @@ onMounted(() => {
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     username(value: string) {
-      if (!value?.length) return "Введите имя";
+      if (!value?.length) return 'Введите имя';
       else if (value?.length >= 2) return true;
-      else return "Имя содержит минимум 2 символа";
+      else return 'Имя содержит минимум 2 символа';
     },
     password(value: string) {
-      if (!value?.length) return "Введите парооль";
+      if (!value?.length) return 'Введите парооль';
       else if (value?.length >= 4) return true;
-      else return "Пароль содержит минимум 4 символа";
-
+      else return 'Пароль содержит минимум 4 символа';
     },
   },
 });
 
-const username = useField("username");
-const password = useField("password");
+const username = useField('username');
+const password = useField('password');
 
 const submitRegister = handleSubmit(async (values) => {
   const { username, password } = values;
 
   if (!username || !password) {
-    return alert("Заполните все поля");
+    return alert('Заполните все поля');
   }
 
-  await appStore.register({ username, password });
+  const result = await appStore.register({ username, password });
+  //   {
+  //     "ok": true,
+  //     "message": "Login successful",
+  //     "user": {
+  //         "_id": "6666ab94dbd85f7cc7abd31e",
+  //         "username": "eee",
+  //         "hashed_password": "9dd5ce0f48848b9171bf35120492a4620bde0cfae9bb566e38a001223fae6bc5",
+  //         "salt": "bd1c602f1a44efebacd071df9225dff1",
+  //         "__v": 0
+  //     }
+  //}
   handleReset();
   appStore.getUsers();
 });
-
 
 const submitLogin = handleSubmit(async (values) => {
   const { username, password } = values;
 
   if (!username || !password) {
-    return alert("Заполните все поля");
+    return alert('Заполните все поля');
   }
 
-  await appStore.login({ username, password });
+  const result: dtoResponse = await appStore.login({ username, password });
+  if (result.ok) {
+    //redirect to login page or tost-message
+  } else {
+    alert(result.message);
+  }
   handleReset();
 });
-
-
 </script>
 
 <style scoped lang="scss">

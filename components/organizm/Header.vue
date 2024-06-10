@@ -2,7 +2,10 @@
   <v-card>
     <v-layout>
       <v-app-bar color="primary" prominent>
-        <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon
+          variant="text"
+          @click.stop="drawer = !drawer"
+        ></v-app-bar-nav-icon>
         <Nuxt-Link to="/" class="icon-link">
           <v-toolbar-title>SHOP</v-toolbar-title>
         </Nuxt-Link>
@@ -14,6 +17,7 @@
         </template>
 
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+        <span v-if="appStore.profile">{{ appStore.profile.username }}</span>
         <Nuxt-Link to="/auth" class="icon-link">
           <v-btn icon="mdi-account-outline" variant="text"></v-btn>
         </Nuxt-Link>
@@ -35,6 +39,8 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useAppStore } from '../stores/AppStore';
+const appStore = useAppStore();
 
 const drawer = ref(false);
 const group = ref(null);
@@ -42,7 +48,7 @@ const items = ref([
   { title: 'Foo', value: 'foo' },
   { title: 'Bar', value: 'bar' },
   { title: 'Fizz', value: 'fizz' },
-  { title: 'Buzz', value: 'buzz' }
+  { title: 'Buzz', value: 'buzz' },
 ]);
 
 watch(group, () => {
