@@ -73,7 +73,7 @@
 import { ref, onMounted } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
-import type { dtoResponse } from '@/types/dtoResponse.ts';
+import type { dtoResponse } from '../types/dtoResponse';
 
 
 const appStore = useAppStore();
