@@ -131,13 +131,11 @@ const submitLogin = handleSubmit(async (values) => {
     return alert('Заполните все поля');
   }
 
-  const res: any = await appStore.login({ username, password });
-  const result: dtoResponse = res?.data;
-  // const res = await appStore.login({ username, password });
+
+  const result: dtoResponse = await appStore.login({ username, password });
   console.log(result);
   if (result.ok) {
     console.log("ok");
-    // appStore.setUser(result?.data.user);
     //redirect to login page or tost-message
   } else {
     alert(result.message);

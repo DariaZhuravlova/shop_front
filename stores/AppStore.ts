@@ -3,6 +3,7 @@ import type { RegisterData } from "@/types/registerData";
 import type { LoginData } from "@/types/loginData";
 import type { userData } from "@/types/userData";
 import apiService from "@/services/api";
+import type { dtoResponse } from '@/types/dtoResponse.ts';
 
 export const useAppStore = defineStore("app", {
     state: () => ({
@@ -22,11 +23,14 @@ export const useAppStore = defineStore("app", {
             }
         },
 
+        // ОРИЕНТИРУЕМСЯ на этот фрагмент в обработке DTO
+        // сделать универсальный хендлер 
         async login(loginData: LoginData) {
             try {
-                const result = await apiService.login(loginData);
+                const res = await apiService.login(loginData);
+                const result: dtoResponse = res.data;
                 if (result.ok) {
-                    this.profile = result.user;
+                    this.profile = result.data;
                     console.log(this.profile);
                 }
                 console.log(result);
