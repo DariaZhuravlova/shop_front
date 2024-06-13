@@ -73,7 +73,9 @@
 import { ref, onMounted } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
-import type { dtoResponse } from '@/types/dtoResponse';
+import type { dtoResponse } from '@/types/dtoResponse.ts';
+
+
 const appStore = useAppStore();
 const tab = ref(null);
 onMounted(() => {
@@ -129,8 +131,13 @@ const submitLogin = handleSubmit(async (values) => {
     return alert('Заполните все поля');
   }
 
-  const result: dtoResponse = await appStore.login({ username, password });
+  const res: any = await appStore.login({ username, password });
+  const result: dtoResponse = res?.data;
+  // const res = await appStore.login({ username, password });
+  console.log(result);
   if (result.ok) {
+    console.log("ok");
+    // appStore.setUser(result?.data.user);
     //redirect to login page or tost-message
   } else {
     alert(result.message);
