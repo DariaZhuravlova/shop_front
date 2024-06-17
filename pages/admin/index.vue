@@ -42,9 +42,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted } from 'vue';
 import { useProductStore } from '../../stores/ProductStore';
-import { useField, useForm } from "vee-validate";
+import { useField, useForm } from 'vee-validate';
+import type { productData } from '@/types/productData';
+
 const productStore = useProductStore();
 
 onMounted(() => {
@@ -54,29 +56,32 @@ onMounted(() => {
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     productName(value: string) {
-      if (!value?.length) return "Введите название";
+      if (!value?.length) return 'Введите название';
       else if (value?.length >= 2) return true;
-      else return "Имя содержит минимум 2 символа";
+      else return 'Имя содержит минимум 2 символа';
     },
     productPrice(value: number) {
       if (value > 0) return true;
 
-      return "Введите цену";
+      return 'Введите цену';
     },
   },
 });
 
-const productName = useField("productName");
-const productPrice = useField("productPrice");
+const productName = useField('productName');
+const productPrice = useField('productPrice');
 
 const submit = handleSubmit(async (values: any) => {
-  await productStore.postProduct(values.productName, values.productPrice);
+  const objProduct: productData = {
+    name: values.productName,
+    price: values.productPrice,
+  };
+  await productStore.postProduct(objProduct);
   handleReset();
 });
 const deleteProduct = (productId: string) => {
   productStore.deleteProduct(productId);
 };
-
 </script>
 
 <style scoped lang="scss">

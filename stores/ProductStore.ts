@@ -10,15 +10,15 @@ export const useProductStore = defineStore("product", {
         async getProducts() {
             try {
                 const data = await apiService.getProducts();
-                this.products = data;
+                this.products = data?.data || [];
             } catch (error) {
                 console.error('Failed to fetch products:', error);
             }
         },
 
-        async postProduct(productName: string, productPrice: number) {
+        async postProduct(product: productData) {
             try {
-                await apiService.postProduct(productName, productPrice);
+                await apiService.postProduct(product);
                 await this.getProducts();
             } catch (error) {
                 console.error('Failed to post product:', error);

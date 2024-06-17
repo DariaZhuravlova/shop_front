@@ -1,8 +1,13 @@
 import axios from 'axios';
 import type { RegisterData } from "@/types/registerData";
 import type { LoginData } from "@/types/loginData";
+import type { productData } from '@/types/productData';
 
-async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T> {
+
+
+// проработать индикацию загрузки и добавить искуств задержки в роутах 
+
+async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | undefined> {
     try {
         return await requestFunc();
     } catch (error) {
@@ -13,7 +18,6 @@ async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T> {
             console.error('Network error:', error);
             alert('Network error. Please try again later.');
         }
-        throw error;
     }
 }
 
@@ -46,84 +50,33 @@ function handleServerError(status: number) {
 const apiUrl = process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001';
 
 const apiService = {
-    apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
 
-    async getProducts() {
-        try {
-            const response = await axios.get(`${this.apiUrl}/api/products`);
-            return response.data;
-        } catch (error) {
-            console.error('Failed to fetch products:', error);
-            throw error;
-        }
-    },
+    getProducts: async () =>
+        handleRequest(async () =>
+            await axios.get(`${apiUrl}/api/products`)),
 
-    async postProduct(productName: string, productPrice: number) {
-        try {
-            await axios.post(`${this.apiUrl}/api/product`,
-                {
-                    name: productName,
-                    price: productPrice
-                },
+    postProduct: async (product: productData) =>
+        handleRequest(async () =>
+            await axios.post(`${apiUrl}/api/product`, product,
                 { headers: { 'Content-Type': 'application/json' } }
-            );
-        } catch (error) {
-            console.error('Failed to post product:', error);
-            throw error;
-        }
-    },
+            )),
 
-    async deleteProduct(productId: string) {
-        try {
-            await axios.delete(`${this.apiUrl}/api/product/${productId}`);
-        } catch (error) {
-            console.error('Failed to delete product:', error);
-            throw error;
-        }
-    },
+    deleteProduct: async (productId: string) =>
+        handleRequest(async () =>
+            await axios.delete(`${apiUrl}/api/product/${productId}`)),
 
-    async register(registerData: RegisterData) {
-        try {
-            await axios.post(`${this.apiUrl}/api/register`, registerData);
-        } catch (error) {
-            console.error('Failed to register:', error);
-            throw error;
-        }
-    },
-    // выработать подход для реагирования на коду ошибок из апи
-    // воссоздать на беке ошибку с несколькими статус-кодами
-    // проработать индикацию загрузки и добавить искуств задержки в роутах 
-    // async login(loginData: LoginData) {
-    //     try {
-    //         const response = await axios.post(`${this.apiUrl}/api/login`, loginData);
-    //         return response.data;
-            
-    //     } catch (error) {
-    //         console.error('Failed to login:', error);
-    //         throw error;
-    //     }
-    // },
+    register: async (registerData: RegisterData) =>
+        handleRequest(async () =>
+            await axios.post(`${apiUrl}/api/register`, registerData)),
 
-    async login2(loginData: LoginData) {
-        return handleRequest(async () => {
-            const response = await axios.post(`${this.apiUrl}/api/login`, loginData);
-            return response.data;
-        });
-    },
-
-    login: async (loginData: LoginData) => 
-        handleRequest(async () => 
+    login: async (loginData: LoginData) =>
+        handleRequest(async () =>
             await axios.post(`${apiUrl}/api/login`, loginData)),
 
-    async getUsers() {
-        try {
-            const response = await axios.get(`${this.apiUrl}/api/users`);
-            return response.data;
-        } catch (error) {
-            console.error('Failed to fetch users:', error);
-            throw error;
-        }
-    }
+    getUsers: async () =>
+        handleRequest(async () =>
+            await axios.get(`${apiUrl}/api/users`)),
+
 }
 
 export default apiService;
