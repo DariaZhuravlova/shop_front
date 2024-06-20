@@ -1,35 +1,37 @@
 <template>
-  <v-container>
-    
-    <v-row>
-      <v-col
-        v-for="product in productStore.products"
-        :key="product._id"
-        cols="12"
-        md="4"
-      >
-        <v-card class="product-card">
-          <v-card-title>{{ product.name }}</v-card-title>
-          <p>Price: ${{ product.price }}</p>
-        
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <organizm-Loader v-if="appStore.isLoading" />
+    <v-container>
+      <v-row>
+        <v-col
+          v-for="product in productStore.products"
+          :key="product._id"
+          cols="12"
+          md="4"
+        >
+          <v-card class="product-card">
+            <v-card-title>{{ product.name }}</v-card-title>
+            <p>Price: ${{ product.price }}</p>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import { useProductStore } from "../stores/ProductStore";
+import { ref, onMounted } from 'vue';
+import { useProductStore } from '../stores/ProductStore';
+import type { dtoResponse } from '../types/dtoResponse';
+import { useAppStore } from '../stores/AppStore';
+
+const appStore = useAppStore();
 
 const productStore = useProductStore();
 
 onMounted(() => {
   productStore.getProducts();
 });
-
-
-
 </script>
 
 <style scoped lang="scss">

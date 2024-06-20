@@ -75,11 +75,9 @@ import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
 import type { dtoResponse } from '../types/dtoResponse';
 
-
 const appStore = useAppStore();
 const tab = ref(null);
 onMounted(() => {
-  // appStore.checkAuth();
   appStore.getUsers();
 });
 
@@ -101,7 +99,7 @@ const { handleSubmit, handleReset } = useForm({
 const username = useField('username');
 const password = useField('password');
 
-const submitRegister = handleSubmit(async (values) => {
+const submitRegister = handleSubmit(async (values: any) => {
   const { username, password } = values;
 
   if (!username || !password) {
@@ -109,33 +107,25 @@ const submitRegister = handleSubmit(async (values) => {
   }
 
   const result = await appStore.register({ username, password });
-  //   {
-  //     "ok": true,
-  //     "message": "Login successful",
-  //     "user": {
-  //         "_id": "6666ab94dbd85f7cc7abd31e",
-  //         "username": "eee",
-  //         "hashed_password": "9dd5ce0f48848b9171bf35120492a4620bde0cfae9bb566e38a001223fae6bc5",
-  //         "salt": "bd1c602f1a44efebacd071df9225dff1",
-  //         "__v": 0
-  //     }
-  //}
   handleReset();
   appStore.getUsers();
 });
 
-const submitLogin = handleSubmit(async (values) => {
+const submitLogin = handleSubmit(async (values: any) => {
   const { username, password } = values;
 
   if (!username || !password) {
     return alert('Заполните все поля');
   }
 
-
-  const result: dtoResponse = await appStore.login({ username, password });
+  const result: dtoResponse | undefined = await appStore.login({
+    username,
+    password,
+  });
   console.log(result);
+  if (!result) return alert('Can not login');
   if (result.ok) {
-    console.log("ok");
+    console.log('ok');
     //redirect to login page or tost-message
   } else {
     alert(result.message);

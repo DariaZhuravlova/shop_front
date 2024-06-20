@@ -9,6 +9,7 @@ export const useAppStore = defineStore("app", {
     state: () => ({
         profile: null as userData | null,
         users: [] as userData[],
+        isLoading: false as boolean,
     }),
     actions: {
         async register(registerData: RegisterData) {
