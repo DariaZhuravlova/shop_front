@@ -1,6 +1,6 @@
 <template>
+  <Loader v-if="appStore.isLoading" />
   <v-container>
-    
     <v-row>
       <v-col
         v-for="product in productStore.products"
@@ -11,7 +11,6 @@
         <v-card class="product-card">
           <v-card-title>{{ product.name }}</v-card-title>
           <p>Price: ${{ product.price }}</p>
-        
         </v-card>
       </v-col>
     </v-row>
@@ -19,17 +18,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import { useProductStore } from "../stores/ProductStore";
+import { ref, onMounted } from 'vue';
+import { useProductStore } from '../stores/ProductStore';
+import type { dtoResponse } from '../types/dtoResponse';
+import Loader from '~/components/Loader.vue';
+import { useAppStore } from '../stores/AppStore';
+
+const appStore = useAppStore();
 
 const productStore = useProductStore();
 
 onMounted(() => {
   productStore.getProducts();
 });
-
-
-
 </script>
 
 <style scoped lang="scss">

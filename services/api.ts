@@ -2,13 +2,14 @@ import axios from 'axios';
 import type { RegisterData } from "@/types/registerData";
 import type { LoginData } from "@/types/loginData";
 import type { productData } from '@/types/productData';
-
+import { useAppStore } from '../stores/AppStore';
 
 
 // проработать индикацию загрузки и добавить искуств задержки в роутах 
 
 async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | undefined> {
     try {
+        useAppStore().isLoading = true;
         return await requestFunc();
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
@@ -18,6 +19,8 @@ async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | unde
             console.error('Network error:', error);
             alert('Network error. Please try again later.');
         }
+    } finally {
+        useAppStore().isLoading = false;
     }
 }
 
