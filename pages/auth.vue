@@ -107,6 +107,17 @@ const submitRegister = handleSubmit(async (values: any) => {
   }
 
   const result = await appStore.register({ username, password });
+  console.log(result);
+  if(result?.data.ok) {
+    appStore.snackbarText = result?.data.message;
+    appStore.snackbarColor = 'success';
+    appStore.isOpenSnackbar = true;
+  } else {
+    appStore.snackbarText = result?.data.message;
+    appStore.snackbarColor = 'error';
+    appStore.isOpenSnackbar = true;
+  }
+  
   handleReset();
   appStore.getUsers();
 });
