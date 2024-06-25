@@ -108,16 +108,16 @@ const submitRegister = handleSubmit(async (values: any) => {
 
   const result = await appStore.register({ username, password });
   console.log(result);
-  if(result?.data.ok) {
+  if (result?.data.ok) {
     appStore.snackbarText = result?.data.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
   } else {
-    appStore.snackbarText = result?.data.message;
+    appStore.snackbarText = result?.data.message; // а есть ли тут че?
     appStore.snackbarColor = 'error';
     appStore.isOpenSnackbar = true;
   }
-  
+
   handleReset();
   appStore.getUsers();
 });
@@ -133,13 +133,14 @@ const submitLogin = handleSubmit(async (values: any) => {
     username,
     password,
   });
-  console.log(result);
-  if (!result) return alert('Can not login');
-  if (result.ok) {
-    console.log('ok');
-    //redirect to login page or tost-message
+  if (result?.ok) {
+    appStore.snackbarText = result?.message;
+    appStore.snackbarColor = 'success';
+    appStore.isOpenSnackbar = true;
   } else {
-    alert(result.message);
+    appStore.snackbarText = 'Ошибка';
+    appStore.snackbarColor = 'error';
+    appStore.isOpenSnackbar = true;
   }
   handleReset();
 });
