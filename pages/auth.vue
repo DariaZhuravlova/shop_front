@@ -102,20 +102,16 @@ const password = useField('password');
 const submitRegister = handleSubmit(async (values: any) => {
   const { username, password } = values;
 
-  if (!username || !password) {
-    return alert('Заполните все поля');
-  }
-
   const result = await appStore.register({ username, password });
-  console.log(result);
   if (result?.data.ok) {
     appStore.snackbarText = result?.data.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
     tab.value = 1;
   } else {
-    appStore.snackbarText = result?.data.message; // а есть ли тут че?
+    appStore.snackbarText = result?.data.message;
     appStore.snackbarColor = 'error';
+    appStore.snackbarTimeout = 4000;
     appStore.isOpenSnackbar = true;
   }
 
