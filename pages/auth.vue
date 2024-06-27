@@ -76,7 +76,7 @@ import { useField, useForm } from 'vee-validate';
 import type { dtoResponse } from '../types/dtoResponse';
 
 const appStore = useAppStore();
-const tab = ref(null);
+const tab = ref<null | number>(null);
 onMounted(() => {
   appStore.getUsers();
 });
@@ -112,6 +112,7 @@ const submitRegister = handleSubmit(async (values: any) => {
     appStore.snackbarText = result?.data.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
+    tab.value = 1;
   } else {
     appStore.snackbarText = result?.data.message; // а есть ли тут че?
     appStore.snackbarColor = 'error';
