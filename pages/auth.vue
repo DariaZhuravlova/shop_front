@@ -14,8 +14,11 @@
                 <v-text-field
                   variant="solo"
                   v-model="username.value.value"
-                  :error-messages="username.errorMessage.value"
+                  :error-messages="
+                    username.errorMessage.value || errorResponseRegister
+                  "
                   label="User Name"
+                  @input="errorResponseRegister = ''"
                 ></v-text-field>
                 <v-text-field
                   variant="solo"
@@ -39,7 +42,10 @@
                 <v-text-field
                   variant="solo"
                   v-model="username.value.value"
-                  :error-messages="username.errorMessage.value"
+                  :error-messages="
+                    username.errorMessage.value || errorResponseLogin
+                  "
+                  @input="errorResponseLogin = ''"
                   label="User Name"
                 ></v-text-field>
                 <v-text-field
@@ -77,6 +83,9 @@ import type { dtoResponse } from '../types/dtoResponse';
 
 const appStore = useAppStore();
 const tab = ref<null | number>(null);
+const errorResponseRegister = ref<undefined | string>('');
+const errorResponseLogin = ref<undefined | string>('');
+
 onMounted(() => {
   appStore.getUsers();
 });
@@ -113,6 +122,7 @@ const submitRegister = handleSubmit(async (values: any) => {
     appStore.snackbarColor = 'error';
     appStore.snackbarTimeout = 4000;
     appStore.isOpenSnackbar = true;
+    errorResponseRegister.value = result?.data.message;
   }
 
   handleReset();
@@ -135,9 +145,10 @@ const submitLogin = handleSubmit(async (values: any) => {
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
   } else {
-    appStore.snackbarText = 'Ошибка';
+    appStore.snackbarText = result;
     appStore.snackbarColor = 'error';
     appStore.isOpenSnackbar = true;
+    errorResponseLogin.value = result;
   }
   handleReset();
 });
