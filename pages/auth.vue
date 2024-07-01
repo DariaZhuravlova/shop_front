@@ -144,7 +144,7 @@ const submitLogin = handleSubmit(async (values: any) => {
     appStore.snackbarText = result?.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
-  } else {
+  } else  if (typeof result == 'string') {  
     appStore.snackbarText = result;
     appStore.snackbarColor = 'error';
     appStore.isOpenSnackbar = true;

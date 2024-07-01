@@ -14,8 +14,18 @@ export const useAppStore = defineStore('app', {
         snackbarText: '' as string,
         snackbarColor: 'success' as 'success' | 'error' | 'warning' | 'info',
         snackbarTimeout: 2000 as number,
+        isShowModal: false as boolean,
+        modalData: {} as any,
+
     }),
     actions: {
+        showModal () {
+            this.isShowModal = true;
+        },
+
+        closeModal () {
+            this.isShowModal = false;
+        },
         async register(registerData: RegisterData) {
             try {
                 const result = await apiService.register(registerData);
