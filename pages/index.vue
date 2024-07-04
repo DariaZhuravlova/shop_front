@@ -1,6 +1,6 @@
 <template>
   <div>
-    <organizm-Loader v-if="appStore.isLoading" />
+    <organism-Loader v-if="appStore.isLoading" />
     <v-container>
       <v-row>
         <v-col

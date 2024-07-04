@@ -1,9 +1,9 @@
 <template>
- <organizm-Header>
+ <organism-Header>
   <slot />
- </organizm-Header>
+ </organism-Header>
 </template>
 
 <script setup>
-import Header from '~/components/organizm/Header.vue';
+import Header from '~/components/organism/Header.vue';
 </script>

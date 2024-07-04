@@ -56,7 +56,7 @@ export const useAppStore = defineStore('app', {
         async getUsers() {
             try {
                 const result = await apiService.getUsers();
-                this.users = result.data;
+                this.users = result?.data;
                 console.log(this.users);
             } catch (error) {
                 console.error('Failed to fetch users:', error);

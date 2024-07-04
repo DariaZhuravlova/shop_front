@@ -31,10 +31,8 @@
                 <v-divider></v-divider>
               </template>
               <template v-if="item.type === 'component'">
-                <component :is="item.component"></component>
+                <component :is="loadComponent(item.dir, item.component)"></component>
               </template>
-              <organizm-Header />
-              <component :is="'Loader'"></component>
             </div>
             <v-btn
             class="ms-auto"
@@ -49,13 +47,26 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue';
 import { useAppStore } from '../../stores/AppStore';
 const appStore = useAppStore();
+
+const loadComponent = (componentDir: string, componentName: string) => {
+  return defineAsyncComponent(() => import(`../../components/${componentDir}/${componentName}.vue`));
+};
+
 </script>
 
 <style>
 .content-item {
   margin-top: 20px;
   width: fit-content;
+}
+
+.cls-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 </style>
