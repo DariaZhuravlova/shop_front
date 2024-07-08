@@ -9,23 +9,19 @@ export const useAppStore = defineStore('app', {
     state: () => ({
         profile: null as userData | null,
         users: [] as userData[],
+        // loading
         isLoading: false as boolean,
+        // snackbar
         isOpenSnackbar: false as boolean,
         snackbarText: '' as string,
         snackbarColor: 'success' as 'success' | 'error' | 'warning' | 'info',
         snackbarTimeout: 2000 as number,
+        // modal
         isShowModal: false as boolean,
         modalData: {} as any,
-
+        // ...
     }),
     actions: {
-        showModal () {
-            this.isShowModal = true;
-        },
-
-        closeModal () {
-            this.isShowModal = false;
-        },
         async register(registerData: RegisterData) {
             try {
                 const result = await apiService.register(registerData);

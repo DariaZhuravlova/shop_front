@@ -31,13 +31,13 @@
                 <v-divider></v-divider>
               </template>
               <template v-if="item.type === 'component'">
-                <component :is="loadComponent(item.dir, item.component)"></component>
+                <component v-if="loadComponent(item.dir, item.component)" :is="loadComponent(item.dir, item.component)"></component>
               </template>
             </div>
             <v-btn
             class="ms-auto"
             text="Ok"
-            @click="appStore.closeModal()"
+            @click="appStore.isShowModal = false"
           ></v-btn>
           </div>
         </template>
@@ -52,7 +52,15 @@ import { useAppStore } from '../../stores/AppStore';
 const appStore = useAppStore();
 
 const loadComponent = (componentDir: string, componentName: string) => {
-  return defineAsyncComponent(() => import(`../../components/${componentDir}/${componentName}.vue`));
+  return defineAsyncComponent({
+    loader: () => import(`../../components/${componentDir}/${componentName}.vue`)
+      .catch(error => {
+        console.error(`Failed to load component ${componentName} from ${componentDir}:`, error);
+        return null;
+      }),
+    loadingComponent: undefined,
+    errorComponent: undefined
+  });
 };
 
 </script>
