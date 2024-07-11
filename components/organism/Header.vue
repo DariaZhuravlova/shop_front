@@ -25,7 +25,34 @@
       </v-app-bar>
 
       <v-navigation-drawer v-model="drawer" location="left" temporary>
-        <v-list :items="items"></v-list>
+        <v-list>
+          <NuxtLink to="/" class="icon-link-aside">
+            <v-list-item prepend-icon="mdi-home" title="Home"></v-list-item>
+          </NuxtLink>
+
+          <v-list-group
+            v-for="(category, index) in items"
+            :key="index"
+            :prepend-icon="category.icon"
+            :title="category.name"
+          >
+            <template v-slot:activator="{ props }">
+              <v-list-item v-bind="props"></v-list-item>
+            </template>
+
+            <NuxtLink
+              v-for="(item, subIndex) in category.items"
+              :key="subIndex"
+              :to="`/${category.name}/${item.name}`" 
+              class="icon-link-aside"
+            >
+              <v-list-item
+                :prepend-icon="item.icon"
+                :title="item.name"
+              ></v-list-item>
+            </NuxtLink>
+          </v-list-group>
+        </v-list>
       </v-navigation-drawer>
 
       <v-main>
@@ -40,16 +67,13 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useAppStore } from '../stores/AppStore';
+import { productMenu } from '../../data/default/productMenu';
+
 const appStore = useAppStore();
 
 const drawer = ref(false);
 const group = ref(null);
-const items = ref([
-  { title: 'Foo', value: 'foo' },
-  { title: 'Bar', value: 'bar' },
-  { title: 'Fizz', value: 'fizz' },
-  { title: 'Buzz', value: 'buzz' },
-]);
+const items = ref(productMenu);
 
 watch(group, () => {
   drawer.value = false;
@@ -59,6 +83,11 @@ watch(group, () => {
 <style scoped>
 .icon-link {
   color: white;
+  text-decoration: none;
+}
+
+.icon-link-aside {
+  color: inherit;
   text-decoration: none;
 }
 </style>
