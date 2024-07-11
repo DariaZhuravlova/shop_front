@@ -1,5 +1,4 @@
-export const productMenu = {
-  categories: [
+export const productMenu = [
     {
       name: 'Компьютеры и ноутбуки',
       icon: 'mdi-laptop',
@@ -81,4 +80,3 @@ export const productMenu = {
       ]
     }
   ]
-}
