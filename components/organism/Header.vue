@@ -34,7 +34,7 @@
             v-for="(category, index) in items"
             :key="index"
             :prepend-icon="category.icon"
-            :title="category.name"
+            :title="category.name.ru"
           >
             <template v-slot:activator="{ props }">
               <v-list-item v-bind="props"></v-list-item>
@@ -43,12 +43,12 @@
             <NuxtLink
               v-for="(item, subIndex) in category.items"
               :key="subIndex"
-              :to="`/${category.name}/${item.name}`" 
+              :to="`/${replaceSpace(category.name.en)}/${replaceSpace(item.name.en)}`" 
               class="icon-link-aside"
             >
               <v-list-item
                 :prepend-icon="item.icon"
-                :title="item.name"
+                :title="item.name.ru"
               ></v-list-item>
             </NuxtLink>
           </v-list-group>
@@ -68,6 +68,7 @@
 import { ref, watch } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { productMenu } from '../../data/default/productMenu';
+import { replaceSpace } from '../utils';
 
 const appStore = useAppStore();
 
@@ -78,6 +79,8 @@ const items = ref(productMenu);
 watch(group, () => {
   drawer.value = false;
 });
+
+
 </script>
 
 <style scoped>
