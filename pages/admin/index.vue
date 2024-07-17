@@ -10,11 +10,20 @@
             label="Product Name"
           ></v-text-field>
           <v-select
-            label="Select"
-            :items="extractCategories(productMenu)"
+            label="Category"
+            :items="categories"
             :error-messages="productCategory.errorMessage.value"
             v-model="productCategory.value.value"
             variant="solo"
+            @change="updateSubcategories"
+          ></v-select>
+          <v-select
+            label="Subcategory"
+            :items="subcategories"
+            :error-messages="productSubcategory.errorMessage.value"
+            v-model="productSubcategory.value.value"
+            variant="solo"
+            :disabled="!productCategory.value.value"
           ></v-select>
           <v-text-field
             variant="solo"
@@ -38,8 +47,9 @@
       >
         <v-card class="product-card">
           <v-card-title>{{ product.name }}</v-card-title>
-          <p>Price: ${{ product.price }}</p>
-          <p>Category: {{ product.category }}</p>
+          <p><b>Price:</b> ${{ product.price }}</p>
+          <p><b>Category:</b> {{ product.category }}</p>
+          <p><b>Subcategory:</b> {{ product.subcategory }}</p>
           <v-btn color="error" @click="deleteProduct(product._id)"
             >Delete</v-btn
           >
@@ -50,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useProductStore } from '../../stores/ProductStore';
 import { useField, useForm } from 'vee-validate';
 import type { ProductData } from '@/types/productData';
@@ -61,8 +71,20 @@ const productStore = useProductStore();
 const extractCategories = (productMenu) => {
   return productMenu.map((item) => {
     return { title: item.name.ru, value: item.name.en };
-  })
-}
+  });
+};
+
+const extractSubcategories = (category) => {
+  const foundCategory = productMenu.find(
+    (item) => item.name.en === category
+  );
+  if (foundCategory) {
+    return foundCategory.items.map((item) => {
+      return { title: item.name.ru, value: item.name.en };
+    });
+  }
+  return [];
+};
 
 onMounted(() => {
   productStore.getProducts();
@@ -83,6 +105,10 @@ const { handleSubmit, handleReset } = useForm({
     productCategory(value: string) {
       if (!value?.length) return 'Выберите категорию';
       else return true;
+    },
+    productSubcategory(value: string) {
+      if (!value?.length) return 'Выберите подкатегорию';
+      else return true;
     }
   },
 });
@@ -90,12 +116,24 @@ const { handleSubmit, handleReset } = useForm({
 const productName = useField('productName');
 const productPrice = useField('productPrice');
 const productCategory = useField('productCategory');
+const productSubcategory = useField('productSubcategory');
+
+const categories = extractCategories(productMenu);
+const subcategories = ref([]);
+
+const updateSubcategories = (category: string) => {
+  subcategories.value = extractSubcategories(category);
+};
 
 const submit = handleSubmit(async (values: any) => {
+  const category = productMenu.find(item => item.name.en === values.productCategory);
+  const subcategory = category?.items.find(item => item.name.en === values.productSubcategory);
+
   const objProduct: ProductData = {
     name: values.productName,
     price: values.productPrice,
-    category: values.productCategory
+    category: category?.name.ru,
+    subcategory: subcategory?.name.ru,
   };
   await productStore.postProduct(objProduct);
   handleReset();
@@ -103,6 +141,10 @@ const submit = handleSubmit(async (values: any) => {
 const deleteProduct = (productId: string) => {
   productStore.deleteProduct(productId);
 };
+
+watch(productCategory.value, (newCategory) => {
+  updateSubcategories(newCategory);
+});
 </script>
 
 <style scoped lang="scss">
@@ -110,7 +152,7 @@ const deleteProduct = (productId: string) => {
   margin: 20px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  text-align: left;
   padding: 20px;
 
   .v-card-title {
@@ -121,6 +163,10 @@ const deleteProduct = (productId: string) => {
 
   .v-btn {
     margin-top: 20px;
+  }
+
+  p {
+    margin-bottom: 10px;
   }
 }
 </style>
