@@ -11,7 +11,9 @@
         >
           <v-card class="product-card">
             <v-card-title>{{ product.name }}</v-card-title>
-            <p>Price: ${{ product.price }}</p>
+            <p><b>Price:</b> ${{ product.price }}</p>
+            <p><b>Category:</b> {{ product.category }}</p>
+            <p><b>Subcategory:</b> {{ product.subcategory }}</p>
           </v-card>
         </v-col>
       </v-row>
@@ -39,7 +41,7 @@ onMounted(() => {
   margin: 20px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  text-align: left;
   padding: 20px;
 
   .v-card-title {
@@ -50,6 +52,10 @@ onMounted(() => {
 
   .v-btn {
     margin-top: 20px;
+  }
+
+  p {
+    margin-bottom: 10px;
   }
 }
 </style>
