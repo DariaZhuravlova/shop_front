@@ -75,9 +75,7 @@ const extractCategories = (productMenu) => {
 };
 
 const extractSubcategories = (category) => {
-  const foundCategory = productMenu.find(
-    (item) => item.name.en === category
-  );
+  const foundCategory = productMenu.find((item) => item.name.en === category);
   if (foundCategory) {
     return foundCategory.items.map((item) => {
       return { title: item.name.ru, value: item.name.en };
@@ -109,7 +107,7 @@ const { handleSubmit, handleReset } = useForm({
     productSubcategory(value: string) {
       if (!value?.length) return 'Выберите подкатегорию';
       else return true;
-    }
+    },
   },
 });
 
@@ -123,11 +121,16 @@ const subcategories = ref([]);
 
 const updateSubcategories = (category: string) => {
   subcategories.value = extractSubcategories(category);
+  productSubcategory.value.value ? (productSubcategory.value.value = '') : null;
 };
 
 const submit = handleSubmit(async (values: any) => {
-  const category = productMenu.find(item => item.name.en === values.productCategory);
-  const subcategory = category?.items.find(item => item.name.en === values.productSubcategory);
+  const category = productMenu.find(
+    (item) => item.name.en === values.productCategory
+  );
+  const subcategory = category?.items.find(
+    (item) => item.name.en === values.productSubcategory
+  );
 
   const objProduct: ProductData = {
     name: values.productName,
