@@ -37,7 +37,6 @@
         </v-col>
       </v-row>
     </v-form>
-
     <v-row>
       <v-col
         v-for="product in productStore.products"
@@ -70,15 +69,15 @@ const productStore = useProductStore();
 
 const extractCategories = (productMenu) => {
   return productMenu.map((item) => {
-    return { title: item.name.ru, value: item.name.en };
+    return { title: item.name.ru, value: item.id };
   });
 };
 
-const extractSubcategories = (category) => {
-  const foundCategory = productMenu.find((item) => item.name.en === category);
+const extractSubcategories = (categoryID: number) => {
+  const foundCategory = productMenu.find((item) => item.id === categoryID);
   if (foundCategory) {
     return foundCategory.items.map((item) => {
-      return { title: item.name.ru, value: item.name.en };
+      return { title: item.name.ru, value: item.id };
     });
   }
   return [];
@@ -100,12 +99,12 @@ const { handleSubmit, handleReset } = useForm({
 
       return 'Введите цену';
     },
-    productCategory(value: string) {
-      if (!value?.length) return 'Выберите категорию';
+    productCategory(value: number) {
+      if (!value) return 'Выберите категорию';
       else return true;
     },
-    productSubcategory(value: string) {
-      if (!value?.length) return 'Выберите подкатегорию';
+    productSubcategory(value: number) {
+      if (!value) return 'Выберите подкатегорию';
       else return true;
     },
   },
@@ -119,24 +118,17 @@ const productSubcategory = useField('productSubcategory');
 const categories = extractCategories(productMenu);
 const subcategories = ref([]);
 
-const updateSubcategories = (category: string) => {
+const updateSubcategories = (category: number) => {
   subcategories.value = extractSubcategories(category);
   productSubcategory.value.value ? (productSubcategory.value.value = '') : null;
 };
 
 const submit = handleSubmit(async (values: any) => {
-  const category = productMenu.find(
-    (item) => item.name.en === values.productCategory
-  );
-  const subcategory = category?.items.find(
-    (item) => item.name.en === values.productSubcategory
-  );
-
   const objProduct: ProductData = {
     name: values.productName,
     price: values.productPrice,
-    category: category?.name.ru,
-    subcategory: subcategory?.name.ru,
+    category: values.productCategory,
+    subcategory: values.productSubcategory,
   };
   await productStore.postProduct(objProduct);
   handleReset();
@@ -145,7 +137,7 @@ const deleteProduct = (productId: string) => {
   productStore.deleteProduct(productId);
 };
 
-watch(productCategory.value, (newCategory) => {
+watch(productCategory.value, (newCategory: any) => {
   updateSubcategories(newCategory);
 });
 </script>
