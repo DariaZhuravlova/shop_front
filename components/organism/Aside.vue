@@ -1,0 +1,3 @@
+<template>
+  <molecule-ProductCatalog />
+</template>
