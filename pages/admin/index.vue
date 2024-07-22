@@ -129,6 +129,9 @@ const submit = handleSubmit(async (values: any) => {
     price: values.productPrice,
     category: values.productCategory,
     subcategory: values.productSubcategory,
+    _id: '',
+    description: '',
+    image: []
   };
   await productStore.postProduct(objProduct);
   handleReset();
