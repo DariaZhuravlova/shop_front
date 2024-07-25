@@ -8,29 +8,7 @@ export const useProductStore = defineStore("product", {
         products: [] as productData[],
     }),
     actions: {
-        async getProducts() {
-            try {
-                const data = await apiService.getProducts();
-                data?.data.map(elem => {
-                    productMenu.find(item => {
-                        if (item.id == elem.category) {
-                            elem.category = item.name.ru;
-                            item.items.find(subitem => {
-                                if (subitem.id == elem.subcategory) {
-                                    elem.subcategory = subitem.name.ru
-                                }
-                            })
-                        }
-                    });
-                    return elem
-                })
-
-                this.products = data?.data || [];
-            } catch (error) {
-                console.error('Failed to fetch products:', error);
-            }
-        },
-        async getProducts2(query: any) {
+        async getProducts(query = {}) {
             try {
                 const data = await apiService.getProducts(query);
                 data?.data.map(elem => {

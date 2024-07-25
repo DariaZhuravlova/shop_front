@@ -59,10 +59,15 @@ const apiUrl = process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.o
 
 const apiService = {
 
-    getProducts: async (query?: any) =>
-        handleRequest(async () =>
-            await axios.get(`${apiUrl}/api/products?${objectToQueryString(query)}`)),
-
+    getProducts: async (query = {}) =>
+        handleRequest(async () => {
+            if (Object.keys(query).length === 0) {
+                return await axios.get(`${apiUrl}/api/products`);
+            } else {
+                return await axios.get(`${apiUrl}/api/products?${objectToQueryString(query)}`)
+            }
+        }
+        ),
     postProduct: async (product: productData) =>
         handleRequest(async () =>
             await axios.post(`${apiUrl}/api/product`, product,

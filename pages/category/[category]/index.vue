@@ -15,15 +15,13 @@ const route = useRoute();
 const router = useRouter();
 const productStore = useProductStore();
 
-console.log();
-
 function categoryToId(category, productMenu) {
   return productMenu.find((elem) => replaceSpace(elem.name.en) == category).id;
 }
 
 try {
   const categoryId = categoryToId(route.params.category, productMenu);
-  productStore.getProducts2({ categoryId });
+  productStore.getProducts({ categoryId });
 } catch (e) {
   router.push('/');
 }
