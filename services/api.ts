@@ -4,7 +4,7 @@ import type { RegisterData } from "@/types/registerData";
 import type { LoginData } from "@/types/loginData";
 import type { productData } from '@/types/productData';
 import { useAppStore } from '../stores/AppStore';
-
+import { objectToQueryString } from '../utils/index.ts';
 
 // проработать индикацию загрузки и добавить искуств задержки в роутах 
 
@@ -59,9 +59,9 @@ const apiUrl = process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.o
 
 const apiService = {
 
-    getProducts: async () =>
+    getProducts: async (query?: any) =>
         handleRequest(async () =>
-            await axios.get(`${apiUrl}/api/products`)),
+            await axios.get(`${apiUrl}/api/products?${objectToQueryString(query)}`)),
 
     postProduct: async (product: productData) =>
         handleRequest(async () =>
