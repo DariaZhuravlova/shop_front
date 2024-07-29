@@ -2,6 +2,7 @@
   <div>
     <h1>{{ route.params.category }}</h1>
     <h2>category page</h2>
+    <organism-ProductList />
   </div>
 </template>
 

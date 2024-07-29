@@ -6,21 +6,7 @@
         <organism-Aside />
       </v-col>
       <v-col cols="7" md="9" lg="9" xl="9"> -->
-        <v-row>
-          <v-col
-            v-for="product in productStore.products"
-            :key="product._id"
-            cols="12"
-            md="4"
-          >
-            <v-card class="product-card">
-              <v-card-title>{{ product.name }}</v-card-title>
-              <p><b>Price:</b> ${{ product.price }}</p>
-              <p><b>Category:</b> {{ product.category }}</p>
-              <p><b>Subcategory:</b> {{ product.subcategory }}</p>
-            </v-card>
-          </v-col>
-        </v-row>
+      <organism-ProductList />
       <!-- </v-col>
     </v-row> -->
   </div>
