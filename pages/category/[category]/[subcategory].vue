@@ -16,31 +16,78 @@ const route = useRoute();
 const router = useRouter();
 const productStore = useProductStore();
 
-function subCategoryToId(category, subcategory, productMenu) {
-  const categoryId = productMenu.find(
-    (elem) => replaceSpace(elem.name.en) == category
-  ).id;
-  let subcategoryId = null;
-  productMenu.forEach((elem) => {
-    if (elem.id == categoryId) {
-      elem.items.forEach((item) => {
-        if (replaceSpace(item.name.en) == subcategory) {
-          subcategoryId = item.id;
-        }
-      });
-    }
-  });
+interface ProductMenu {
+  id: number;
+  name: {
+    en: string;
+    ru: string;
+  };
+  items: ProductMenuItem[];
+}
+
+interface ProductMenuItem {
+  id: number;
+  name: {
+    en: string;
+    ru: string;
+  };
+}
+
+interface SubCategoryToIdArgs {
+  category: string;
+  subcategory: string;
+  productMenu: ProductMenu[];
+}
+
+interface SubCategoryToIdResult {
+  categoryId: number | null;
+  subcategoryId: number | null;
+}
+
+function findCategoryId(productMenu: ProductMenu[], category: string): number | null {
+  return productMenu.find(
+    (elem) => replaceSpace(elem.name.en) === category
+  )?.id || null;
+}
+
+function subCategoryToId({
+  category,
+  subcategory,
+  productMenu
+}: SubCategoryToIdArgs): SubCategoryToIdResult {
+  const categoryId = findCategoryId(productMenu, category);
+
+  const subcategoryId = productMenu
+    .filter(elem => elem.id === categoryId)
+    .flatMap(elem => elem.items)
+    .find(item => replaceSpace(item.name.en) === subcategory)?.id || null;
+
   return { categoryId, subcategoryId };
 }
 
-try {
-  const objId = subCategoryToId(
-    route.params.category,
-    route.params.subcategory,
-    productMenu
-  );
-  productStore.getProducts(objId);
-} catch (e) {
-  router.push('/');
+async function fetchProducts() {
+  try {
+    // Приведение типов
+    const category =  route.params.category;
+    const subcategory = route.params.subcategory;
+
+    // Проверка на наличие значений
+    if (typeof category !== 'string' || typeof subcategory !== 'string') {
+      throw new Error('Invalid route parameters');
+    }
+
+    const objId = subCategoryToId({
+      category,
+      subcategory,
+      productMenu: productMenu
+    });
+
+    await productStore.getProducts(objId); // Убедитесь, что getProducts возвращает Promise
+  } catch (e) {
+    console.error(e); // Можно вывести ошибку в консоль для отладки
+    router.push('/');
+  }
 }
+
+fetchProducts();
 </script>
