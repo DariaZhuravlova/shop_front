@@ -22,7 +22,7 @@ function categoryToId(category, productMenu) {
 
 try {
   const categoryId = categoryToId(route.params.category, productMenu);
-  productStore.getProducts({ categoryId });
+  productStore.getProducts({ category: categoryId });
 } catch (e) {
   router.push('/');
 }

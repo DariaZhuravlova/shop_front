@@ -41,8 +41,8 @@ interface SubCategoryToIdArgs {
 }
 
 interface SubCategoryToIdResult {
-  categoryId: number | null;
-  subcategoryId: number | null;
+  category: number | null;
+  subcategory: number | null;
 }
 
 function findCategoryId(productMenu: ProductMenu[], category: string): number | null {
@@ -63,7 +63,7 @@ function subCategoryToId({
     .flatMap(elem => elem.items)
     .find(item => replaceSpace(item.name.en) === subcategory)?.id || null;
 
-  return { categoryId, subcategoryId };
+  return { category: categoryId, subcategory: subcategoryId };
 }
 
 async function fetchProducts() {
