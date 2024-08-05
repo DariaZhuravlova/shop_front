@@ -6,6 +6,9 @@ import type { productData } from '@/types/productData';
 import { useAppStore } from '../stores/AppStore';
 import { objectToQueryString } from '../utils/index.ts';
 
+axios.defaults.baseURL = 'http://localhost:3001'; // Домен вашего API сервера
+axios.defaults.withCredentials = true; // Включение передачи куки
+
 // проработать индикацию загрузки и добавить искуств задержки в роутах 
 
 async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | AxiosResponse | undefined> {

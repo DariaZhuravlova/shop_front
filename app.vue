@@ -21,12 +21,14 @@ const appStore = useAppStore();
 
 appStore.modalData = modalContent;
 
-if (process.client) {
-  setCookie('myCook', '555', 1);
-  if (getCookie('myCook')) {
-    console.log(getCookie('myCook'));
-  }
-}
+// if (process.client) {
+//   setCookie('myCook', '555', 1);
+//   if (getCookie('myCook')) {
+//     console.log(getCookie('myCook'));
+//   }
+// }
+
+
 function setCookie(name: string, value: string, days: number) {
   let expires = '';
   if (days) {
