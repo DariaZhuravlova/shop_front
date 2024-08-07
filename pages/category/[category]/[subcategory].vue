@@ -1,21 +1,21 @@
 <template>
   <div>
-    <h1>{{ route.params.category }}</h1>
-    <h2>subcategory page</h2>
-    <h2>{{ route.params.subcategory }}</h2>
-    <organism-ProductList />
+    <organism-Loader v-if="appStore.isLoading" :isBlock="true" />
+    <organism-ProductList v-else />
   </div>
 </template>
-
+ 
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
 import { productMenu } from '@/data/default/productMenu';
 import { replaceSpace } from '../utils';
-import { useProductStore } from '../stores/ProductStore';
+import { useProductStore } from '@/stores/ProductStore';
+import { useAppStore } from '@/stores/AppStore';
 
 const route = useRoute();
 const router = useRouter();
 const productStore = useProductStore();
+const appStore = useAppStore();
 
 interface ProductMenu {
   id: number;
@@ -45,23 +45,28 @@ interface SubCategoryToIdResult {
   subcategory: number | null;
 }
 
-function findCategoryId(productMenu: ProductMenu[], category: string): number | null {
-  return productMenu.find(
-    (elem) => replaceSpace(elem.name.en) === category
-  )?.id || null;
+function findCategoryId(
+  productMenu: ProductMenu[],
+  category: string
+): number | null {
+  return (
+    productMenu.find((elem) => replaceSpace(elem.name.en) === category)?.id ||
+    null
+  );
 }
 
 function subCategoryToId({
   category,
   subcategory,
-  productMenu
+  productMenu,
 }: SubCategoryToIdArgs): SubCategoryToIdResult {
   const categoryId = findCategoryId(productMenu, category);
 
-  const subcategoryId = productMenu
-    .filter(elem => elem.id === categoryId)
-    .flatMap(elem => elem.items)
-    .find(item => replaceSpace(item.name.en) === subcategory)?.id || null;
+  const subcategoryId =
+    productMenu
+      .filter((elem) => elem.id === categoryId)
+      .flatMap((elem) => elem.items)
+      .find((item) => replaceSpace(item.name.en) === subcategory)?.id || null;
 
   return { category: categoryId, subcategory: subcategoryId };
 }
@@ -69,7 +74,7 @@ function subCategoryToId({
 async function fetchProducts() {
   try {
     // Приведение типов
-    const category =  route.params.category;
+    const category = route.params.category;
     const subcategory = route.params.subcategory;
 
     // Проверка на наличие значений
@@ -80,7 +85,7 @@ async function fetchProducts() {
     const objId = subCategoryToId({
       category,
       subcategory,
-      productMenu: productMenu
+      productMenu: productMenu,
     });
 
     await productStore.getProducts(objId); // Убедитесь, что getProducts возвращает Promise
