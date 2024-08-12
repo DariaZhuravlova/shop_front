@@ -6,11 +6,11 @@
 
     <v-list-group
       v-for="(category, index) in items"
-      @click.stop="goToCategory(category, index)"
+      @click="goToCategory(category, index)"
       :key="index"
       :prepend-icon="category.icon"
       :title="category.name.ru"
-      :value="index"
+      :value="category.name.ru"
     >
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props"></v-list-item>
@@ -43,10 +43,12 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 let open = ref([]);
 const items = ref(productMenu);
-
 const goToCategory = (category, index) => {
-  open.value[0] = index;
-
+  if (open.value.length == 0) {
+    open.value[0] = 'пусто';
+  } else {
+    open.value[0] = category.name.ru;
+  }
   router.push(`/category/${replaceSpace(category.name.en)}`);
 };
 </script>
