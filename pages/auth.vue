@@ -81,6 +81,12 @@ import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
 import type { dtoResponse } from '../types/dtoResponse';
 
+definePageMeta({
+  layout: 'empty',
+});
+
+const layout = ref('empty'); 
+
 const appStore = useAppStore();
 const tab = ref<null | number>(null);
 const errorResponseRegister = ref<undefined | string>('');
