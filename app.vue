@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout>
+  <NuxtLayout :name="layout">
     <v-app>
       <NuxtPage />
       <organism-Snackbar
@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { useAppStore } from './stores/AppStore';
 import { modalContent } from './data/devTest/modalContent';
+
 const appStore = useAppStore();
 
 appStore.modalData = modalContent;

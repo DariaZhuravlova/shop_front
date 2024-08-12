@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <div>
-      <input type="file" ref="fileInput" />
-      <button style="margin-bottom: 50px" @click="uploadFile">
+      <v-file-input label="File input" variant="solo" ref="fileInput"></v-file-input>
+      <v-btn style="margin-bottom: 50px" @click="uploadFile">
         Upload to Google Drive
-      </button>
+      </v-btn>
     </div>
     <v-form @submit.prevent="submit">
       <v-row justify="center">
@@ -71,6 +71,12 @@ import { useField, useForm } from 'vee-validate';
 import type { ProductData } from '@/types/productData';
 import { productMenu } from '@/data/default/productMenu';
 import axios from 'axios';
+// import { definePageMeta } from 'nuxt/app';
+
+definePageMeta({
+  layout: 'empty',
+});
+
 const productStore = useProductStore();
 const fileInput = ref(null);
 const extractCategories = (productMenu) => {
@@ -194,3 +200,5 @@ watch(productCategory.value, (newCategory: any) => {
   }
 }
 </style>
+
+

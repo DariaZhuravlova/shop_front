@@ -6,10 +6,11 @@
 
     <v-list-group
       v-for="(category, index) in items"
-      @click.stop="goToCategory(category)"
+      @click.stop="goToCategory(category, index)"
       :key="index"
       :prepend-icon="category.icon"
-      :title="category.name.ru"
+      :title="(currentCategoryIndex == index) + category.name.ru"
+      :value="currentCategoryIndex == index"
     >
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props"></v-list-item>
@@ -41,9 +42,17 @@ const router = useRouter();
 
 const items = ref(productMenu);
 
-const goToCategory = (category) => {
+const currentCategoryIndex = ref(-1);
+
+const goToCategory = (category, index) => {
+  if (index === currentCategoryIndex.value) {
+    // Если кликнули по уже открытому элементу, то просто закрыть его
+    currentCategoryIndex.value = -1;
+  } else {
+    // Открыть новый элемент и закрыть все остальные
+    currentCategoryIndex.value = index;
+  }
   router.push(`/category/${replaceSpace(category.name.en)}`);
- 
 };
 </script>
 
