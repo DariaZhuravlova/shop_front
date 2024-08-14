@@ -44,9 +44,7 @@ const router = useRouter();
 let open = ref([]);
 const items = ref(productMenu);
 const goToCategory = (category, index) => {
-  if (open.value.length == 0) {
-    open.value[0] = 'пусто';
-  } else {
+  if (open.value.length != 0) {
     open.value[0] = category.name.ru;
   }
   router.push(`/category/${replaceSpace(category.name.en)}`);
