@@ -1,7 +1,19 @@
 <template>
   <v-container>
+    <form
+      action="http://localhost:3001/upload"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <input type="file" name="file" required />
+      <button type="submit">Upload</button>
+    </form>
     <div>
-      <v-file-input label="File input" variant="solo" ref="fileInput"></v-file-input>
+      <v-file-input
+        label="File input"
+        variant="solo"
+        ref="fileInput"
+      ></v-file-input>
       <v-btn style="margin-bottom: 50px" @click="uploadFile">
         Upload to Google Drive
       </v-btn>
