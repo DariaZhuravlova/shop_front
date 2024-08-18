@@ -1,23 +1,5 @@
 <template>
   <v-container>
-    <form
-      action="http://localhost:3001/upload"
-      method="post"
-      enctype="multipart/form-data"
-    >
-      <input type="file" name="file" required />
-      <button type="submit">Upload</button>
-    </form>
-    <div>
-      <v-file-input
-        label="File input"
-        variant="solo"
-        ref="fileInput"
-      ></v-file-input>
-      <v-btn style="margin-bottom: 50px" @click="uploadFile">
-        Upload to Google Drive
-      </v-btn>
-    </div>
     <v-form @submit.prevent="submit">
       <v-row justify="center">
         <v-col cols="12" md="6">
@@ -51,6 +33,13 @@
             type="number"
             min="0"
           ></v-text-field>
+          <div>
+            <v-file-input
+              label="File input"
+              variant="solo"
+              ref="fileInput"
+            ></v-file-input>
+          </div>
           <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
         </v-col>
       </v-row>
@@ -88,6 +77,10 @@ import axios from 'axios';
 definePageMeta({
   layout: 'empty',
 });
+const apiUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'https://shop-back-mh7t.onrender.com'
+    : 'http://localhost:3001';
 
 const productStore = useProductStore();
 const fileInput = ref(null);
@@ -169,15 +162,32 @@ const updateSubcategories = (category: number) => {
 };
 
 const submit = handleSubmit(async (values: any) => {
-  const objProduct: ProductData = {
-    name: values.productName,
-    price: values.productPrice,
-    category: values.productCategory,
-    subcategory: values.productSubcategory,
-    description: '',
-    image: [],
+  //   const objProduct: ProductData = {
+  //     name: values.productName,
+  //     price: values.productPrice,
+  //     category: values.productCategory,
+  //     subcategory: values.productSubcategory,
+  //     description: '',
+  //     image: [],
+  //   };
+  const imgResult = async () => {
+    const imgData = new FormData();
+    imgData.append('file', fileInput.value.files[0]);
+
+    return await axios.post(`${apiUrl}/upload`, imgData);
   };
-  await productStore.postProduct(objProduct);
+  let nameImg = await imgResult();
+  console.log(nameImg.data);
+
+  const prodData = new FormData();
+  const arImg = [];
+  arImg.push(nameImg.data);
+  prodData.append('name', values.productName);
+  prodData.append('price', values.productPrice);
+  prodData.append('category', values.productCategory);
+  prodData.append('subcategory', values.productSubcategory);
+  prodData.append('image', JSON.stringify(arImg));
+  await productStore.postProduct(prodData);
   handleReset();
 });
 const deleteProduct = (productId: string) => {
