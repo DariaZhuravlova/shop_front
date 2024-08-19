@@ -5,5 +5,6 @@ export type ProductData = {
     description: string;
     image: string[];
     category: number;
-    subcategory: number
+    subcategory: number;
+    mainImagePointer: number;
 }

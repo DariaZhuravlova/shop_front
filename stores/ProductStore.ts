@@ -6,6 +6,7 @@ import { productMenu } from '@/data/default/productMenu';
 export const useProductStore = defineStore("product", {
     state: () => ({
         products: [] as productData[],
+        uploadedFiles: [] as string[],
     }),
     actions: {
         async getProducts(query = {}) {

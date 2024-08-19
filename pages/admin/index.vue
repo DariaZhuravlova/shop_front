@@ -33,13 +33,16 @@
             type="number"
             min="0"
           ></v-text-field>
-          <div>
+
+          <organism-Uploader />
+
+          <!-- <div>
             <v-file-input
               label="File input"
               variant="solo"
               ref="fileInput"
             ></v-file-input>
-          </div>
+          </div> -->
           <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
         </v-col>
       </v-row>
@@ -162,32 +165,33 @@ const updateSubcategories = (category: number) => {
 };
 
 const submit = handleSubmit(async (values: any) => {
-  //   const objProduct: ProductData = {
-  //     name: values.productName,
-  //     price: values.productPrice,
-  //     category: values.productCategory,
-  //     subcategory: values.productSubcategory,
-  //     description: '',
-  //     image: [],
-  //   };
-  const imgResult = async () => {
-    const imgData = new FormData();
-    imgData.append('file', fileInput.value.files[0]);
+    const objProduct: ProductData = {
+      name: values.productName,
+      price: values.productPrice,
+      category: values.productCategory,
+      subcategory: values.productSubcategory,
+      description: '',
+      image: productStore.uploadedFiles,
+    };
 
-    return await axios.post(`${apiUrl}/upload`, imgData);
-  };
-  let nameImg = await imgResult();
-  console.log(nameImg.data);
+  // const imgResult = async () => {
+  //   const imgData = new FormData();
+  //   imgData.append('file', fileInput.value.files[0]);
 
-  const prodData = new FormData();
-  const arImg = [];
-  arImg.push(nameImg.data);
-  prodData.append('name', values.productName);
-  prodData.append('price', values.productPrice);
-  prodData.append('category', values.productCategory);
-  prodData.append('subcategory', values.productSubcategory);
-  prodData.append('image', JSON.stringify(arImg));
-  await productStore.postProduct(prodData);
+  //   return await axios.post(`${apiUrl}/upload`, imgData);
+  // };
+  // let nameImg = await imgResult();
+  // console.log(nameImg.data);
+
+  // const prodData = new FormData();
+  // const arImg = [];
+  // arImg.push(nameImg.data);
+  // prodData.append('name', values.productName);
+  // prodData.append('price', values.productPrice);
+  // prodData.append('category', values.productCategory);
+  // prodData.append('subcategory', values.productSubcategory);
+  // prodData.append('image', JSON.stringify(arImg));
+  await productStore.postProduct(objProduct);
   handleReset();
 });
 const deleteProduct = (productId: string) => {
