@@ -1,6 +1,13 @@
 <template>
   <v-card class="product-card">
-    <v-img :src="product.image[mainImagePointer] ? 'http://localhost:3001/' + product.image[mainImagePointer] : ''"></v-img>
+    <v-img
+      :src="
+        product.image[mainImagePointer]
+          ? 'https://shop-back-mh7t.onrender.com/' +
+            product.image[mainImagePointer]
+          : ''
+      "
+    ></v-img>
     <v-card-title>{{ product.name }}</v-card-title>
     <p><b>Price:</b> ${{ product.price }}</p>
     <p><b>Category:</b> {{ product.category }}</p>

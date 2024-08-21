@@ -46,7 +46,6 @@ const apiUrl =
     : 'http://localhost:3001';
 
 const selectedFiles = ref([]);
-// const previews = ref(productStore.previews);
 
 const handleFileUpload = async () => {
   productStore.previews = []; // Очистить предыдущие превью
