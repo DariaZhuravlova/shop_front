@@ -11,9 +11,9 @@
       @change="handleFileUpload"
     ></v-file-input>
 
-    <v-row v-if="previews.length">
+    <v-row v-if="productStore.previews.length">
       <v-col
-        v-for="(preview, index) in previews"
+        v-for="(preview, index) in productStore.previews"
         :key="index"
         cols="4"
         class="d-flex justify-center position-relative"
@@ -40,20 +40,23 @@ import { useProductStore } from '../../stores/ProductStore';
 
 const productStore = useProductStore();
 
-const apiUrl = process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001';
+const apiUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'https://shop-back-mh7t.onrender.com'
+    : 'http://localhost:3001';
 
 const selectedFiles = ref([]);
-const previews = ref([]);
+// const previews = ref(productStore.previews);
 
 const handleFileUpload = async () => {
-  previews.value = []; // Очистить предыдущие превью
+  productStore.previews = []; // Очистить предыдущие превью
 
   for (let i = 0; i < selectedFiles.value.length; i++) {
     const file = selectedFiles.value[i];
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      previews.value.push(e.target.result); // Добавить новое превью
+      productStore.previews.push(e.target.result); // Добавить новое превью
     };
 
     reader.readAsDataURL(file);
@@ -66,15 +69,11 @@ const handleFileUpload = async () => {
   }
 
   try {
-    const response = await axios.post(
-      `${apiUrl}/upload-multiple`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
+    const response = await axios.post(`${apiUrl}/upload-multiple`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     productStore.uploadedFiles = response.data.filenames;
     selectedFiles.value = []; // Очищаем выбранные файлы
@@ -84,7 +83,7 @@ const handleFileUpload = async () => {
 };
 
 const removePreview = (index) => {
-  previews.value.splice(index, 1);
+  productStore.previews.splice(index, 1);
   selectedFiles.value.splice(index, 1);
 };
 </script>

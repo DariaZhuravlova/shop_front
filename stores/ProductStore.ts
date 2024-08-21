@@ -7,6 +7,7 @@ export const useProductStore = defineStore("product", {
     state: () => ({
         products: [] as productData[],
         uploadedFiles: [] as string[],
+        previews: [] as any,
     }),
     actions: {
         async getProducts(query = {}) {
