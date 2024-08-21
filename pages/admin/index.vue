@@ -55,6 +55,7 @@
         md="4"
       >
         <v-card class="product-card">
+          <v-img :src="product.image[0] ? `${apiUrl}/` + product.image[0] : ''"></v-img>
           <v-card-title>{{ product.name }}</v-card-title>
           <p><b>Price:</b> ${{ product.price }}</p>
           <p><b>Category:</b> {{ product.category }}</p>
@@ -77,13 +78,11 @@ import { productMenu } from '@/data/default/productMenu';
 import axios from 'axios';
 // import { definePageMeta } from 'nuxt/app';
 
+const apiUrl = process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001';
+
 definePageMeta({
   layout: 'empty',
 });
-const apiUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://shop-back-mh7t.onrender.com'
-    : 'http://localhost:3001';
 
 const productStore = useProductStore();
 const fileInput = ref(null);
@@ -115,7 +114,7 @@ const uploadFile = () => {
   formData.append('file', file);
 
   axios
-    .post('http://localhost:3001/api/upload', formData)
+    .post(`${apiUrl}/api/upload`, formData)
     .then((response) => {
       console.log(response.data);
     })
@@ -226,5 +225,3 @@ watch(productCategory.value, (newCategory: any) => {
   }
 }
 </style>
-
-
