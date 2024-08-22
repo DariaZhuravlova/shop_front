@@ -7,7 +7,10 @@ export const useProductStore = defineStore("product", {
     state: () => ({
         products: [] as productData[],
         uploadedFiles: [] as string[],
-        previews: [] as any,
+        selectedFiles: [] as string[],
+        existingFiles: [] as string[],
+        previews: [] as string[],
+
     }),
     actions: {
         async getProducts(query = {}) {
@@ -30,6 +33,16 @@ export const useProductStore = defineStore("product", {
                 this.products = data?.data || [];
             } catch (error) {
                 console.error('Failed to fetch products:', error);
+            }
+        },
+        async getUploadedFiles() {
+            try {
+                const result = await apiService.getUploadedFiles();
+                this.existingFiles = result?.data || [];
+            }
+            catch (error) {
+                console.log(error);
+
             }
         },
         async postProduct(product: productData) {

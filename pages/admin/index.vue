@@ -35,6 +35,7 @@
           ></v-text-field>
 
           <organism-Uploader />
+          <organism-SelectPhoto />
 
           <!-- <div>
             <v-file-input

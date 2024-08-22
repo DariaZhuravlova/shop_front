@@ -5,15 +5,15 @@ import type { LoginData } from "@/types/loginData";
 import type { productData } from '@/types/productData';
 import { useAppStore } from '../stores/AppStore';
 import { objectToQueryString } from '../utils/index.ts';
-
 // axios.defaults.baseURL = 'http://localhost:3001'; 
 axios.defaults.withCredentials = true; // Включение передачи куки
 
+const appStore = useAppStore()
 // проработать индикацию загрузки и добавить искуств задержки в роутах 
 
 async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | AxiosResponse | undefined> {
     try {
-        useAppStore().isLoading = true;
+        appStore.isLoading = true;
         return await requestFunc();
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
@@ -28,7 +28,7 @@ async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | Axio
             alert('Network error. Please try again later.');
         }
     } finally {
-        useAppStore().isLoading = false;
+        appStore.isLoading = false;
     }
 }
 
@@ -58,40 +58,44 @@ function handleServerError(status: number) {
     }
 }
 
-const apiUrl = process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001';
 
 const apiService = {
 
     getProducts: async (query = {}) =>
         handleRequest(async () => {
-            return await axios.get(`${apiUrl}/api/products?${objectToQueryString(query)}`
+            return await axios.get(`${appStore.apiUrl}/api/products?${objectToQueryString(query)}`
                 // , {
                 //     withCredentials: true // Важно для отправки cookies
                 // }
             )
-        }
-        ),
+        }),
+
+    getUploadedFiles: async () =>
+        handleRequest(async () => {
+            return await axios.get(`${appStore.apiUrl}/api/uploaded-files`)
+        }),
+
     postProduct: async (product: productData) =>
         handleRequest(async () =>
-            await axios.post(`${apiUrl}/api/product`, product,
+            await axios.post(`${appStore.apiUrl}/api/product`, product,
                 { headers: { 'Content-Type': 'application/json' } }
             )),
 
     deleteProduct: async (productId: string) =>
         handleRequest(async () =>
-            await axios.delete(`${apiUrl}/api/product/${productId}`)),
+            await axios.delete(`${appStore.apiUrl}/api/product/${productId}`)),
 
     register: async (registerData: RegisterData) =>
         handleRequest(async () =>
-            await axios.post(`${apiUrl}/api/register`, registerData)),
+            await axios.post(`${appStore.apiUrl}/api/register`, registerData)),
 
     login: async (loginData: LoginData) =>
         handleRequest(async () =>
-            await axios.post(`${apiUrl}/api/login`, loginData)),
+            await axios.post(`${appStore.apiUrl}/api/login`, loginData)),
 
     getUsers: async () =>
         handleRequest(async () =>
-            await axios.get(`${apiUrl}/api/users`)),
+            await axios.get(`${appStore.apiUrl}/api/users`)),
 
 }
 
