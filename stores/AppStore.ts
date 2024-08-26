@@ -7,7 +7,7 @@ import type { dtoResponse } from '@/types/dtoResponse.ts';
 
 export const useAppStore = defineStore('app', {
     state: () => ({
-        apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
+        // apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
         profile: null as userData | null,
         users: [] as userData[],
         // loading

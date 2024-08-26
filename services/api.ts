@@ -3,18 +3,16 @@ import type { AxiosResponse } from 'axios';
 import type { RegisterData } from "@/types/registerData";
 import type { LoginData } from "@/types/loginData";
 import type { productData } from '@/types/productData';
-import { useAppStore } from '../stores/AppStore';
 import { objectToQueryString } from '../utils/index.ts';
-// axios.defaults.baseURL = 'http://localhost:3001'; 
+import { useAppStore } from '../stores/AppStore';
+
 axios.defaults.withCredentials = true; // Включение передачи куки
 
-const appStore = useAppStore()
-// проработать индикацию загрузки и добавить искуств задержки в роутах 
-
-async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | AxiosResponse | undefined> {
+async function handleRequest<T>(requestFunc: (envConfig: any) => Promise<T>): Promise<T | AxiosResponse | undefined> {
     try {
-        appStore.isLoading = true;
-        return await requestFunc();
+        const envConfig: any = useNuxtApp().$envConfig;
+        useAppStore().isLoading = true;
+        return await requestFunc(envConfig);
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             const status = error.response.status;
@@ -28,7 +26,8 @@ async function handleRequest<T>(requestFunc: () => Promise<T>): Promise<T | Axio
             alert('Network error. Please try again later.');
         }
     } finally {
-        appStore.isLoading = false;
+        const envConfig = useNuxtApp().$envConfig;
+        useAppStore().isLoading = false;
     }
 }
 
@@ -58,45 +57,43 @@ function handleServerError(status: number) {
     }
 }
 
-
 const apiService = {
-
     getProducts: async (query = {}) =>
-        handleRequest(async () => {
-            return await axios.get(`${appStore.apiUrl}/api/products?${objectToQueryString(query)}`
-                // , {
-                //     withCredentials: true // Важно для отправки cookies
-                // }
-            )
+        handleRequest(async (envConfig) => {
+            return await axios.get(`${envConfig.apiUrl}/api/products?${objectToQueryString(query)}`)
         }),
 
     getUploadedFiles: async () =>
-        handleRequest(async () => {
-            return await axios.get(`${appStore.apiUrl}/api/uploaded-files`)
+        handleRequest(async (envConfig) => {
+            return await axios.get(`${envConfig.apiUrl}/api/uploaded-files`)
         }),
 
     postProduct: async (product: productData) =>
-        handleRequest(async () =>
-            await axios.post(`${appStore.apiUrl}/api/product`, product,
+        handleRequest(async (envConfig) => {
+            return await axios.post(`${envConfig.apiUrl}/api/product`, product,
                 { headers: { 'Content-Type': 'application/json' } }
-            )),
+            )
+        }),
 
     deleteProduct: async (productId: string) =>
-        handleRequest(async () =>
-            await axios.delete(`${appStore.apiUrl}/api/product/${productId}`)),
+        handleRequest(async (envConfig) => {
+            return await axios.delete(`${envConfig.apiUrl}/api/product/${productId}`)
+        }),
 
     register: async (registerData: RegisterData) =>
-        handleRequest(async () =>
-            await axios.post(`${appStore.apiUrl}/api/register`, registerData)),
+        handleRequest(async (envConfig) => {
+            return await axios.post(`${envConfig.apiUrl}/api/register`, registerData)
+        }),
 
     login: async (loginData: LoginData) =>
-        handleRequest(async () =>
-            await axios.post(`${appStore.apiUrl}/api/login`, loginData)),
+        handleRequest(async (envConfig) => {
+            return await axios.post(`${envConfig.apiUrl}/api/login`, loginData)
+        }),
 
     getUsers: async () =>
-        handleRequest(async () =>
-            await axios.get(`${appStore.apiUrl}/api/users`)),
-
-}
+        handleRequest(async (envConfig) => {
+            return await axios.get(`${envConfig.apiUrl}/api/users`)
+        }),
+};
 
 export default apiService;
