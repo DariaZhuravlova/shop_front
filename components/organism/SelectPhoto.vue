@@ -1,15 +1,15 @@
 <template>
   <div>
     <!-- <v-file-input
-      multiple
-      v-model="selectedFiles"
-      variant="solo"
-      label="Выберите файлы"
-      accept="image/*"
-      show-size
-      prepend-icon="mdi-camera"
-      @cl="handleFileUpload"
-    ></v-file-input> -->
+        multiple
+        v-model="selectedFiles"
+        variant="solo"
+        label="Выберите файлы"
+        accept="image/*"
+        show-size
+        prepend-icon="mdi-camera"
+        @cl="handleFileUpload"
+      ></v-file-input> -->
     <button @click="getPhoto">getPhoto</button>
 
     <v-row v-if="productStore.previews.length">
@@ -33,13 +33,15 @@
     </v-row>
   </div>
 </template>
-  
-  <script setup>
+    
+    <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
 import { useProductStore } from '../../stores/ProductStore';
+import { useAppStore } from '../../stores/AppStore';
 
 const productStore = useProductStore();
+const appStore = useAppStore();
 
 const apiUrl =
   process.env.NODE_ENV === 'production'
@@ -49,6 +51,10 @@ const apiUrl =
 const selectedFiles = ref([]);
 const getPhoto = () => {
   productStore.getUploadedFiles();
+  appStore.modalData.content = [
+    { type: 'component', dir: 'organism', component: 'SelectableImgBlock' },
+  ];
+  appStore.isShowModal = true;
   console.log(productStore.existingFiles);
 };
 const handleFileUpload = async () => {
@@ -90,8 +96,8 @@ const removePreview = (index) => {
   selectedFiles.value.splice(index, 1);
 };
 </script>
-  
-  <style scoped lang="scss">
+    
+    <style scoped lang="scss">
 .close-btn {
   position: absolute;
   top: 5px;

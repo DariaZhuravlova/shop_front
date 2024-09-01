@@ -38,7 +38,7 @@ export const useProductStore = defineStore("product", {
         async getUploadedFiles() {
             try {
                 const result = await apiService.getUploadedFiles();
-                this.existingFiles = result?.data || [];
+                this.existingFiles = result?.data.data || [];
             }
             catch (error) {
                 console.log(error);
@@ -64,5 +64,3 @@ export const useProductStore = defineStore("product", {
         }
     }
 });
-
-
