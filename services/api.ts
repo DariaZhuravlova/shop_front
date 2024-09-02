@@ -60,12 +60,15 @@ function handleServerError(status: number) {
 const apiService = {
     getProducts: async (query = {}) =>
         handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/products?${objectToQueryString(query)}`)
+            return await axios.get(`${envConfig.apiUrl}/api/products?${objectToQueryString(query)}`,
+            { headers: { 'Content-Type': 'application/json' } })
         }),
 
     getUploadedFiles: async () =>
         handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/uploaded-files`)
+            return await axios.get(`${envConfig.apiUrl}/api/uploaded-files?random=${Math.random()}`,
+                { headers: { 'Content-Type': 'application/json' } }
+            )
         }),
 
     postProduct: async (product: productData) =>

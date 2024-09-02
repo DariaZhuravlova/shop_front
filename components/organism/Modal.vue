@@ -6,7 +6,6 @@
 
     <v-dialog v-model="appStore.isShowModal" width="auto">
       <v-card
-        max-width="400"
         :prepend-icon="appStore.modalData.icon"
         :title="appStore.modalData.title"
       >

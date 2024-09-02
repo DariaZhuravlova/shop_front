@@ -6,9 +6,9 @@ import { productMenu } from '@/data/default/productMenu';
 export const useProductStore = defineStore("product", {
     state: () => ({
         products: [] as productData[],
-        uploadedFiles: [] as string[],
-        selectedFiles: [] as string[],
-        existingFiles: [] as string[],
+        uploadedFiles: [] as string[], // загружаем с компа 
+        selectedFiles: [] as string[], // выбираем из существующих 
+        existingFiles: [] as string[], 
         previews: [] as string[],
 
     }),
