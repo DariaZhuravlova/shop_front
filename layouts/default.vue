@@ -8,13 +8,6 @@
         <slot />
       </v-col>
     </v-row>
-
-    <v-row class="d-flex justify-center" v-else>
-      <v-col cols="12">
-        <slot />
-      </v-col>
-    </v-row>
-   
   </organism-Header>
 </template>
 
