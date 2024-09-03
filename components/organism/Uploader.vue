@@ -4,7 +4,7 @@
       multiple
       v-model="selectedFiles"
       variant="solo"
-      label="Выберите файлы"
+      label="Загрузить файлы"
       accept="image/*"
       show-size
       prepend-icon="mdi-camera"
