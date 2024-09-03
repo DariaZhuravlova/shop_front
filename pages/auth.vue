@@ -85,8 +85,6 @@ definePageMeta({
   layout: 'empty',
 });
 
-const layout = ref('empty'); 
-
 const appStore = useAppStore();
 const tab = ref<null | number>(null);
 const errorResponseRegister = ref<undefined | string>('');

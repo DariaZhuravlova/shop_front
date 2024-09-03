@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import type { RegisterData } from "@/types/registerData";
 import type { LoginData } from "@/types/loginData";
-import type { productData } from '@/types/productData';
+import type { ProductData } from '@/types/productData';
 import { objectToQueryString } from '../utils/index.ts';
 import { useAppStore } from '../stores/AppStore';
 
@@ -71,7 +71,7 @@ const apiService = {
             )
         }),
 
-    postProduct: async (product: productData) =>
+    postProduct: async (product: ProductData) =>
         handleRequest(async (envConfig) => {
             return await axios.post(`${envConfig.apiUrl}/api/product`, product,
                 { headers: { 'Content-Type': 'application/json' } }

@@ -76,9 +76,10 @@
 import { ref, onMounted, watch } from 'vue';
 import { useProductStore } from '../../stores/ProductStore';
 import { useField, useForm } from 'vee-validate';
-import type { ProductData } from '@/types/productData';
-import { productMenu } from '@/data/default/productMenu';
+import type { ProductData } from '../../types/productData';
+import { productMenu } from '../../data/default/productMenu';
 import axios from 'axios';
+
 // import { definePageMeta } from 'nuxt/app';
 
 const apiUrl =
@@ -215,3 +216,4 @@ watch(productCategory.value, (newCategory: any) => {
   }
 }
 </style>
+
