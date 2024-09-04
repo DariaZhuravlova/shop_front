@@ -6,9 +6,8 @@ const productStore = useProductStore();
 const appStore = useAppStore();
 
 const select = () => {
-  
   appStore.isShowModal = false;
-}
+};
 </script>
 
 <template>
@@ -26,20 +25,17 @@ const select = () => {
 </template>
 
 <style scoped lang="scss">
-  .block-imgs {
-    width: 80vw;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.block-imgs {
+  width: 80vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 
-
-    .img {
-      width: 100px;
-      // height: 100px;
-      margin: 5px;
-      cursor: pointer;
-    }
-
+  .img {
+    width: 100px;
+    // height: 100px;
+    margin: 5px;
+    cursor: pointer;
   }
-
+}
 </style>

@@ -10,28 +10,26 @@ const props = defineProps({
   },
 });
 const envConfig = useNuxtApp().$envConfig;
-// Определяем событие 'update:selected'
-const emit = defineEmits(['update:selected']);
 
 // Локальное состояние для отслеживания выбранности
 const isSelected = ref(false);
 
 function toggleSelected() {
   isSelected.value = !isSelected.value;
-  emit('update:selected', isSelected.value);
+  const selectedImg = [...productStore.selectedFiles];
   if (isSelected.value) {
-    productStore.selectedFiles.push(props.src);
+    selectedImg.push(props.src);
   } else {
-    const index = productStore.selectedFiles.indexOf(props.src);
+    const index = selectedImg.indexOf(props.src);
     if (index > -1) {
-      productStore.selectedFiles.splice(index, 1);
+      selectedImg.splice(index, 1);
     }
   }
+  productStore.selectedFiles = selectedImg;
 }
 </script>
 <template>
   <div :class="{ selected: isSelected }" @click="toggleSelected">
-
     <v-img
       aspect-ratio="1/1"
       cover

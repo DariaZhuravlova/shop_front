@@ -33,17 +33,8 @@
             type="number"
             min="0"
           ></v-text-field>
+          <organism-AddPhoto />
 
-          <organism-Uploader />
-          <organism-SelectPhoto />
-
-          <!-- <div>
-            <v-file-input
-              label="File input"
-              variant="solo"
-              ref="fileInput"
-            ></v-file-input>
-          </div> -->
           <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
         </v-col>
       </v-row>
@@ -177,11 +168,16 @@ const submit = handleSubmit(async (values: any) => {
     category: values.productCategory,
     subcategory: values.productSubcategory,
     description: '',
-    image: productStore.uploadedFiles,
+    image: productStore.uploadedFiles.length
+      ? productStore.uploadedFiles
+      : productStore.selectedFiles,
   };
 
   await productStore.postProduct(objProduct);
   handleReset();
+  productStore.uploadedFiles.length = 0;
+  productStore.currentFiles.length = 0;
+  productStore.selectedFiles.length = 0;
   productStore.previews.length = 0;
 });
 const deleteProduct = (productId: string) => {
