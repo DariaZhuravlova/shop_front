@@ -2,15 +2,14 @@ import { defineStore } from "pinia";
 import apiService from "@/services/api";
 import type { productData } from "@/types/productData";
 import { productMenu } from '@/data/default/productMenu';
-
 export const useProductStore = defineStore("product", {
     state: () => ({
         products: [] as productData[],
-        uploadedFiles: [] as string[], // загружаем с компа 
-        selectedFiles: [] as string[], // выбираем из существующих 
-        existingFiles: [] as string[], 
-        previews: [] as string[],
-
+        uploadedFiles: [] as string[], // это имена файлов которые уже загружены для отправки на сервер
+        currentFiles: [] as File[], //это сами файлы, которые мы выбрали
+        selectedFiles: [] as string[], // те которые мы выбирали из существующих  из  existingFiles
+        existingFiles: [] as string[], // те имеющиеся которые мы получает с сервера
+        previews: [] as string[], // формируется из currentFiles или selectedFiles
     }),
     actions: {
         async getProducts(query = {}) {
