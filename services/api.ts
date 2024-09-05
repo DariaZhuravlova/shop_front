@@ -8,11 +8,12 @@ import { useAppStore } from '../stores/AppStore';
 
 axios.defaults.withCredentials = true; // Включение передачи куки
 
-async function handleRequest<T>(requestFunc: (envConfig: any) => Promise<T>): Promise<T | AxiosResponse | undefined> {
+async function handleRequest<T>(requestFunc: (envConfig: any, option: any) => Promise<T>): Promise<T | AxiosResponse | undefined> {
     try {
         const envConfig: any = useNuxtApp().$envConfig;
+        const option = { headers: { 'Content-Type': 'application/json' } };
         useAppStore().isLoading = true;
-        return await requestFunc(envConfig);
+        return await requestFunc(envConfig, option);
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             const status = error.response.status;
@@ -61,20 +62,24 @@ const apiService = {
     getProducts: async (query = {}) =>
         handleRequest(async (envConfig) => {
             return await axios.get(`${envConfig.apiUrl}/api/products?${objectToQueryString(query)}`,
-            { headers: { 'Content-Type': 'application/json' } })
+            )
         }),
 
     getUploadedFiles: async () =>
         handleRequest(async (envConfig) => {
             return await axios.get(`${envConfig.apiUrl}/api/uploaded-files?random=${Math.random()}`,
-                { headers: { 'Content-Type': 'application/json' } }
+
             )
+        }),
+    getProduct: async (id: string) =>
+        handleRequest(async (envConfig) => {
+            return await axios.get(`${envConfig.apiUrl}/api/product/${id}`)
         }),
 
     postProduct: async (product: ProductData) =>
-        handleRequest(async (envConfig) => {
-            return await axios.post(`${envConfig.apiUrl}/api/product`, product,
-                { headers: { 'Content-Type': 'application/json' } }
+        handleRequest(async (envConfig, option) => {
+            return await axios.post(`${envConfig.apiUrl}/api/product`, product, option,
+
             )
         }),
 
@@ -84,13 +89,13 @@ const apiService = {
         }),
 
     register: async (registerData: RegisterData) =>
-        handleRequest(async (envConfig) => {
-            return await axios.post(`${envConfig.apiUrl}/api/register`, registerData)
+        handleRequest(async (envConfig, option) => {
+            return await axios.post(`${envConfig.apiUrl}/api/register`, registerData, option)
         }),
 
     login: async (loginData: LoginData) =>
-        handleRequest(async (envConfig) => {
-            return await axios.post(`${envConfig.apiUrl}/api/login`, loginData)
+        handleRequest(async (envConfig, option) => {
+            return await axios.post(`${envConfig.apiUrl}/api/login`, loginData, option)
         }),
 
     getUsers: async () =>
