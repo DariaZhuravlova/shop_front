@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import apiService from "@/services/api";
-import type { productData } from "@/types/productData";
+import type { ProductData } from "@/types/productData";
 import { productMenu } from '@/data/default/productMenu';
 export const useProductStore = defineStore("product", {
     state: () => ({
-        products: [] as productData[],
+        products: [] as ProductData[],
+        currentProduct: {} as ProductData,
         uploadedFiles: [] as string[], // это имена файлов которые уже загружены для отправки на сервер
         currentFiles: [] as File[], //это сами файлы, которые мы выбрали
         selectedFiles: [] as string[], // те которые мы выбирали из существующих  из  existingFiles
@@ -44,7 +45,15 @@ export const useProductStore = defineStore("product", {
 
             }
         },
-        async postProduct(product: productData) {
+        async getProduct(id: string) {
+            try {
+                const result = await apiService.getProduct(id);
+                this.currentProduct = result?.data;
+            } catch (error) {
+                console.error('Failed to post product:', error);
+            }
+        },
+        async postProduct(product: ProductData) {
             try {
                 await apiService.postProduct(product);
                 await this.getProducts();
