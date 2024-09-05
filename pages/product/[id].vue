@@ -1,21 +1,22 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
 import { productMenu } from '@/data/default/productMenu';
-import { replaceSpace } from '../utils';
 import { useProductStore } from '@/stores/ProductStore';
 import { useAppStore } from '@/stores/AppStore';
-import { ref } from 'vue';
 const route = useRoute();
 const router = useRouter();
 const productStore = useProductStore();
 const appStore = useAppStore();
-
+const apiUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'https://shop-back-mh7t.onrender.com'
+    : 'http://localhost:3001';
 async function fetchProduct() {
   try {
     const id = route.params.id;
     console.log(id);
 
-    await productStore.getProduct(id);
+    await productStore.getProduct(id as string);
     console.log(productStore.currentProduct.image);
   } catch (e) {
     console.error(e);
@@ -41,7 +42,7 @@ fetchProduct();
           <v-carousel-item
             v-for="img in productStore.currentProduct.image"
             :key="img"
-            :src="'http://localhost:3001/' + img"
+            :src="apiUrl + '/' + img"
           >
           </v-carousel-item>
         </v-carousel>
