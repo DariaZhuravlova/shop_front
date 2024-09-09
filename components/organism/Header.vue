@@ -25,7 +25,12 @@
         <v-btn icon="mdi-cart-outline" variant="text"></v-btn>
       </v-app-bar>
 
-      <v-navigation-drawer v-model="drawer" location="left" temporary>
+      <v-navigation-drawer
+        v-model="drawer"
+        location="left"
+        temporary
+        width="330"
+      >
         <molecule-ProductCatalog />
       </v-navigation-drawer>
 
