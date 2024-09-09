@@ -10,10 +10,10 @@ const route = useRoute();
 const router = useRouter();
 const productStore = useProductStore();
 const appStore = useAppStore();
-const apiUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://shop-back-mh7t.onrender.com'
-    : 'http://localhost:3001';
+
+const config = useRuntimeConfig();
+const apiUrl = config.public.apiUrl;
+  
 
 const characteristics = ref([...characteristicsSchemaKeys]);
 async function fetchProduct() {
