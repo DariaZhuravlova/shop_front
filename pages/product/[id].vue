@@ -24,7 +24,6 @@ async function fetchProduct() {
     console.log(productStore.currentProduct.image);
   } catch (e) {
     console.error(e);
-    // router.push('/');
   }
 }
 
@@ -33,7 +32,7 @@ fetchProduct();
 
 <template>
   <v-container>
-    <v-row justify="center">
+    <v-row justify="space-around">
       <v-col cols="12" md="6">
         <h1 class="product__title text-center mb-4">
           {{ productStore.currentProduct.name }}
@@ -113,8 +112,10 @@ fetchProduct();
         </div> -->
 <style lang="scss" scoped>
 .product__characteristic {
+  max-width: 700px;
   margin-bottom: 4px;
   border-bottom: 1px solid;
+  margin: 0 auto;
   &-title {
     cursor: pointer;
   }
