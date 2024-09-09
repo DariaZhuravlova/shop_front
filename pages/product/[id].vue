@@ -13,7 +13,6 @@ const appStore = useAppStore();
 
 const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
-  
 
 const characteristics = ref([...characteristicsSchemaKeys]);
 async function fetchProduct() {
@@ -35,7 +34,7 @@ fetchProduct();
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col cols="12" lg="6">
         <h1 class="text-center mb-4">{{ productStore.currentProduct.name }}</h1>
         <v-carousel
           height="400"
@@ -52,12 +51,17 @@ fetchProduct();
           </v-carousel-item>
         </v-carousel>
         <atom-DiscountedPrice :price="productStore.currentProduct.price" />
+      </v-col>
+      <v-col cols="12" lg="6">
         <div v-for="ch in characteristics" :key="ch.key">
           <div v-if="ch.active">
             <v-label>{{ ch.title }}</v-label>
-            <input type="text" placeholder="Enter value"/>
-            <v-icon @click="ch.active = false" class="black--text" icon="mdi-close">
-             
+            <input type="text" placeholder="Enter value" />
+            <v-icon
+              @click="ch.active = false"
+              class="black--text"
+              icon="mdi-close"
+            >
             </v-icon>
           </div>
 
@@ -69,3 +73,4 @@ fetchProduct();
     </v-row>
   </v-container>
 </template>
+

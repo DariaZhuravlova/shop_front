@@ -3,7 +3,7 @@
     <v-layout>
       <v-app-bar color="primary" prominent>
         <v-app-bar-nav-icon
-          v-if="$vuetify.display.smAndDown"
+          class="d-xs-block d-sm-none"
           variant="text"
           @click.stop="drawer = !drawer"
         ></v-app-bar-nav-icon>
@@ -11,11 +11,11 @@
           <v-toolbar-title class="logo">SHOP</v-toolbar-title>
         </Nuxt-Link>
         <v-spacer></v-spacer>
-
-        <template v-if="$vuetify.display.mdAndUp">
+        <!-- я х з че эт ниже) -->
+        <!-- <template v-if="$vuetify.display.mdAndUp">
           <v-btn icon="mdi-magnify" variant="text"></v-btn>
           <v-btn icon="mdi-heart-outline" variant="text"></v-btn>
-        </template>
+        </template> -->
 
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
         <span v-if="appStore.profile">{{ appStore.profile.username }}</span>
@@ -62,8 +62,8 @@ watch(group, () => {
   .logo {
     font-weight: 800;
   }
- 
-  @media  (min-width: 540px) {
+
+  @media (min-width: 540px) {
     .logo {
       padding: 0 32px;
     }
