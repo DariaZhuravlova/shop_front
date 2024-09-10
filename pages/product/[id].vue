@@ -55,7 +55,13 @@ fetchProduct();
         </v-carousel>
         <atom-DiscountedPrice :price="productStore.currentProduct.price" />
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col
+        cols="12"
+        md="6"
+        id="scroll-target"
+        class="overflow-y-auto"
+        style="max-height: 500px"
+      >
         <v-row
           class="product__characteristic d-flex align-center"
           v-for="ch in characteristics"
