@@ -10,6 +10,7 @@ export const useAppStore = defineStore('app', {
         // apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
         profile: null as userData | null,
         users: [] as userData[],
+        role: 'admin' as string,
         // loading
         isLoading: false as boolean,
         // snackbar
