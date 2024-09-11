@@ -4,7 +4,7 @@ import { productMenu } from '@/data/default/productMenu';
 import { useProductStore } from '@/stores/ProductStore';
 import { useAppStore } from '@/stores/AppStore';
 import { characteristicsSchemaKeys } from '@/data/default/productCharacteristics';
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -14,20 +14,42 @@ const appStore = useAppStore();
 const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
 
-const characteristics = ref([...characteristicsSchemaKeys]);
+// const characteristics = ref([...allCharacteristicsProduct]);
 async function fetchProduct() {
   try {
     const id = route.params.id;
-    console.log(id);
-
     await productStore.getProduct(id as string);
-    console.log(productStore.currentProduct.image);
   } catch (e) {
     console.error(e);
   }
 }
 
 fetchProduct();
+
+const allCharacteristicsProduct = computed(() => {
+  const allCharacteristics = [...characteristicsSchemaKeys];
+
+  for (let key in productStore.currentProduct.characteristics) {
+    allCharacteristics.forEach((elem) => {
+      if (elem.key == key) {
+        elem.value = productStore.currentProduct.characteristics[key];
+      }
+    });
+  }
+  return allCharacteristics;
+});
+
+const currentProductCharacteristics = computed(() => {
+  let currentCharacteristics = [];
+  allCharacteristicsProduct.value.forEach((elem) => {
+    if (elem.value) {
+      currentCharacteristics.push(elem);
+    }
+  });
+  return currentCharacteristics;
+});
+
+onMounted(() => {});
 </script>
 
 <template>
@@ -55,46 +77,74 @@ fetchProduct();
         </v-carousel>
         <atom-DiscountedPrice :price="productStore.currentProduct.price" />
       </v-col>
-      <v-col
-        cols="12"
-        md="6"
-        id="scroll-target"
-        class="overflow-y-auto"
-        style="max-height: 500px"
-      >
-        <v-row
-          class="product__characteristic d-flex align-center"
-          v-for="ch in characteristics"
-          :key="ch.key"
+      <v-col cols="12" md="6">
+        <h2 style="text-align: center">Характеристики</h2>
+        <div
+          v-if="appStore.role === 'admin'"
+          id="scroll-target"
+          class="overflow-y-auto"
+          style="max-height: 500px"
         >
-          <v-col cols="12" sm="6">
-            <span
-              class="product__characteristic-title"
-              @click="ch.active = !ch.active"
-            >
-              {{ ch.title }}
-            </span>
-          </v-col>
-          <v-col
-            :class="{ 'product__characteristic-input--active': ch.active }"
-            cols="12"
-            sm="6"
+          <v-row
+            class="product__characteristic d-flex align-center"
+            v-for="ch in allCharacteristicsProduct"
+            :key="ch.key"
           >
-            <input
-              class="product__characteristic-input"
-              type="text"
-              :disabled="!ch.active"
-              placeholder="Enter value"
-            />
-            <v-icon
-              v-if="ch.active"
-              @click="ch.active = false"
-              class="product__characteristic-close"
-              icon="mdi-close"
+            <v-col cols="12" sm="6">
+              <span
+                class="product__characteristic-title"
+                @click="ch.active = !ch.active"
+              >
+                {{ ch.title }}
+              </span>
+            </v-col>
+            <v-col
+              :class="{ 'product__characteristic-input--active': ch.active }"
+              cols="12"
+              sm="6"
             >
-            </v-icon>
-          </v-col>
-        </v-row>
+              <input
+                class="product__characteristic-input"
+                type="text"
+                :disabled="!ch.active"
+                placeholder="Enter value"
+                v-model="ch.value"
+              />
+              <v-icon
+                v-if="ch.active"
+                @click="ch.active = false"
+                class="product__characteristic-close"
+                icon="mdi-close"
+              >
+              </v-icon>
+            </v-col>
+          </v-row>
+        </div>
+        <div
+          v-else
+          id="scroll-target"
+          class="overflow-y-auto"
+          style="max-height: 500px"
+        >
+          <v-row
+            class="product__characteristic d-flex align-center"
+            v-for="ch in currentProductCharacteristics"
+            :key="ch"
+          >
+            <v-col cols="12" sm="6">
+              <span class="product__characteristic-title">
+                {{ ch.title }}
+              </span>
+            </v-col>
+            <v-col
+              :class="{ 'product__characteristic-input--active': ch.active }"
+              cols="12"
+              sm="6"
+            >
+              <span>{{ ch.value }}</span>
+            </v-col>
+          </v-row>
+        </div>
       </v-col>
     </v-row>
   </v-container>

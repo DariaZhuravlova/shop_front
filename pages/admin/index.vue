@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-form @submit.prevent="submit">
-      <v-row justify="center">
-        <v-col cols="12" md="6">
+    <v-row justify="center">
+      <v-col cols="12" md="6">
+        <v-form @submit.prevent="submit">
           <v-text-field
             variant="solo"
             v-model="productName.value.value"
@@ -36,9 +36,51 @@
           <organism-AddPhoto />
 
           <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
+        </v-form>
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+        id="scroll-target"
+        class="overflow-y-auto"
+        style="max-height: 500px"
+      >
+        <v-row
+          class="product__characteristic d-flex align-center"
+          v-for="ch in characteristics"
+          :key="ch.key"
+        >
+          <v-col cols="12" sm="6">
+            <span
+              class="product__characteristic-title"
+              @click="ch.active = !ch.active"
+            >
+              {{ ch.title }}
+            </span>
+          </v-col>
+          <v-col
+            :class="{ 'product__characteristic-input--active': ch.active }"
+            cols="12"
+            sm="6"
+          >
+            <input
+              class="product__characteristic-input"
+              type="text"
+              :disabled="!ch.active"
+              placeholder="Enter value"
+              v-model="ch.value"
+            />
+            <v-icon
+              v-if="ch.active"
+              @click="ch.active = false"
+              class="product__characteristic-close"
+              icon="mdi-close"
+            >
+            </v-icon>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col
         v-for="product in productStore.products"
@@ -64,11 +106,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useProductStore } from '../../stores/ProductStore';
 import { useField, useForm } from 'vee-validate';
 import type { ProductData } from '../../types/productData';
 import { productMenu } from '../../data/default/productMenu';
+import { characteristicsSchemaKeys } from '@/data/default/productCharacteristics';
+
 import axios from 'axios';
 
 // import { definePageMeta } from 'nuxt/app';
@@ -82,6 +126,13 @@ definePageMeta({
   layout: 'empty',
 });
 
+interface Characteristic {
+  key: string;
+  value: string;
+  active: boolean;
+}
+
+const characteristics = ref<Characteristic[]>([...characteristicsSchemaKeys]);
 const productStore = useProductStore();
 const fileInput = ref(null);
 const extractCategories = (productMenu) => {
@@ -171,10 +222,12 @@ const submit = handleSubmit(async (values: any) => {
     image: productStore.uploadedFiles.length
       ? productStore.uploadedFiles
       : productStore.selectedFiles,
+    characteristics: currentCharacteristics.value,
   };
 
   await productStore.postProduct(objProduct);
   handleReset();
+  clearCharacteristicsValue();
   productStore.uploadedFiles.length = 0;
   productStore.currentFiles.length = 0;
   productStore.selectedFiles.length = 0;
@@ -187,9 +240,47 @@ const deleteProduct = (productId: string) => {
 watch(productCategory.value, (newCategory: any) => {
   updateSubcategories(newCategory);
 });
+
+const currentCharacteristics = computed(() => {
+  let objCharacteristics: Record<string, string> = {};
+  characteristics.value.forEach((elem: Characteristic) => {
+    if (elem.value) {
+      objCharacteristics[elem.key] = elem.value;
+    }
+  });
+  return objCharacteristics;
+});
+
+function clearCharacteristicsValue() {
+  characteristics.value.forEach((elem: Characteristic) => {
+    elem.value = '';
+    elem.active = false;
+  });
+}
 </script>
 
 <style scoped lang="scss">
+.product__characteristic {
+  max-width: 700px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid;
+  margin: 0 auto;
+  &-title {
+    cursor: pointer;
+  }
+  &-input--active {
+    border-bottom: 1px solid;
+    padding: 0;
+    height: 28px;
+  }
+  &-input {
+    width: 90%;
+    color: black;
+  }
+  &-input:focus {
+    outline: none;
+  }
+}
 .product-card {
   margin: 20px;
   border-radius: 8px;

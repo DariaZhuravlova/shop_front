@@ -7,4 +7,5 @@ export type ProductData = {
     category: number;
     subcategory: number;
     mainImagePointer: number;
+    characteristics: { [key: string]: string }
 }
