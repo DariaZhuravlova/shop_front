@@ -11,6 +11,7 @@ export const useAppStore = defineStore('app', {
         profile: null as userData | null,
         users: [] as userData[],
         role: '' as string,
+        isEditMode: false as boolean,
         // loading
         isLoading: false as boolean,
         // snackbar

@@ -13,8 +13,6 @@ const appStore = useAppStore();
 
 const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
-
-// const characteristics = ref([...allCharacteristicsProduct]);
 async function fetchProduct() {
   try {
     const id = route.params.id;
@@ -24,10 +22,10 @@ async function fetchProduct() {
   }
 }
 
-fetchProduct();
-
 const allCharacteristicsProduct = computed(() => {
-  const allCharacteristics = [...characteristicsSchemaKeys];
+  let allCharacteristics = JSON.parse(
+    JSON.stringify(characteristicsSchemaKeys)
+  );
 
   for (let key in productStore.currentProduct.characteristics) {
     allCharacteristics.forEach((elem) => {
@@ -48,15 +46,35 @@ const currentProductCharacteristics = computed(() => {
   });
   return currentCharacteristics;
 });
+fetchProduct();
 
 onMounted(() => {});
+
+function show() {
+  let arrayProdCharact = [];
+
+  arrayProdCharact = allCharacteristicsProduct.value;
+  let objCharacteristics: Record<string, string> = {};
+
+  arrayProdCharact.forEach((elem: Characteristic) => {
+    if (elem.value) {
+      objCharacteristics[elem.key] = elem.value;
+    }
+  });
+  productStore.currentProduct.characteristics = objCharacteristics;
+
+  productStore.editProduct(productStore.currentProduct);
+}
 </script>
 
 <template>
   <v-container>
     <v-row justify="space-around">
       <v-col cols="12" md="6">
-        <h1 class="product__title text-center mb-4">
+        <div v-if="appStore.isEditMode" class="product__title text-center mb-4">
+          <input type="text" v-model="productStore.currentProduct.name" />
+        </div>
+        <h1 v-else class="product__title text-center mb-4">
           {{ productStore.currentProduct.name }}
         </h1>
         <v-carousel
@@ -75,12 +93,12 @@ onMounted(() => {});
           >
           </v-carousel-item>
         </v-carousel>
-        <atom-DiscountedPrice :price="productStore.currentProduct.price" />
+        <atom-DiscountedPrice />
       </v-col>
       <v-col cols="12" md="6">
         <h2 style="text-align: center">Характеристики</h2>
         <div
-          v-if="appStore.role === 'admin'"
+          v-if="appStore.isEditMode"
           id="scroll-target"
           class="overflow-y-auto"
           style="max-height: 500px"
@@ -91,10 +109,7 @@ onMounted(() => {});
             :key="ch.key"
           >
             <v-col cols="12" sm="6">
-              <span
-                class="product__characteristic-title"
-                @click="ch.active = !ch.active"
-              >
+              <span class="product__characteristic-title">
                 {{ ch.title }}
               </span>
             </v-col>
@@ -106,7 +121,6 @@ onMounted(() => {});
               <input
                 class="product__characteristic-input"
                 type="text"
-                :disabled="!ch.active"
                 placeholder="Enter value"
                 v-model="ch.value"
               />
@@ -147,25 +161,17 @@ onMounted(() => {});
         </div>
       </v-col>
     </v-row>
+    <v-row>
+      <v-btn v-if="appStore.isEditMode" @click="show">Сохранить</v-btn>
+      <v-btn
+        @click="appStore.isEditMode = true"
+        v-if="appStore.role === 'admin' && !appStore.isEditMode"
+        >Редактировать</v-btn
+      >
+    </v-row>
   </v-container>
 </template>
   
- <!-- <div v-for="ch in characteristics" :key="ch.key">
-          <div cols="12" v-if="ch.active">
-            <v-label>{{ ch.title }}</v-label>
-            <input type="text" placeholder="Enter value" />
-            <v-icon
-              @click="ch.active = false"
-              class="black--text"
-              icon="mdi-close"
-            >
-            </v-icon>
-          </div>
-
-          <div v-else>
-            <div @click="ch.active = true">{{ ch.title }}</div>
-          </div>
-        </div> -->
 <style lang="scss" scoped>
 .product__characteristic {
   max-width: 700px;

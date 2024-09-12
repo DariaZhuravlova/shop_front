@@ -82,6 +82,12 @@ const apiService = {
 
             )
         }),
+    editProduct: async (product: ProductData) =>
+        handleRequest(async (envConfig, option) => {
+            return await axios.put(`${envConfig.apiUrl}/api/product`, product, option,
+            )
+        }),
+
 
     deleteProduct: async (productId: string) =>
         handleRequest(async (envConfig) => {

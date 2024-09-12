@@ -53,6 +53,13 @@ export const useProductStore = defineStore("product", {
                 console.error('Failed to post product:', error);
             }
         },
+        async editProduct(product: ProductData) {
+            try {
+                await apiService.editProduct(product);
+            } catch (error) {
+                console.error('Failed to edit product:', error);
+            }
+        },
         async postProduct(product: ProductData) {
             try {
                 await apiService.postProduct(product);

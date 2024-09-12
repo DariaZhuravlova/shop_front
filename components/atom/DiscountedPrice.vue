@@ -1,11 +1,18 @@
 <script lang="ts" setup>
 import { defineProps, ref, computed } from 'vue';
-const props = defineProps<{
-  price: number;
-}>();
+import { useProductStore } from '@/stores/ProductStore';
+
+import { useAppStore } from '@/stores/AppStore';
+
+const appStore = useAppStore();
+
+const productStore = useProductStore();
 
 const oldPrice = computed(() => {
-  return Math.floor(props.price + (props.price * Math.random() * 0.3 + 0.1));
+  return Math.floor(
+    productStore.currentProduct.price +
+      (productStore.currentProduct.price * Math.random() * 0.3 + 0.1)
+  );
 });
 </script>
 
@@ -13,7 +20,14 @@ const oldPrice = computed(() => {
   <v-row class="product__price" justify="end">
     <v-col cols="3">
       <v-row class="product__price-old">{{ oldPrice }} $</v-row>
-      <v-row class="product__price-current">{{ price }} $</v-row>
+      <v-row class="product__price-current">
+        <input
+          v-if="appStore.isEditMode"
+          type="text"
+          v-model="productStore.currentProduct.price"
+        />
+        <span v-else> {{ productStore.currentProduct.price }}</span>
+      </v-row>
     </v-col>
   </v-row>
 </template>  
