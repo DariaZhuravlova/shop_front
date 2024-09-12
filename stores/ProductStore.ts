@@ -56,6 +56,7 @@ export const useProductStore = defineStore("product", {
         async editProduct(product: ProductData) {
             try {
                 await apiService.editProduct(product);
+                this.getProduct(this.currentProduct._id);
             } catch (error) {
                 console.error('Failed to edit product:', error);
             }

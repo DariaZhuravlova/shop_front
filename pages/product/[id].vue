@@ -64,6 +64,7 @@ function show() {
   productStore.currentProduct.characteristics = objCharacteristics;
 
   productStore.editProduct(productStore.currentProduct);
+  appStore.isEditMode = false;
 }
 </script>
 
