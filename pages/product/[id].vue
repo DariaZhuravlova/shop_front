@@ -50,7 +50,7 @@ fetchProduct();
 
 onMounted(() => {});
 
-function show() {
+function updateProduct() {
   let arrayProdCharact = [];
 
   arrayProdCharact = allCharacteristicsProduct.value;
@@ -66,18 +66,25 @@ function show() {
   productStore.editProduct(productStore.currentProduct);
   appStore.isEditMode = false;
 }
+
+function cancelChanges() {
+  appStore.isEditMode = false;
+  fetchProduct();
+}
 </script>
 
 <template>
   <v-container>
     <v-row justify="space-around">
       <v-col cols="12" md="6">
-        <div v-if="appStore.isEditMode" class="product__title text-center mb-4">
-          <input type="text" v-model="productStore.currentProduct.name" />
+        <div class="product__title text-center mb-4">
+          <input
+            type="text"
+            :disabled="!appStore.isEditMode"
+            v-model="productStore.currentProduct.name"
+            class="product__title-input"
+          />
         </div>
-        <h1 v-else class="product__title text-center mb-4">
-          {{ productStore.currentProduct.name }}
-        </h1>
         <v-carousel
           class="product__carousel"
           height="400"
@@ -162,18 +169,39 @@ function show() {
         </div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-btn v-if="appStore.isEditMode" @click="show">Сохранить</v-btn>
-      <v-btn
-        @click="appStore.isEditMode = true"
+    <v-row justify="space-around">
+      <v-col
+        cols="12"
+        md="6"
         v-if="appStore.role === 'admin' && !appStore.isEditMode"
-        >Редактировать</v-btn
+        class="d-flex justify-center"
       >
+        <v-btn @click="appStore.isEditMode = true">Редактировать</v-btn>
+      </v-col>
+      <v-col
+        cols="12"
+        md="6"
+        v-if="appStore.role === 'admin' && appStore.isEditMode"
+        class="d-flex flex-column flex-sm-row justify-space-around"
+      >
+        <v-btn class="mb-4 mb-sm-0" @click="updateProduct">Сохранить</v-btn>
+        <v-btn @click="cancelChanges">Отменить изменения</v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>
   
 <style lang="scss" scoped>
+.product__title {
+  &-input {
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+  }
+  &-input:focus {
+    outline: none;
+  }
+}
 .product__characteristic {
   max-width: 700px;
   margin-bottom: 4px;

@@ -22,11 +22,11 @@ const oldPrice = computed(() => {
       <v-row class="product__price-old">{{ oldPrice }} $</v-row>
       <v-row class="product__price-current">
         <input
-          v-if="appStore.isEditMode"
+          class="product__price-current-input"
+          :disabled="!appStore.isEditMode"
           type="text"
           v-model="productStore.currentProduct.price"
         />
-        <span v-else> {{ productStore.currentProduct.price }}</span>
       </v-row>
     </v-col>
   </v-row>
@@ -42,8 +42,13 @@ const oldPrice = computed(() => {
   }
 
   .product__price-current {
-    font-size: 16px;
-    color: #f84147;
+    &-input {
+      font-size: 16px;
+      color: #f84147;
+    }
+    &-input:focus {
+      outline: none;
+    }
   }
 }
 </style>
