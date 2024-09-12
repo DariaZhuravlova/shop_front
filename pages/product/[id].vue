@@ -74,7 +74,7 @@ function cancelChanges() {
 </script>
 
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row justify="space-around">
       <v-col cols="12" md="6">
         <div class="product__title text-center mb-4">

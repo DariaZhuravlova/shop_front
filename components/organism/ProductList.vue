@@ -6,15 +6,13 @@
       cols="12"
       md="4"
     >
-      
-    <organism-ProductCard :product="product" />
+      <organism-ProductCard :product="product" />
     </v-col>
   </v-row>
-  <h1 v-else>Товаров не найдено</h1>
+  <h1 class="text-center" v-else>Товаров не найдено</h1>
 </template>
 
 <script lang="ts" setup>
 import { useProductStore } from '../../stores/ProductStore';
 const productStore = useProductStore();
-
 </script>
