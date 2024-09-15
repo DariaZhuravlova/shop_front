@@ -11,7 +11,7 @@
       ></v-img>
       <v-card-title><b>{{ product.name }}</b></v-card-title>
       <div class="card-content">
-        <p><b>Price:</b> грн{{ product.price }}</p>
+        <p><b>Price:</b> {{ product.price }} грн</p>
         <p><b>Category:</b> {{ product.category }}</p>
         <p><b>Subcategory:</b> {{ product.subcategory }}</p>
       </div>
