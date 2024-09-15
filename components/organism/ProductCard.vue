@@ -1,6 +1,6 @@
 <template>
   <Nuxt-Link :to="'/product/' + product._id">
-    <v-card class="product-card">
+    <v-card class="product-card pa-3">
       <v-img
         :src="
           product.image[mainImagePointer]
@@ -9,12 +9,20 @@
             : ''
         "
       ></v-img>
-      <v-card-title>{{ product.name }}</v-card-title>
+      <v-card-title><b>{{ product.name }}</b></v-card-title>
       <div class="card-content">
-        <p><b>Price:</b> ${{ product.price }}</p>
+        <p><b>Price:</b> {{ product.price }} грн</p>
         <p><b>Category:</b> {{ product.category }}</p>
         <p><b>Subcategory:</b> {{ product.subcategory }}</p>
       </div>
+      <v-btn color="primary" @click.prevent="">Купить</v-btn>
+      <v-icon
+        class="favorite-icon"
+        :color="isFavorite ? 'primary' : 'grey'"
+        @click.prevent="toggleFavorite"
+      >
+        {{ isFavorite ? 'mdi-heart' : 'mdi-heart-outline' }}
+      </v-icon>
     </v-card>
   </Nuxt-Link>
 </template>
@@ -32,6 +40,12 @@ const mainImagePointer = ref(0);
 if (props.product.mainImagePointer !== undefined) {
   mainImagePointer.value = props.product.mainImagePointer;
 }
+
+// Логика для добавления в избранное
+const isFavorite = ref(false);
+const toggleFavorite = () => {
+  isFavorite.value = !isFavorite.value;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -39,18 +53,18 @@ a {
   text-decoration: none;
 
   .product-card {
-    max-width: 300px;
-    margin: 10px;
-    height: 400px;
+    width: 100%;
+    max-width: 400px;
+    height: 420px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     transition: all 0.3s ease;
     position: relative;
 
     &:hover {
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transform: scale(1.03);
     }
 
     .v-img {
@@ -61,7 +75,7 @@ a {
     }
 
     .card-content {
-      padding: 10px;
+      height: 120px;
       flex-grow: 1;
 
       p {
@@ -74,11 +88,17 @@ a {
       text-align: center;
     }
 
-    @media (max-width: 600px) {
-      max-width: 100%;
-      height: auto;
-      margin: 0;
-      border-radius: 0;
+    .favorite-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 24px;
+      transition: color 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 }

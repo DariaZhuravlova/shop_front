@@ -11,12 +11,9 @@
           <v-toolbar-title class="logo">SHOP</v-toolbar-title>
         </Nuxt-Link>
         <v-spacer></v-spacer>
-        <!-- я х з че эт ниже) -->
-        <!-- <template v-if="$vuetify.display.mdAndUp">
-          <v-btn icon="mdi-magnify" variant="text"></v-btn>
-          <v-btn icon="mdi-heart-outline" variant="text"></v-btn>
-        </template> -->
 
+        <v-btn icon="mdi-magnify" variant="text" class="d-none d-md-flex"></v-btn>
+        <v-btn icon="mdi-heart-outline" variant="text" class="d-none d-md-flex"></v-btn>
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
         <span v-if="appStore.profile">{{ appStore.profile.username }}</span>
         <Nuxt-Link to="/auth" class="icon-link">
@@ -46,9 +43,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useAppStore } from '../stores/AppStore';
-import { useDisplay } from 'vuetify';
-
-const { smAndDown } = useDisplay();
 
 const appStore = useAppStore();
 const drawer = ref(false);
@@ -72,6 +66,14 @@ watch(group, () => {
     .logo {
       padding: 0 32px;
     }
+  }
+}
+
+.v-main {
+  padding-left: 0;
+
+  @media (min-width: 600px) {
+    padding-left: 56px;
   }
 }
 </style>
