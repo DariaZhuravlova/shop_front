@@ -176,7 +176,7 @@ function cancelChanges() {
         v-if="appStore.role === 'admin' && !appStore.isEditMode"
         class="d-flex justify-center"
       >
-        <v-btn @click="appStore.isEditMode = true">Редактировать</v-btn>
+        <v-btn @click="appStore.isEditMode = true" color="success">Редактировать</v-btn>
       </v-col>
       <v-col
         cols="12"
@@ -184,8 +184,8 @@ function cancelChanges() {
         v-if="appStore.role === 'admin' && appStore.isEditMode"
         class="d-flex flex-column flex-sm-row justify-space-around"
       >
-        <v-btn class="mb-4 mb-sm-0" @click="updateProduct">Сохранить</v-btn>
-        <v-btn @click="cancelChanges">Отменить изменения</v-btn>
+        <v-btn class="mb-4 mb-sm-0" @click="updateProduct" color="success">Сохранить</v-btn>
+        <v-btn @click="cancelChanges" color="error">Отменить изменения</v-btn>
       </v-col>
     </v-row>
   </v-container>
