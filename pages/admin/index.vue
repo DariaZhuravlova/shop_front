@@ -33,6 +33,15 @@
             type="number"
             min="0"
           ></v-text-field>
+          <v-text-field
+            variant="solo"
+            v-model="productQuantity.value.value"
+            :error-messages="productQuantity.errorMessage.value"
+            label="Количество в наличии"
+            type="number"
+            min="0"
+          ></v-text-field>
+          
           <organism-AddPhoto />
 
           <v-btn class="mt-2" text="Submit" type="submit" block></v-btn>
@@ -188,6 +197,11 @@ const { handleSubmit, handleReset } = useForm({
 
       return 'Введите цену';
     },
+    productQuantity(value: number) {
+      if (value > 0) return true;
+
+      return 'Введите количество';
+    },
     productCategory(value: number) {
       if (!value) return 'Выберите категорию';
       else return true;
@@ -201,6 +215,7 @@ const { handleSubmit, handleReset } = useForm({
 
 const productName = useField('productName');
 const productPrice = useField('productPrice');
+const productQuantity = useField('productQuantity');
 const productCategory = useField('productCategory');
 const productSubcategory = useField('productSubcategory');
 
@@ -216,6 +231,7 @@ const submit = handleSubmit(async (values: any) => {
   const objProduct: ProductData = {
     name: values.productName,
     price: values.productPrice,
+    quantitiesInStore: values.productQuantity,
     category: values.productCategory,
     subcategory: values.productSubcategory,
     description: '',

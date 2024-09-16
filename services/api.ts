@@ -11,6 +11,8 @@ axios.defaults.withCredentials = true; // Включение передачи к
 async function handleRequest<T>(requestFunc: (envConfig: any, option: any) => Promise<T>): Promise<T | AxiosResponse | undefined> {
     try {
         const envConfig: any = useNuxtApp().$envConfig;
+        console.log(envConfig);
+        
         const option = { headers: { 'Content-Type': 'application/json' } };
         useAppStore().isLoading = true;
         return await requestFunc(envConfig, option);
