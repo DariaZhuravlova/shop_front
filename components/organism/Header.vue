@@ -19,7 +19,7 @@
         <Nuxt-Link to="/auth" class="icon-link">
           <v-btn icon="mdi-account-outline" variant="text"></v-btn>
         </Nuxt-Link>
-        <v-btn icon="mdi-cart-outline" variant="text"></v-btn>
+        <v-btn @click.stop="drawerCart = !drawerCart" icon="mdi-cart-outline" variant="text"></v-btn>
       </v-app-bar>
 
       <v-navigation-drawer
@@ -29,6 +29,14 @@
         width="330"
       >
         <molecule-ProductCatalog />
+      </v-navigation-drawer>
+
+      <v-navigation-drawer
+        v-model="drawerCart"
+        location="right"
+        temporary
+        width="330"
+      >
       </v-navigation-drawer>
 
       <v-main>
@@ -46,11 +54,12 @@ import { useAppStore } from '../stores/AppStore';
 
 const appStore = useAppStore();
 const drawer = ref(false);
-const group = ref(null);
+const drawerCart = ref(false);
+// const group = ref(null);
 
-watch(group, () => {
-  drawer.value = false;
-});
+// watch(group, () => {
+//   drawer.value = false;
+// });
 </script>
 
 <style scoped lang="scss">

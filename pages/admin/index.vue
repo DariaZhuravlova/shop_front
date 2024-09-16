@@ -27,6 +27,14 @@
           ></v-select>
           <v-text-field
             variant="solo"
+            v-model="productOldPrice.value.value"
+            :error-messages="productOldPrice.errorMessage.value"
+            label="Product Old Price"
+            type="number"
+            :min="productPrice.value.value"
+          ></v-text-field>
+          <v-text-field
+            variant="solo"
             v-model="productPrice.value.value"
             :error-messages="productPrice.errorMessage.value"
             label="Product Price"
@@ -126,10 +134,8 @@ import axios from 'axios';
 
 // import { definePageMeta } from 'nuxt/app';
 
-const apiUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://shop-back-mh7t.onrender.com'
-    : 'http://localhost:3001';
+const config = useRuntimeConfig();
+const apiUrl = config.public.apiUrl;
 
 definePageMeta({
   layout: 'empty',
@@ -214,6 +220,7 @@ const { handleSubmit, handleReset } = useForm({
 });
 
 const productName = useField('productName');
+const productOldPrice = useField('productOldPrice');
 const productPrice = useField('productPrice');
 const productQuantity = useField('productQuantity');
 const productCategory = useField('productCategory');
@@ -230,6 +237,7 @@ const updateSubcategories = (category: number) => {
 const submit = handleSubmit(async (values: any) => {
   const objProduct: ProductData = {
     name: values.productName,
+    oldPrice: values.productOldPrice,
     price: values.productPrice,
     quantitiesInStore: values.productQuantity,
     category: values.productCategory,
