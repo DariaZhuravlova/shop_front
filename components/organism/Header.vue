@@ -12,14 +12,32 @@
         </Nuxt-Link>
         <v-spacer></v-spacer>
 
-        <v-btn icon="mdi-magnify" variant="text" class="d-none d-md-flex"></v-btn>
-        <v-btn icon="mdi-heart-outline" variant="text" class="d-none d-md-flex"></v-btn>
+        <v-btn
+          icon="mdi-magnify"
+          variant="text"
+          class="d-none d-md-flex"
+        ></v-btn>
+        <v-btn
+          icon="mdi-heart-outline"
+          variant="text"
+          class="d-none d-md-flex"
+        ></v-btn>
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
         <span v-if="appStore.profile">{{ appStore.profile.username }}</span>
         <Nuxt-Link to="/auth" class="icon-link">
           <v-btn icon="mdi-account-outline" variant="text"></v-btn>
         </Nuxt-Link>
-        <v-btn @click.stop="drawerCart = !drawerCart" icon="mdi-cart-outline" variant="text"></v-btn>
+        <div style="position: relative">
+          <v-btn
+            @click.stop="appStore.drawerCart = !appStore.drawerCart"
+            icon="mdi-cart-outline"
+            variant="text"
+          >
+          </v-btn>
+          <div v-if="cartStore.currentCart.length > 0" class="amount_product">
+            {{ cartStore.currentCart.length }}
+          </div>
+        </div>
       </v-app-bar>
 
       <v-navigation-drawer
@@ -32,11 +50,12 @@
       </v-navigation-drawer>
 
       <v-navigation-drawer
-        v-model="drawerCart"
+        v-model="appStore.drawerCart"
         location="right"
         temporary
         width="330"
       >
+        <organism-cart />
       </v-navigation-drawer>
 
       <v-main>
@@ -51,10 +70,11 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useAppStore } from '../stores/AppStore';
+import { useCartStore } from '@/stores/CartStore';
 
+const cartStore = useCartStore();
 const appStore = useAppStore();
 const drawer = ref(false);
-const drawerCart = ref(false);
 // const group = ref(null);
 
 // watch(group, () => {
@@ -63,6 +83,20 @@ const drawerCart = ref(false);
 </script>
 
 <style scoped lang="scss">
+.amount_product {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: green;
+  color: white;
+  position: absolute;
+  top: 1px;
+  right: 6px;
+  font-size: 12px;
+}
 .icon-link {
   color: white;
   text-decoration: none;

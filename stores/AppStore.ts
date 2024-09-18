@@ -10,7 +10,7 @@ export const useAppStore = defineStore('app', {
         // apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
         profile: null as userData | null,
         users: [] as userData[],
-        role: 'admin' as string,
+        role: '' as string,
         isEditMode: false as boolean,
         // loading
         isLoading: false as boolean,
@@ -23,6 +23,7 @@ export const useAppStore = defineStore('app', {
         isShowModal: false as boolean,
         modalData: {} as any,
         // ...
+        drawerCart: false as boolean
     }),
     actions: {
         async register(registerData: RegisterData) {
