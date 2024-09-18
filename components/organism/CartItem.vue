@@ -37,6 +37,11 @@ function addQuantity() {
         <div>В наличии: {{ product.product.quantitiesInStore }} шт.</div>
         <div style="font-size: 16px">{{ product.product.price }} грн/шт.</div>
       </div>
+      <v-icon
+        class="btn-del"
+        icon="mdi-delete"
+        @click="cartStore.deleteProduct(product.product._id)"
+      ></v-icon>
     </div>
     <div class="items_amount">
       <div class="items_amount-price">
@@ -61,6 +66,7 @@ function addQuantity() {
     margin-bottom: 0 0 10px 0;
     padding: 0;
     height: 80px;
+    position: relative;
 
     &-img {
       width: 80px;
@@ -81,6 +87,18 @@ function addQuantity() {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+    }
+    .btn-del {
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      top: 40%;
+    }
+    .btn-del:hover {
+      color: red;
+    }
+    .btn-del:active {
+      scale: 1.1;
     }
   }
   .items_amount {

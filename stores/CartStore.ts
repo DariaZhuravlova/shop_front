@@ -18,6 +18,9 @@ export const useCartStore = defineStore('cart', {
             })
             console.log(this.currentCart);
 
+        },
+        deleteProduct(id: string) {
+            this.currentCart = this.currentCart.filter(item => item.product._id !== id)
         }
     },
 
