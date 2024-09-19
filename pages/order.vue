@@ -83,11 +83,11 @@ const productStore = useProductStore();
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0;
+  padding: 60px 0 40px 0;
   &-info {
     display: flex;
     width: 100%;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
 
@@ -105,6 +105,7 @@ const productStore = useProductStore();
     &-description {
       max-width: 800px;
       padding: 15px;
+      margin-top: 40px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
       .table {
@@ -181,6 +182,16 @@ const productStore = useProductStore();
 @media (max-width: 450px) {
   .table td:nth-child(3) {
     display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .order-info {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .order-info-description {
+    margin-top: 0;
   }
 }
 </style>
