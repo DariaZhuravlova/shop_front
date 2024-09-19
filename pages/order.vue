@@ -9,7 +9,9 @@ const appStore = useAppStore();
 const productStore = useProductStore();
 </script>
 
-<template></template>  
+<template>
+  <h1>Order</h1>
+</template>  
 
 <style lang="scss" scoped>
 </style>
