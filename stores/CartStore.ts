@@ -23,6 +23,13 @@ export const useCartStore = defineStore('cart', {
             this.currentCart = this.currentCart.filter(item => item.product._id !== id)
         }
     },
+    getters: {
+        totalPrice: (state) => {
+            return state.currentCart.reduce((acum, elem) => {
+                return acum + elem.product.price * elem.quantity;
+            }, 0);
+        }
+    },
 
 });
 

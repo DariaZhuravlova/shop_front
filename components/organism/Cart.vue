@@ -7,14 +7,6 @@ import { useCartStore } from '@/stores/CartStore';
 const cartStore = useCartStore();
 const appStore = useAppStore();
 const productStore = useProductStore();
-
-const totalPrice = computed(() =>
-  cartStore.currentCart.reduce((acum, elem) => {
-    acum = acum + elem.product.price * elem.quantity;
-
-    return acum;
-  }, 0)
-);
 </script>
 
 <template>
@@ -36,7 +28,7 @@ const totalPrice = computed(() =>
     </v-col>
     <v-col>
       <p>
-        {{ totalPrice }}
+        {{ cartStore.totalPrice }}
       </p>
 
       <v-btn>Перейти к оформлению</v-btn>
