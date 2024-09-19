@@ -7,6 +7,14 @@ import { useCartStore } from '@/stores/CartStore';
 const cartStore = useCartStore();
 const appStore = useAppStore();
 const productStore = useProductStore();
+
+const totalPrice = computed(() =>
+  cartStore.currentCart.reduce((acum, elem) => {
+    acum = acum + elem.product.price * elem.quantity;
+
+    return acum;
+  }, 0)
+);
 </script>
 
 <template>
@@ -25,6 +33,13 @@ const productStore = useProductStore();
         :key="item.product._id"
         :indProduct="ind"
       />
+    </v-col>
+    <v-col>
+      <p>
+        {{ totalPrice }}
+      </p>
+
+      <v-btn>Перейти к оформлению</v-btn>
     </v-col>
   </v-col>
 </template>  

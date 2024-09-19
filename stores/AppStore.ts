@@ -41,13 +41,8 @@ export const useAppStore = defineStore('app', {
         async login(loginData: LoginData) {
             try {
                 const res = await apiService.login(loginData);
-                if (res) {
-                    const result: dtoResponse = res.data;
-                    if (result.ok) {
-                        this.profile = result.data;
-                    }
-                    return result;
-                }
+                this.profile = res.data.user;
+
             } catch (error) {
                 console.error(error);
             }
