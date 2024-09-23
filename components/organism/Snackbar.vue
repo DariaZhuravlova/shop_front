@@ -8,8 +8,8 @@
       {{ props.text }}
 
       <template v-slot:actions>
-        <v-btn color="white" variant="flat" @click="emit('update:snackbar', false)">
-          Close
+        <v-btn icon color="transparent" @click="emit('update:snackbar', false)">
+          <v-icon color="white">mdi-close</v-icon>
         </v-btn>
       </template>
     </v-snackbar>

@@ -20,7 +20,7 @@
       <v-btn
         v-if="product.quantitiesInStore && !isProductInCart"
         color="primary"
-        @click.prevent="cartStore.addProductToCart(product)"
+        @click.prevent="handleAddToCart"
         >Купить</v-btn
       >
       <v-btn
@@ -77,6 +77,15 @@ const isProductInCart = computed(() => {
     (elem: {}) => elem.product._id === props.product._id
   );
 });
+
+const handleAddToCart = () => {
+  cartStore.addProductToCart(props.product);
+  appStore.snackbarText = `${props.product.name} добавлен в корзину!`;
+  appStore.snackbarColor = 'green';
+  appStore.isOpenSnackbar = true;
+  appStore.snackbarTimeout = 4000;
+};
+
 </script>
 
 <style lang="scss" scoped>
