@@ -74,6 +74,7 @@ const productStore = useProductStore();
     </div>
     <div class="delivery">
       <div class="action">2 Доставка</div>
+      <organism-Delivery />
     </div>
   </div>
 </template>  
