@@ -2,113 +2,189 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
-// Определяем интерфейсы для данных
-interface City {
-  Ref: string;
-  DescriptionRu: string;
-}
-
-interface Department {
-  Ref: string;
-  DescriptionRu: string;
-}
-
-// Инициализируем состояния с типами
-const cities = ref<City[]>([]);
-const departments = ref<Department[]>([]);
-const selectedCity = ref<City | null>(null); // Изменено на объект City или null
+const cities = ref<string[]>([
+  'Киев',
+  'Харьков',
+  'Одесса',
+  'Днепр',
+  'Львов',
+  'Запорожье',
+  'Винница',
+  'Чернигов',
+  'Сумы',
+  'Полтава',
+  'Черкассы',
+  'Кропивницкий',
+  'Херсон',
+  'Николаев',
+  'Житомир',
+  'Хмельницкий',
+  'Тернополь',
+  'Ровно',
+  'Ивано-Франковск',
+  'Ужгород',
+  'Черновцы',
+]);
+const departments = ref<string[]>([]);
+const selectedCity = ref<string | null>(null);
 const selectedDepartment = ref<string>('');
-const citySearchTerm = ref<string>('');
-
+let citySearchTerm = ref<string>('');
+const isInputActive = ref<boolean>(false);
 // Конфигурация API
 const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
 
-// Поиск городов
-const fetchCities = async (query: string) => {
-  console.log('Поиск городов с запросом:', query);
-  if (query) {
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/search-cities?q=${encodeURIComponent(query)}`
-      );
-      if (Array.isArray(response.data.cities)) {
-        cities.value = response.data.cities; // Устанавливаем города
-      } else {
-        console.error('Некорректный формат данных:', response.data);
-      }
-    } catch (error) {
-      console.error('Ошибка при поиске городов:', error);
-    }
-  } else {
-    cities.value = [];
+async function searchDepartment(city: string) {
+  try {
+    const response = await axios.get(
+      `${apiUrl}/api/search-departments?CityName=${city}`
+    );
+    departments.value = response.data.departments.map(
+      (elem) => elem.DescriptionRu
+    );
+  } catch (error) {
+    console.log(error);
   }
-};
+}
 
-// Поиск отделений для выбранного города
-const fetchDepartments = async (cityRef: string) => {
-  if (cityRef) {
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/search-departments?cityRef=${cityRef}`
-      );
+async function searchCity(city: string) {
+  try {
+    let response = await axios.get(`${apiUrl}/api/search-cities?q=${city}`);
 
-      console.log('Ответ от сервера для отделений:', response.data); // Логируем ответ
-
-      // Проверяем, есть ли поле ok и является ли departments массивом
-      if (response.data.ok) {
-        if (
-          Array.isArray(response.data.departments) &&
-          response.data.departments.length > 0
-        ) {
-          departments.value = response.data.departments; // Устанавливаем данные в состояние
-        } else {
-          console.error('Отделения не найдены:', response.data.departments);
-          alert('Отделения не найдены для данного города.');
-          departments.value = []; // Очищаем список отделений
-        }
-      } else {
-        console.error('Ошибка от API Новой Почты:', response.data);
-        alert('Ошибка при получении данных от Новой Почты.');
-      }
-    } catch (error) {
-      console.error('Ошибка при поиске отделений:', error);
-      alert('Произошла ошибка при обращении к API.');
-    }
-  } else {
-    departments.value = []; // Очистка списка отделений, если cityRef не задан
+    cities.value = response.data.cities[0].Addresses.map(
+      (elem) => elem.MainDescription
+    );
+  } catch (error) {
+    console.log(error);
   }
-};
+}
+
+function selectCity(city: string) {
+  selectedCity.value = city;
+  isInputActive.value = false;
+  citySearchTerm.value = city;
+}
+
+watch(
+  () => citySearchTerm.value,
+  (newValue: string, oldValue: string) => {
+    if (newValue) {
+      searchCity(newValue);
+    } else {
+      cities.value = [
+        'Киев',
+        'Харьков',
+        'Одесса',
+        'Днепр',
+        'Львов',
+        'Запорожье',
+        'Винница',
+        'Чернигов',
+        'Сумы',
+        'Полтава',
+        'Черкассы',
+        'Кропивницкий',
+        'Херсон',
+        'Николаев',
+        'Житомир',
+        'Хмельницкий',
+        'Тернополь',
+        'Ровно',
+        'Ивано-Франковск',
+        'Ужгород',
+        'Черновцы',
+      ];
+    }
+  }
+);
+
+watch(
+  () => selectedCity.value,
+  (newValue: string, oldValue: string) => {
+    if (newValue) {
+      searchDepartment(newValue);
+    }
+  }
+);
 </script>
 
 <template>
   <v-container>
-    <!-- Поле поиска и выбора города -->
-    <v-autocomplete
-      v-model="selectedCity"
-      :items="['Киев', 'Харьков', 'Днепр', 'Одесса', 'Львов']"
-      label="Введите название города"
-      item-text="DescriptionRu"
-      item-value="Ref"
-      @update:model-value="(value: City | null) => {
-        console.log('Выбранный город:', value); // Логируем выбранный город
-        if (value) {
-          fetchDepartments(value.Ref); // Используем Ref для запроса отделений
-        } else {
-          departments.value = []; // Очищаем отделения, если город не выбран
-        }
-      }"
-      @search-input="fetchCities"
-      :search-input.sync="citySearchTerm"
-    />
+    <v-row class="city-select">
+      <v-col cols="12">
+        <input
+          placeholder="Введите город"
+          @focus="isInputActive = true"
+          type="text"
+          v-model="citySearchTerm"
+        />
+        <div
+          :class="isInputActive ? 'all-cities' : 'd-none'"
+          id="scroll-target"
+          class="overflow-y-auto"
+          style="max-height: 150px"
+        >
+          <div
+            v-for="city in cities"
+            :key="city"
+            class="city"
+            @click="selectCity(city)"
+          >
+            <span>{{ city }}</span>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
 
     <!-- Поле выбора отделения -->
-    <v-select
-      v-model="selectedDepartment"
-      :items="departments"
-      label="Выберите отделение"
-      item-text="DescriptionRu"
-      item-value="Ref"
-    />
+    <v-row>
+      <v-col cols="12">
+        <v-select
+          v-model="selectedDepartment"
+          :items="departments"
+          label="Выберите отделение"
+          item-text="DescriptionRu"
+          item-value="Ref"
+          :disabled="!selectedCity"
+        />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
+
+<style scoped lang="scss">
+.city-select {
+  width: 100%;
+  height: 28px;
+  z-index: 1;
+  margin: 0 auto 35px auto;
+  position: relative;
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 5px;
+  }
+  input:focus {
+    outline: none;
+  }
+  .all-cities {
+    max-height: 150px;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    z-index: 11;
+    background-color: white;
+  }
+  .d-none {
+    display: none;
+  }
+  .city {
+    padding: 5px 10px;
+  }
+  .city:hover {
+    background-color: rgb(203, 208, 206);
+    cursor: pointer;
+  }
+}
+</style>
