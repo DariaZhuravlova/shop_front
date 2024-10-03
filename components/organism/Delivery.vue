@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const cities = ref<any[]>([]);
 const departments = ref<string[]>([]);
-const selectedCity = ref<{} | null>(null);
+const selectedCity = ref<any | null>(null);
 const selectedDepartment = ref<string>('');
 let citySearchTerm = ref<string>('');
 const isInputActive = ref<boolean>(false);
@@ -18,7 +18,7 @@ async function searchDepartment(ref: string) {
       `${apiUrl}/api/search-departments?CityRef=${ref}`
     );
     departments.value = response.data.departments.map(
-      (elem) => elem.DescriptionRu
+      (elem: { DescriptionRu: any; }) => elem.DescriptionRu
     );
   } catch (error) {
     console.log(error);
@@ -36,7 +36,7 @@ async function searchCity(city: string) {
   }
 }
 
-function selectCity(city: string) {
+function selectCity(city: any) {
   selectedCity.value = city;
   isInputActive.value = false;
   citySearchTerm.value = city.MainDescription;
@@ -44,7 +44,7 @@ function selectCity(city: string) {
 
 watch(
   () => citySearchTerm.value,
-  (newValue: string, oldValue: string) => {
+  (newValue: string, _oldValue: string) => {
     cities.value = [];
     if (newValue) {
       searchCity(newValue);
@@ -54,11 +54,11 @@ watch(
 
 watch(
   () => selectedCity.value,
-  (newValue: {}, oldValue: string) => {
+  (newValue: any, _oldValue: string) => {
     if (newValue) {
-      console.log(newValue.Ref);
+      console.log(newValue.DeliveryCity);
 
-      searchDepartment(newValue.Ref);
+      searchDepartment(newValue.DeliveryCity);
     }
   }
 );
