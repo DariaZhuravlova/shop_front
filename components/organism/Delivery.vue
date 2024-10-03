@@ -1,32 +1,10 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import axios from 'axios';
 
-const cities = ref<string[]>([
-  'Киев',
-  'Харьков',
-  'Одесса',
-  'Днепр',
-  'Львов',
-  'Запорожье',
-  'Винница',
-  'Чернигов',
-  'Сумы',
-  'Полтава',
-  'Черкассы',
-  'Кропивницкий',
-  'Херсон',
-  'Николаев',
-  'Житомир',
-  'Хмельницкий',
-  'Тернополь',
-  'Ровно',
-  'Ивано-Франковск',
-  'Ужгород',
-  'Черновцы',
-]);
+const cities = ref<any[]>([]);
 const departments = ref<string[]>([]);
-const selectedCity = ref<string | null>(null);
+const selectedCity = ref<{} | null>(null);
 const selectedDepartment = ref<string>('');
 let citySearchTerm = ref<string>('');
 const isInputActive = ref<boolean>(false);
@@ -34,10 +12,10 @@ const isInputActive = ref<boolean>(false);
 const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
 
-async function searchDepartment(city: string) {
+async function searchDepartment(ref: string) {
   try {
     const response = await axios.get(
-      `${apiUrl}/api/search-departments?CityName=${city}`
+      `${apiUrl}/api/search-departments?CityRef=${ref}`
     );
     departments.value = response.data.departments.map(
       (elem) => elem.DescriptionRu
@@ -51,9 +29,8 @@ async function searchCity(city: string) {
   try {
     let response = await axios.get(`${apiUrl}/api/search-cities?q=${city}`);
 
-    cities.value = response.data.cities[0].Addresses.map(
-      (elem) => elem.MainDescription
-    );
+    cities.value = response.data.cities[0].Addresses;
+    console.log(cities.value);
   } catch (error) {
     console.log(error);
   }
@@ -62,47 +39,26 @@ async function searchCity(city: string) {
 function selectCity(city: string) {
   selectedCity.value = city;
   isInputActive.value = false;
-  citySearchTerm.value = city;
+  citySearchTerm.value = city.MainDescription;
 }
 
 watch(
   () => citySearchTerm.value,
   (newValue: string, oldValue: string) => {
+    cities.value = [];
     if (newValue) {
       searchCity(newValue);
-    } else {
-      cities.value = [
-        'Киев',
-        'Харьков',
-        'Одесса',
-        'Днепр',
-        'Львов',
-        'Запорожье',
-        'Винница',
-        'Чернигов',
-        'Сумы',
-        'Полтава',
-        'Черкассы',
-        'Кропивницкий',
-        'Херсон',
-        'Николаев',
-        'Житомир',
-        'Хмельницкий',
-        'Тернополь',
-        'Ровно',
-        'Ивано-Франковск',
-        'Ужгород',
-        'Черновцы',
-      ];
     }
   }
 );
 
 watch(
   () => selectedCity.value,
-  (newValue: string, oldValue: string) => {
+  (newValue: {}, oldValue: string) => {
     if (newValue) {
-      searchDepartment(newValue);
+      console.log(newValue.Ref);
+
+      searchDepartment(newValue.Ref);
     }
   }
 );
@@ -126,11 +82,11 @@ watch(
         >
           <div
             v-for="city in cities"
-            :key="city"
+            :key="city.Present"
             class="city"
             @click="selectCity(city)"
           >
-            <span>{{ city }}</span>
+            <span>{{ city.Present }}</span>
           </div>
         </div>
       </v-col>
