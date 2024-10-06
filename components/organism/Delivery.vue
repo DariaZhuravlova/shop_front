@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import axios from 'axios';
+import { defineProps, defineEmits } from 'vue';
 
 const cities = ref<any[]>([]);
 const departments = ref<string[]>([]);
@@ -11,6 +12,20 @@ const isInputActive = ref<boolean>(false);
 // Конфигурация API
 const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
+
+const emits = defineEmits(['updateCity']);
+const props = defineProps({
+  cityError: String,
+  departmentError: String,
+});
+function emitCity(city: string) {
+  emits('updateCity', city);
+}
+
+function emitDepartment() {
+  emits('updateDepartment', selectedDepartment.value);
+  //   console.log(selectedDepartment.value);
+}
 
 async function searchDepartment(ref: string) {
   try {
@@ -29,6 +44,8 @@ async function searchCity(city: string) {
   try {
     let response = await axios.get(`${apiUrl}/api/search-cities?q=${city}`);
     cities.value = response.data.cities[0].Addresses;
+    selectedDepartment.value = '';
+    emitDepartment('');
   } catch (error) {
     console.log(error);
   }
@@ -38,6 +55,7 @@ function selectCity(city: any) {
   selectedCity.value = city;
   isInputActive.value = false;
   citySearchTerm.value = city.MainDescription;
+  emitCity(city.Present);
 }
 
 watch(
@@ -64,17 +82,12 @@ watch(
   <v-container>
     <v-row class="city-select">
       <v-col cols="12" class="pa-0">
-        <!-- <input
-          placeholder="Введите город"
-          @focus="isInputActive = true"
-          type="text"
-          v-model="citySearchTerm"
-        /> -->
         <v-text-field
           variant="solo"
           label="Введите город"
           @focus="isInputActive = true"
           v-model="citySearchTerm"
+          :error-messages="cityError"
         ></v-text-field>
         <div
           :class="isInputActive ? 'all-cities' : 'd-none'"
@@ -96,7 +109,7 @@ watch(
 
     <!-- Поле выбора отделения -->
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" align="start">
         <v-select
           variant="solo"
           v-model="selectedDepartment"
@@ -105,6 +118,8 @@ watch(
           item-text="DescriptionRu"
           item-value="Ref"
           :disabled="!selectedCity"
+          @update:model-value="emitDepartment"
+          :error-messages="departmentError"
         />
       </v-col>
     </v-row>
@@ -118,6 +133,8 @@ watch(
   z-index: 1;
   margin: 0 auto 35px auto;
   position: relative;
+  text-align: start;
+
   input:focus {
     outline: none;
   }
