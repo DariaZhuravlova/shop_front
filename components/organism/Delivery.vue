@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import axios from 'axios';
+import { defineProps, defineEmits } from 'vue';
 
 const cities = ref<any[]>([]);
 const departments = ref<string[]>([]);
@@ -11,6 +12,14 @@ const isInputActive = ref<boolean>(false);
 // Конфигурация API
 const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
+
+const emits = defineEmits(['updateCity']);
+const props = defineProps({
+  cityError: String,
+});
+function emitCity(city: string) {
+  emits('updateCity', city);
+}
 
 async function searchDepartment(ref: string) {
   try {
@@ -38,6 +47,7 @@ function selectCity(city: any) {
   selectedCity.value = city;
   isInputActive.value = false;
   citySearchTerm.value = city.MainDescription;
+  emitCity(city.Present);
 }
 
 watch(
@@ -64,17 +74,12 @@ watch(
   <v-container>
     <v-row class="city-select">
       <v-col cols="12" class="pa-0">
-        <!-- <input
-          placeholder="Введите город"
-          @focus="isInputActive = true"
-          type="text"
-          v-model="citySearchTerm"
-        /> -->
         <v-text-field
           variant="solo"
           label="Введите город"
           @focus="isInputActive = true"
           v-model="citySearchTerm"
+          :error-messages="cityError"
         ></v-text-field>
         <div
           :class="isInputActive ? 'all-cities' : 'd-none'"
@@ -118,6 +123,8 @@ watch(
   z-index: 1;
   margin: 0 auto 35px auto;
   position: relative;
+  text-align: start;
+
   input:focus {
     outline: none;
   }

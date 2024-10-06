@@ -20,16 +20,22 @@ const { handleSubmit } = useForm({
       if (!regEmail.test(value)) return 'Неверный формат Email';
       return true;
     },
+    city(value: string) {
+      if (!value?.length) return 'Введите город';
+      return true;
+    },
   },
 });
 
 const username = useField('username');
 const phone = useField('phone');
 const email = useField('email');
+const city = useField('city');
 const submitOrder = handleSubmit(async (values: any) => {
   console.log(username.value.value);
   console.log(phone.value.value);
   console.log(email.value.value);
+  console.log(city.value.value);
 });
 
 function onInputPhone(event: any) {
@@ -61,6 +67,10 @@ function onInputPhone(event: any) {
     }
   );
   phone.value.value = event.target.value;
+}
+
+function updateCity(selectedCity: string) {
+  city.value.value = selectedCity;
 }
 </script>
 
@@ -101,7 +111,10 @@ function onInputPhone(event: any) {
       <v-col align="center" cols="12">
         <div class="delivery">
           <div class="action">2 Доставка</div>
-          <organism-Delivery />
+          <organism-Delivery
+            @updateCity="updateCity"
+            :cityError="city.errorMessage.value"
+          />
         </div>
       </v-col>
     </v-row>
