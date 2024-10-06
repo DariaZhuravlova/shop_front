@@ -16,7 +16,7 @@ export const useCartStore = defineStore('cart', {
                 product: product,
                 quantity: 1
             })
-            console.log(this.currentCart);
+
 
         },
         deleteProduct(id: string) {

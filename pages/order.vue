@@ -24,6 +24,10 @@ const { handleSubmit } = useForm({
       if (!value?.length) return 'Введите город';
       return true;
     },
+    department(value: string) {
+      if (!value?.length && city.value.value) return 'Выберите отделение';
+      return true;
+    },
   },
 });
 
@@ -31,11 +35,13 @@ const username = useField('username');
 const phone = useField('phone');
 const email = useField('email');
 const city = useField('city');
+const department = useField('department');
 const submitOrder = handleSubmit(async (values: any) => {
   console.log(username.value.value);
   console.log(phone.value.value);
   console.log(email.value.value);
   console.log(city.value.value);
+  console.log(department.value.value);
 });
 
 function onInputPhone(event: any) {
@@ -71,6 +77,10 @@ function onInputPhone(event: any) {
 
 function updateCity(selectedCity: string) {
   city.value.value = selectedCity;
+}
+
+function updateDepartment(selectedDepartment: string) {
+  department.value.value = selectedDepartment;
 }
 </script>
 
@@ -113,7 +123,9 @@ function updateCity(selectedCity: string) {
           <div class="action">2 Доставка</div>
           <organism-Delivery
             @updateCity="updateCity"
+            @updateDepartment="updateDepartment"
             :cityError="city.errorMessage.value"
+            :departmentError="department.errorMessage.value"
           />
         </div>
       </v-col>

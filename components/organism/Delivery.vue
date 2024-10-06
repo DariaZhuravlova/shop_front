@@ -16,9 +16,15 @@ const apiUrl = config.public.apiUrl;
 const emits = defineEmits(['updateCity']);
 const props = defineProps({
   cityError: String,
+  departmentError: String,
 });
 function emitCity(city: string) {
   emits('updateCity', city);
+}
+
+function emitDepartment() {
+  emits('updateDepartment', selectedDepartment.value);
+  //   console.log(selectedDepartment.value);
 }
 
 async function searchDepartment(ref: string) {
@@ -38,6 +44,8 @@ async function searchCity(city: string) {
   try {
     let response = await axios.get(`${apiUrl}/api/search-cities?q=${city}`);
     cities.value = response.data.cities[0].Addresses;
+    selectedDepartment.value = '';
+    emitDepartment('');
   } catch (error) {
     console.log(error);
   }
@@ -101,7 +109,7 @@ watch(
 
     <!-- Поле выбора отделения -->
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" align="start">
         <v-select
           variant="solo"
           v-model="selectedDepartment"
@@ -110,6 +118,8 @@ watch(
           item-text="DescriptionRu"
           item-value="Ref"
           :disabled="!selectedCity"
+          @update:model-value="emitDepartment"
+          :error-messages="departmentError"
         />
       </v-col>
     </v-row>
