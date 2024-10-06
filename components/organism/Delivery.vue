@@ -18,7 +18,7 @@ async function searchDepartment(ref: string) {
       `${apiUrl}/api/search-departments?CityRef=${ref}`
     );
     departments.value = response.data.departments.map(
-      (elem: { DescriptionRu: any; }) => elem.DescriptionRu
+      (elem: { DescriptionRu: any }) => elem.DescriptionRu
     );
   } catch (error) {
     console.log(error);
@@ -28,9 +28,7 @@ async function searchDepartment(ref: string) {
 async function searchCity(city: string) {
   try {
     let response = await axios.get(`${apiUrl}/api/search-cities?q=${city}`);
-
     cities.value = response.data.cities[0].Addresses;
-    console.log(cities.value);
   } catch (error) {
     console.log(error);
   }
@@ -56,8 +54,6 @@ watch(
   () => selectedCity.value,
   (newValue: any, _oldValue: string) => {
     if (newValue) {
-      console.log(newValue.DeliveryCity);
-
       searchDepartment(newValue.DeliveryCity);
     }
   }

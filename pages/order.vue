@@ -77,7 +77,6 @@ function onInputPhone(event: any) {
             label="Имя"
           ></v-text-field>
         </v-col>
-
         <v-col cols="12">
           <v-text-field
             variant="solo"
@@ -87,7 +86,6 @@ function onInputPhone(event: any) {
             :error-messages="phone.errorMessage.value"
           ></v-text-field>
         </v-col>
-
         <v-col cols="12">
           <v-text-field
             variant="solo"
@@ -100,11 +98,13 @@ function onInputPhone(event: any) {
       <v-col cols="12" md="6">
         <molecule-OrderedProducts />
       </v-col>
+      <v-col align="center" cols="12">
+        <div class="delivery">
+          <div class="action">2 Доставка</div>
+          <organism-Delivery />
+        </div>
+      </v-col>
     </v-row>
-    <!-- <div class="delivery">
-      <div class="action">2 Доставка</div>
-      <organism-Delivery />
-    </div> -->
     <v-row justify="center">
       <v-btn
         class="mt-4"
@@ -139,8 +139,7 @@ function onInputPhone(event: any) {
   }
   .delivery {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 800px;
-    height: 400px;
+    max-width: 800px;
     margin-top: 40px;
     position: relative;
 
