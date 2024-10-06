@@ -69,7 +69,7 @@ function onInputPhone(event: any) {
     <v-row align="center">
       <v-col cols="12" md="6" class="contact-info">
         <div class="action">1 Контактная информация</div>
-        <v-col cols="12">
+        <v-col cols="12" class="pa-0 pt-2">
           <v-text-field
             variant="solo"
             v-model="username.value.value"
@@ -77,7 +77,7 @@ function onInputPhone(event: any) {
             label="Имя"
           ></v-text-field>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="pa-0">
           <v-text-field
             variant="solo"
             v-model="phone.value.value"
@@ -86,7 +86,7 @@ function onInputPhone(event: any) {
             :error-messages="phone.errorMessage.value"
           ></v-text-field>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="pa-0">
           <v-text-field
             variant="solo"
             v-model="email.value.value"

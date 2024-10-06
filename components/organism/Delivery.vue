@@ -63,13 +63,19 @@ watch(
 <template>
   <v-container>
     <v-row class="city-select">
-      <v-col cols="12">
-        <input
+      <v-col cols="12" class="pa-0">
+        <!-- <input
           placeholder="Введите город"
           @focus="isInputActive = true"
           type="text"
           v-model="citySearchTerm"
-        />
+        /> -->
+        <v-text-field
+          variant="solo"
+          label="Введите город"
+          @focus="isInputActive = true"
+          v-model="citySearchTerm"
+        ></v-text-field>
         <div
           :class="isInputActive ? 'all-cities' : 'd-none'"
           id="scroll-target"
@@ -92,6 +98,7 @@ watch(
     <v-row>
       <v-col cols="12">
         <v-select
+          variant="solo"
           v-model="selectedDepartment"
           :items="departments"
           label="Выберите отделение"
@@ -111,22 +118,18 @@ watch(
   z-index: 1;
   margin: 0 auto 35px auto;
   position: relative;
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid;
-    border-radius: 5px;
-  }
   input:focus {
     outline: none;
   }
   .all-cities {
+    margin-top: -20px;
     max-height: 150px;
     width: 100%;
     border-radius: 5px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
     z-index: 11;
     background-color: white;
+    text-align: start;
   }
   .d-none {
     display: none;
