@@ -1,73 +1,124 @@
 <script lang="ts" setup>
 import { defineProps, ref, computed } from 'vue';
-import { useProductStore } from '@/stores/ProductStore';
-import { useAppStore } from '@/stores/AppStore';
-import { useCartStore } from '@/stores/CartStore';
+import { useField, useForm } from 'vee-validate';
+const regPhone = /^\+38 \(0[1-9]\d{1}\) \d{3} \d{2} \d{2}$/;
+const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
+const { handleSubmit } = useForm({
+  validationSchema: {
+    username(value: string) {
+      if (!value?.length) return 'Введите имя';
+      else if (value?.length >= 2) return true;
+      else return 'Имя содержит минимум 2 символа';
+    },
+    phone(value: string) {
+      if (!value?.length) return 'Введите номер телефона';
+      if (!regPhone.test(value)) return 'Неверный формат номера';
+      return true;
+    },
+    email(value: string) {
+      if (!value?.length) return 'Введите Email';
+      if (!regEmail.test(value)) return 'Неверный формат Email';
+      return true;
+    },
+  },
+});
 
-const cartStore = useCartStore();
-const appStore = useAppStore();
-const productStore = useProductStore();
+const username = useField('username');
+const phone = useField('phone');
+const email = useField('email');
+const submitOrder = handleSubmit(async (values: any) => {
+  console.log(username.value.value);
+  console.log(phone.value.value);
+  console.log(email.value.value);
+});
+
+function onInputPhone(event: any) {
+  event.target.value = event.target.value
+    .replace('+38 (0', '')
+    .replace(/\D/g, '')
+    .slice(0, 9);
+  const phoneRegex = /^(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})$/;
+
+  event.target.value = event.target.value.replace(
+    phoneRegex,
+    (_match: string, p1: string, p2: string, p3: string, p4: string) => {
+      const formattedNumber = [];
+
+      if (p1) {
+        formattedNumber.push(`+38 (0${p1}`);
+      }
+      if (p2) {
+        formattedNumber.push(`) ${p2}`);
+      }
+      if (p3) {
+        formattedNumber.push(` ${p3}`);
+      }
+      if (p4) {
+        formattedNumber.push(` ${p4}`);
+      }
+
+      return formattedNumber.join('');
+    }
+  );
+  phone.value.value = event.target.value;
+}
 </script>
 
 <template>
-  <div class="order">
-    <div class="order-info">
-      <div style="width: 500px" class="contact-info">
+  <v-form class="order" @submit.prevent="submitOrder">
+    <v-row align="center">
+      <v-col cols="12" md="6" class="contact-info">
         <div class="action">1 Контактная информация</div>
-        <v-form v-model="valid">
-          <v-container>
-            <v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="firstname"
-                  :counter="10"
-                  :rules="nameRules"
-                  label="First name"
-                  hide-details
-                  required
-                ></v-text-field>
-              </v-col>
+        <v-col cols="12">
+          <v-text-field
+            variant="solo"
+            v-model="username.value.value"
+            :error-messages="username.errorMessage.value"
+            label="Имя"
+          ></v-text-field>
+        </v-col>
 
-              <v-col cols="12">
-                <v-text-field
-                  v-model="lastname"
-                  :counter="10"
-                  :rules="nameRules"
-                  label="Phone"
-                  hide-details
-                  required
-                ></v-text-field>
-              </v-col>
+        <v-col cols="12">
+          <v-text-field
+            variant="solo"
+            v-model="phone.value.value"
+            @input="onInputPhone"
+            label="Телефон"
+            :error-messages="phone.errorMessage.value"
+          ></v-text-field>
+        </v-col>
 
-              <v-col cols="12">
-                <v-text-field
-                  v-model="email"
-                  :rules="emailRules"
-                  label="E-mail"
-                  hide-details
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-col>
-          </v-container>
-        </v-form>
-      </div>
-      <molecule-OrderedProducts />
-    </div>
-    <div class="delivery">
+        <v-col cols="12">
+          <v-text-field
+            variant="solo"
+            v-model="email.value.value"
+            label="E-mail"
+            :error-messages="email.errorMessage.value"
+          ></v-text-field>
+        </v-col>
+      </v-col>
+      <v-col cols="12" md="6">
+        <molecule-OrderedProducts />
+      </v-col>
+    </v-row>
+    <!-- <div class="delivery">
       <div class="action">2 Доставка</div>
       <organism-Delivery />
-    </div>
-    <v-btn class="mt-2" text="Сделать заказ" type="submit" block></v-btn>
-  </div>
+    </div> -->
+    <v-row justify="center">
+      <v-btn
+        class="mt-4"
+        style="width: 200px"
+        text="Сделать заказ"
+        type="submit"
+      ></v-btn>
+    </v-row>
+  </v-form>
 </template>  
 
 <style lang="scss" scoped>
 .order {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 60px 0 40px 0;
+  padding: 60px 20px 40px 20px;
   &-info {
     display: flex;
     width: 100%;

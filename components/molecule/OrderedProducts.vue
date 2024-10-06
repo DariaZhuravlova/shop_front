@@ -25,9 +25,8 @@ const cartStore = useCartStore();
 
 <style lang="scss" scoped>
 .order-info-description {
-  max-width: 800px;
+  width: 100%;
   padding: 15px;
-  margin-top: 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   .table {
