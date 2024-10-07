@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { defineProps, ref, computed } from 'vue';
 import { useField, useForm } from 'vee-validate';
+import { useCartStore } from '@/stores/CartStore';
+
+const cartStore = useCartStore();
+
 const regPhone = /^\+38 \(0[1-9]\d{1}\) \d{3} \d{2} \d{2}$/;
 const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
 const { handleSubmit } = useForm({
@@ -37,6 +41,18 @@ const email = useField('email');
 const city = useField('city');
 const department = useField('department');
 const submitOrder = handleSubmit(async (values: any) => {
+  const contacts = {
+    username: username.value.value,
+    phone: phone.value.value,
+    email: email.value.value,
+  }
+  const delivery = {
+    city: city.value.value,
+    department: department.value.value,
+  }
+
+  cartStore.addOrder(contacts, delivery)
+
   console.log(username.value.value);
   console.log(phone.value.value);
   console.log(email.value.value);

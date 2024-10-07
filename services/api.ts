@@ -109,6 +109,11 @@ const apiService = {
         handleRequest(async (envConfig) => {
             return await axios.get(`${envConfig.apiUrl}/api/users`)
         }),
+
+    postOrder: async (order: any) =>
+        handleRequest(async (envConfig, option) => {
+            return await axios.post(`${envConfig.apiUrl}/api/order`, order, option)
+        }),
 };
 
 export default apiService;
