@@ -32,7 +32,7 @@ const handleFileUpload = async () => {
   }
 
   try {
-    const response = await axios.post(`${apiUrl}/upload-multiple`, formData, {
+    const response = await axios.post(`${apiUrl}/api/upload-multiple`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
