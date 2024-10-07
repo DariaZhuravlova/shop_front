@@ -9,8 +9,6 @@ import type { ProductData } from '../../types/productData';
 export const useCartStore = defineStore('cart', {
     state: () => ({
         currentCart: [],
-        guestContact: {},
-        delivery: {},
     }),
     actions: {
         addProductToCart(product: ProductData) {
@@ -24,23 +22,15 @@ export const useCartStore = defineStore('cart', {
         deleteProduct(id: string) {
             this.currentCart = this.currentCart.filter(item => item.product._id !== id)
         },
-        async addOrder(contacts, delivery) {
+        async addOrder(contacts: { username: string, phone: string, email: string }, delivery: { city: string, department: string }) {
             const order = {
                 products: this.currentCart,
                 guestContact: contacts,
                 delivery
             }
 
-           const result = await apiService.postOrder(order)
-           if (result?.ok) {
-               console.log(result);
-               this.currentCart = [];
-            //    this.contacts = {};
-            //    this.delivery = {};
-               alert("Ваш заказ принят. Спасибо за покупку!");
-           } else {
-               alert("Произошла ошибка при оформлении заказа. Попробуйте еще раз.");
-           }
+            return await apiService.postOrder(order)
+
         }
     },
     getters: {

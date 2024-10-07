@@ -7,7 +7,7 @@ const cartStore = useCartStore();
 
 const regPhone = /^\+38 \(0[1-9]\d{1}\) \d{3} \d{2} \d{2}$/;
 const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
-const { handleSubmit } = useForm({
+const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     username(value: string) {
       if (!value?.length) return 'Введите имя';
@@ -45,19 +45,21 @@ const submitOrder = handleSubmit(async (values: any) => {
     username: username.value.value,
     phone: phone.value.value,
     email: email.value.value,
-  }
+  };
   const delivery = {
     city: city.value.value,
     department: department.value.value,
+  };
+
+  const result = await cartStore.addOrder(contacts, delivery);
+  if (result?.data.ok) {
+    cartStore.currentCart = [];
+    alert('Ваш заказ принят. Спасибо за покупку!');
+    handleReset();
+    city.value.value = '';
+  } else {
+    alert('Произошла ошибка при оформлении заказа. Попробуйте еще раз.');
   }
-
-  cartStore.addOrder(contacts, delivery)
-
-  console.log(username.value.value);
-  console.log(phone.value.value);
-  console.log(email.value.value);
-  console.log(city.value.value);
-  console.log(department.value.value);
 });
 
 function onInputPhone(event: any) {
