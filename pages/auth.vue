@@ -80,7 +80,9 @@ import { ref, onMounted } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
 import type { dtoResponse } from '../types/dtoResponse';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 definePageMeta({
   layout: 'empty',
 });
@@ -148,13 +150,14 @@ const submitLogin = handleSubmit(async (values: any) => {
     appStore.snackbarText = result?.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
-  } else  if (typeof result == 'string') {  
+  } else if (typeof result == 'string') {
     appStore.snackbarText = result;
     appStore.snackbarColor = 'error';
     appStore.isOpenSnackbar = true;
     errorResponseLogin.value = result;
   }
   handleReset();
+  router.push('/');
 });
 </script>
 

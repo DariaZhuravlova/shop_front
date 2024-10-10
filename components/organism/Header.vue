@@ -23,9 +23,16 @@
           class="d-none d-md-flex"
         ></v-btn>
         <span v-if="appStore.profile">{{ appStore.profile.username }}</span>
-        <Nuxt-Link to="/auth" class="icon-link">
-          <v-btn icon="mdi-account-outline" variant="text"></v-btn>
-        </Nuxt-Link>
+        <template v-if="!appStore.profile">
+          <Nuxt-Link to="/auth" class="icon-link">
+            <v-btn icon="mdi-account-outline" variant="text"></v-btn>
+          </Nuxt-Link>
+        </template>
+        <template v-else>
+          <Nuxt-Link to="/profile" class="icon-link">
+            <v-btn icon="mdi-account-outline" variant="text"></v-btn>
+          </Nuxt-Link>
+        </template>
         <div style="position: relative">
           <v-btn
             @click.stop="appStore.drawerCart = !appStore.drawerCart"
