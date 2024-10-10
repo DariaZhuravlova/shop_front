@@ -2,7 +2,8 @@
 import { defineProps, ref, computed } from 'vue';
 import { useField, useForm } from 'vee-validate';
 import { useCartStore } from '@/stores/CartStore';
-
+import { useAppStore } from '../stores/AppStore';
+const appStore = useAppStore();
 const cartStore = useCartStore();
 
 const regPhone = /^\+38 \(0[1-9]\d{1}\) \d{3} \d{2} \d{2}$/;
@@ -61,6 +62,8 @@ const submitOrder = handleSubmit(async (values: any) => {
     alert('Произошла ошибка при оформлении заказа. Попробуйте еще раз.');
   }
 });
+
+if (appStore.profile) username.value.value = appStore.profile.username;
 
 function onInputPhone(event: any) {
   event.target.value = event.target.value

@@ -22,7 +22,6 @@
           variant="text"
           class="d-none d-md-flex"
         ></v-btn>
-        <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
         <span v-if="appStore.profile">{{ appStore.profile.username }}</span>
         <Nuxt-Link to="/auth" class="icon-link">
           <v-btn icon="mdi-account-outline" variant="text"></v-btn>
@@ -38,6 +37,7 @@
             {{ cartStore.currentCart.length }}
           </div>
         </div>
+        <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
       </v-app-bar>
 
       <v-navigation-drawer
