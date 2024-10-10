@@ -43,7 +43,7 @@ const city = useField('city');
 const department = useField('department');
 const submitOrder = handleSubmit(async (values: any) => {
   const contacts = {
-    username: username.value.value,
+    name: username.value.value,
     phone: phone.value.value,
     email: email.value.value,
   };
@@ -63,7 +63,9 @@ const submitOrder = handleSubmit(async (values: any) => {
   }
 });
 
-if (appStore.profile) username.value.value = appStore.profile.username;
+if (appStore.profile) username.value.value = appStore.profile.name || '';
+if (appStore.profile?.phone) phone.value.value = appStore.profile.phone || '';
+if (appStore.profile?.email) email.value.value = appStore.profile.email || '';
 
 function onInputPhone(event: any) {
   event.target.value = event.target.value
