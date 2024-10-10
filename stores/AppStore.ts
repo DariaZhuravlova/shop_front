@@ -42,6 +42,7 @@ export const useAppStore = defineStore('app', {
             try {
                 const res = await apiService.login(loginData);
                 this.profile = res.data.user;
+                return res.data;
 
             } catch (error) {
                 console.error(error);
@@ -52,7 +53,6 @@ export const useAppStore = defineStore('app', {
             try {
                 const result = await apiService.getUsers();
                 this.users = result?.data;
-                console.log(this.users);
             } catch (error) {
                 console.error('Failed to fetch users:', error);
             }

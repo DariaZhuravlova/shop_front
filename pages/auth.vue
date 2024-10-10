@@ -138,18 +138,16 @@ const submitRegister = handleSubmit(async (values: any) => {
 const submitLogin = handleSubmit(async (values: any) => {
   const { username, password } = values;
 
-  if (!username || !password) {
-    return alert('Заполните все поля');
-  }
-
-  const result: dtoResponse | undefined = await appStore.login({
+  const result = await appStore.login({
     username,
     password,
   });
+
   if (result?.ok) {
     appStore.snackbarText = result?.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
+    router.push('/');
   } else if (typeof result == 'string') {
     appStore.snackbarText = result;
     appStore.snackbarColor = 'error';
@@ -157,7 +155,6 @@ const submitLogin = handleSubmit(async (values: any) => {
     errorResponseLogin.value = result;
   }
   handleReset();
-  router.push('/');
 });
 </script>
 

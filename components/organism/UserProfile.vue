@@ -11,7 +11,6 @@ const sendUserInfo = async () => {
     'http://localhost:3001/api/user',
     appStore.profile
   );
-  console.log(result);
 };
 </script>
 
