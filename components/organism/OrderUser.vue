@@ -5,16 +5,13 @@ import { defineProps, ref, computed } from 'vue';
 import axios from 'axios';
 const appStore = useAppStore();
 const cartStore = useCartStore();
+
+const config = useRuntimeConfig();
+const apiUrl = config.public.apiUrl;
 </script>
 
 <template>
-  <div class="profile">
-    <h1>Профиль</h1>
-    <organism-UserProfile v-if="appStore.profile" />
-    <template v-if="appStore.profile">
-      <organism-OrderAdmin v-if="appStore.profile.role === 'admin'" />
-    </template>
-   
-    <organism-OrderUser v-else />
+  <div>
+    <h1>Заказы клиент</h1>
   </div>
 </template>
