@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { useCartStore } from '@/stores/CartStore';
 import { useAppStore } from '../stores/AppStore';
-import { defineProps, ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
+
 const appStore = useAppStore();
 const cartStore = useCartStore();
 
@@ -11,98 +12,113 @@ const apiUrl = config.public.apiUrl;
 
 const orders = ref([]);
 async function getOrders() {
-  orders.value = await axios.get(`${apiUrl}/api/orders`);
-  // orders.value = orders.data;
-  console.log(orders.value.data);
+  const response = await axios.get(`${apiUrl}/api/orders`);
+  orders.value = response.data;
+  console.log(orders.value);
 }
-
-
 
 onMounted(() => {
   getOrders();
 });
-
-const desserts = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    adress: '12345',
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-  },
-]
 </script>
 
 <template>
-  <div>
-    <h1>Заказы админ</h1>
-    <v-table
-    height="300px"
-    fixed-header
-  >
-    <thead>
-      <tr>
-        <th class="text-left font-weight-bold">
-          Номер заказа
-        </th>
-        <th class="text-left font-weight-bold">
-          Имя Клиента
-        </th>
-        <th class="text-left font-weight-bold">
-          Телефон
-        </th>
-        <th class="text-left font-weight-bold">
-          E-mail
-        </th>
-        <th class="text-left font-weight-bold">
-          Итоговая сумма
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="item in orders.data"
-        :key="item._id"
-      >
-        <td>{{ item.number }}</td>
-        <td>{{ item.calories }}</td>
-        <td>{{ item.adress }}</td>
-      </tr>
-    </tbody>
-  </v-table>
+  <div class="orders-admin">
+    <h1 class="title">Заказы админ</h1>
+    <v-table class="order-table" height="300px" fixed-header>
+      <thead>
+        <tr>
+          <th class="text-left">Номер заказа</th>
+          <th class="text-left">Имя Клиента</th>
+          <th class="text-left">Телефон</th>
+          <th class="text-left">E-mail</th>
+          <th class="text-left">Итоговая сумма</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in orders" :key="item._id" class="order-row">
+          <td><NuxtLink :to="`/admin/order/${item.number}`" class="order-link">{{ item.number }}</NuxtLink></td>
+          <td>{{ item.guestContact.name }}</td>
+          <td>{{ item.guestContact.phone }}</td>
+          <td>{{ item.guestContact.email }}</td>
+          <td>{{ item.totalPrice }}₴</td>
+        </tr>
+      </tbody>
+    </v-table>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.orders-admin {
+  padding: 10px;
+
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    // color: #333;
+  }
+
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead th {
+      background-color: #f5f5f5;
+      padding: 8px;
+      border-bottom: 2px solid #ddd;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    tbody td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    tbody tr {
+      &:hover {
+        background-color: #f9f9f9;
+      }
+    }
+
+    .order-link {
+      color: #1e88e5;
+      text-decoration: none;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .orders-admin {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .order-table {
+    thead th {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    tbody td {
+      padding: 15px;
+      font-size: 16px;
+    }
+  }
+}
+</style>

@@ -11,14 +11,14 @@ const productStore = useProductStore();
 
 <template>
   <v-col class="cart">
-    <v-row class="cart__header">
+    <div class="cart__header">
       <h1 class="cart__title">Корзина</h1>
       <v-icon
         class="cart__close-btn"
         icon="mdi-close"
         @click="appStore.drawerCart = false"
       ></v-icon>
-    </v-row>
+    </div>
     <v-col v-if="cartStore.currentCart.length > 0" class="cart__items">
       <organism-CartItem
         v-for="(item, ind) in cartStore.currentCart"
