@@ -49,6 +49,7 @@ export const useProductStore = defineStore("product", {
             try {
                 const result = await apiService.getProduct(id);
                 this.currentProduct = result?.data;
+                return result?.data;
             } catch (error) {
                 console.error('Failed to post product:', error);
             }

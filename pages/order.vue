@@ -15,6 +15,11 @@ const { handleSubmit, handleReset } = useForm({
       else if (value?.length >= 2) return true;
       else return 'Имя содержит минимум 2 символа';
     },
+    surname(value: string) {
+      if (!value?.length) return 'Введите фамилию';
+      else if (value?.length >= 2) return true;
+      else return 'Фамилия содержит минимум 2 символа';
+    },
     phone(value: string) {
       if (!value?.length) return 'Введите номер телефона';
       if (!regPhone.test(value)) return 'Неверный формат номера';
@@ -37,6 +42,7 @@ const { handleSubmit, handleReset } = useForm({
 });
 
 const username = useField('username');
+const surname = useField('surname');
 const phone = useField('phone');
 const email = useField('email');
 const city = useField('city');
@@ -44,6 +50,7 @@ const department = useField('department');
 const submitOrder = handleSubmit(async (values: any) => {
   const contacts = {
     name: username.value.value,
+    surname: surname.value.value,
     phone: phone.value.value,
     email: email.value.value,
   };
@@ -64,6 +71,7 @@ const submitOrder = handleSubmit(async (values: any) => {
 });
 
 if (appStore.profile) username.value.value = appStore.profile.name || '';
+if (appStore.profile) surname.value.value = appStore.profile.surname || '';
 if (appStore.profile?.phone) phone.value.value = appStore.profile.phone || '';
 if (appStore.profile?.email) email.value.value = appStore.profile.email || '';
 
@@ -118,6 +126,14 @@ function updateDepartment(selectedDepartment: string) {
             v-model="username.value.value"
             :error-messages="username.errorMessage.value"
             label="Имя"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" class="pa-0">
+          <v-text-field
+            variant="solo"
+            v-model="surname.value.value"
+            :error-messages="surname.errorMessage.value"
+            label="Фамилия"
           ></v-text-field>
         </v-col>
         <v-col cols="12" class="pa-0">
