@@ -25,6 +25,7 @@ export const useCartStore = defineStore('cart', {
         async addOrder(contacts: { username: string, phone: string, email: string }, delivery: { city: string, department: string }) {
             const order = {
                 products: this.currentCart,
+                totalPrice: this.totalPrice,
                 guestContact: contacts,
                 delivery
             }
