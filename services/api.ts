@@ -114,6 +114,10 @@ const apiService = {
         handleRequest(async (envConfig, option) => {
             return await axios.post(`${envConfig.apiUrl}/api/order`, order, option)
         }),
+    getOrders: async () =>
+        handleRequest(async (envConfig) => {
+            return await axios.get(`${envConfig.apiUrl}/api/orders`)
+        }),
 };
 
 export default apiService;

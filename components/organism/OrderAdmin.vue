@@ -11,14 +11,10 @@ const config = useRuntimeConfig();
 const apiUrl = config.public.apiUrl;
 
 const orders = ref([]);
-async function getOrders() {
-  const response = await axios.get(`${apiUrl}/api/orders`);
-  orders.value = response.data;
-  console.log(orders.value);
-}
 
-onMounted(() => {
-  getOrders();
+onMounted(async () => {
+  const response = await cartStore.getOrders();
+  orders.value = response?.data;
 });
 </script>
 
@@ -37,7 +33,11 @@ onMounted(() => {
       </thead>
       <tbody>
         <tr v-for="item in orders" :key="item._id" class="order-row">
-          <td><NuxtLink :to="`/admin/order/${item.number}`" class="order-link">{{ item.number }}</NuxtLink></td>
+          <td>
+            <NuxtLink :to="`/admin/order/${item._id}`" class="order-link">{{
+              item.number
+            }}</NuxtLink>
+          </td>
           <td>{{ item.guestContact.name }}</td>
           <td>{{ item.guestContact.phone }}</td>
           <td>{{ item.guestContact.email }}</td>

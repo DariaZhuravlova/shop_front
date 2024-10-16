@@ -32,6 +32,9 @@ export const useCartStore = defineStore('cart', {
 
             return await apiService.postOrder(order)
 
+        },
+        async getOrders() {
+            return await apiService.getOrders();
         }
     },
     getters: {
