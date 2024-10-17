@@ -13,9 +13,9 @@
               <v-col cols="12" md="6">
                 <v-text-field
                   variant="solo"
-                  v-model="username.value.value"
+                  v-model="phone.value.value"
                   :error-messages="
-                    username.errorMessage.value || errorResponseRegister
+                    phone.errorMessage.value || errorResponseRegister
                   "
                   label="User Name"
                   @input="errorResponseRegister = ''"
@@ -41,9 +41,9 @@
               <v-col cols="12" md="6">
                 <v-text-field
                   variant="solo"
-                  v-model="username.value.value"
+                  v-model="phone.value.value"
                   :error-messages="
-                    username.errorMessage.value || errorResponseLogin
+                    phone.errorMessage.value || errorResponseLogin
                   "
                   @input="errorResponseLogin = ''"
                   label="User Name"
@@ -68,7 +68,7 @@
     <v-row>
       <v-col v-for="user in appStore.users" :key="user._id" cols="12" md="4">
         <v-card>
-          <v-card-title>{{ user.username }}</v-card-title>
+          <v-card-title>{{ user.phone }}</v-card-title>
         </v-card>
       </v-col>
     </v-row>
@@ -98,7 +98,7 @@ onMounted(() => {
 
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
-    username(value: string) {
+    phone(value: string) {
       if (!value?.length) return 'Введите имя';
       else if (value?.length >= 2) return true;
       else return 'Имя содержит минимум 2 символа';
@@ -111,13 +111,13 @@ const { handleSubmit, handleReset } = useForm({
   },
 });
 
-const username = useField('username');
+const phone = useField('phone');
 const password = useField('password');
 
 const submitRegister = handleSubmit(async (values: any) => {
-  const { username, password } = values;
+  const { phone, password } = values;
 
-  const result = await appStore.register({ username, password });
+  const result = await appStore.register({ phone, password });
   if (result?.data.ok) {
     appStore.snackbarText = result?.data.message;
     appStore.snackbarColor = 'success';
@@ -136,10 +136,10 @@ const submitRegister = handleSubmit(async (values: any) => {
 });
 
 const submitLogin = handleSubmit(async (values: any) => {
-  const { username, password } = values;
+  const { phone, password } = values;
 
   const result = await appStore.login({
-    username,
+    phone,
     password,
   });
 

@@ -22,7 +22,7 @@ const { handleSubmit, handleReset } = useForm({
     },
     phone(value: string) {
       if (!value?.length) return 'Введите номер телефона';
-      if (!regPhone.test(value)) return 'Неверный формат номера';
+      //   if (!regPhone.test(value)) return 'Неверный формат номера';
       return true;
     },
     email(value: string) {
@@ -140,7 +140,6 @@ function updateDepartment(selectedDepartment: string) {
           <v-text-field
             variant="solo"
             v-model="phone.value.value"
-            @input="onInputPhone"
             label="Телефон"
             :error-messages="phone.errorMessage.value"
           ></v-text-field>
