@@ -118,6 +118,11 @@ const apiService = {
         handleRequest(async (envConfig) => {
             return await axios.get(`${envConfig.apiUrl}/api/orders`)
         }),
+    getOrder: async () =>
+        handleRequest(async (envConfig) => {
+            const phone: string = useAppStore().profile.phone
+            return await axios.get(`${envConfig.apiUrl}/api/order/phone/${phone}`)
+        }),
 };
 
 export default apiService;

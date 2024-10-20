@@ -13,8 +13,7 @@ const cartStore = useCartStore();
     <organism-UserProfile v-if="appStore.profile" />
     <template v-if="appStore.profile">
       <organism-OrderAdmin v-if="appStore.profile.role === 'admin'" />
+      <organism-OrderUser v-else />
     </template>
-   
-    <organism-OrderUser v-else />
   </div>
 </template>

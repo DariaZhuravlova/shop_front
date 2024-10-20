@@ -2,12 +2,17 @@
 import { useCartStore } from '@/stores/CartStore';
 import { useAppStore } from '../stores/AppStore';
 import { defineProps, ref, computed } from 'vue';
-import axios from 'axios';
+
 const appStore = useAppStore();
 const cartStore = useCartStore();
 
-const config = useRuntimeConfig();
-const apiUrl = config.public.apiUrl;
+const orders = ref([]);
+
+onMounted(async () => {
+  const response = await cartStore.getOrder();
+  orders.value = response?.data;
+  console.log(orders.value);
+});
 </script>
 
 <template>
