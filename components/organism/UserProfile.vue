@@ -32,6 +32,7 @@ const sendUserInfo = async () => {
         v-model="appStore.profile.phone"
         label="phone"
         placeholder="phone"
+        disabled
       />
     </v-col>
 

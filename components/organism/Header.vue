@@ -22,7 +22,7 @@
           variant="text"
           class="d-none d-md-flex"
         ></v-btn>
-        <span v-if="appStore.profile">{{ appStore.profile.username }}</span>
+        <span v-if="appStore.profile">{{ appStore.profile.name }}</span>
         <template v-if="!appStore.profile">
           <Nuxt-Link to="/auth" class="icon-link">
             <v-btn icon="mdi-account-outline" variant="text"></v-btn>
@@ -47,13 +47,8 @@
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
       </v-app-bar>
 
-      <v-navigation-drawer
-        v-model="drawer"
-        location="left"
-        temporary
-        width="330"
-      >
-        <molecule-ProductCatalog />
+      <v-navigation-drawer v-model="drawer" location="left" width="310">
+        <molecule-ProductCatalog @closeMenu="closeMenu" />
       </v-navigation-drawer>
 
       <v-navigation-drawer
@@ -82,11 +77,9 @@ import { useCartStore } from '@/stores/CartStore';
 const cartStore = useCartStore();
 const appStore = useAppStore();
 const drawer = ref(false);
-// const group = ref(null);
-
-// watch(group, () => {
-//   drawer.value = false;
-// });
+function closeMenu() {
+  drawer.value = false;
+}
 </script>
 
 <style scoped lang="scss">
