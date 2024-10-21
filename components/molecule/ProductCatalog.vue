@@ -26,6 +26,8 @@
         class="icon-link-aside"
       >
         <v-list-item
+          @click.stop="closeMenu"
+          class="chosen"
           :prepend-icon="item.icon"
           :title="item.name.ru"
         ></v-list-item>
@@ -39,8 +41,10 @@ import { ref } from 'vue';
 import { productMenu } from '../../data/default/productMenu';
 import { replaceSpace } from '../utils';
 import { useRouter } from 'vue-router';
+import { defineProps, defineEmits } from 'vue';
 
 const router = useRouter();
+const emits = defineEmits(['closeMenu']);
 let open = ref([]);
 const items = ref(productMenu);
 const goToCategory = (category, index) => {
@@ -49,11 +53,21 @@ const goToCategory = (category, index) => {
   }
   router.push(`/category/${replaceSpace(category.name.en)}`);
 };
+
+function closeMenu() {
+  emits('closeMenu');
+}
 </script>
 
 <style scoped>
 .icon-link-aside {
   color: inherit;
   text-decoration: none;
+}
+.chosen:hover {
+  background: lightgray;
+}
+.chosen:active {
+  background: gray;
 }
 </style>

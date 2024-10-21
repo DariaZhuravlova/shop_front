@@ -47,13 +47,8 @@
         <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
       </v-app-bar>
 
-      <v-navigation-drawer
-        v-model="drawer"
-        location="left"
-        temporary
-        width="330"
-      >
-        <molecule-ProductCatalog />
+      <v-navigation-drawer v-model="drawer" location="left" width="310">
+        <molecule-ProductCatalog @closeMenu="closeMenu" />
       </v-navigation-drawer>
 
       <v-navigation-drawer
@@ -82,6 +77,9 @@ import { useCartStore } from '@/stores/CartStore';
 const cartStore = useCartStore();
 const appStore = useAppStore();
 const drawer = ref(false);
+function closeMenu() {
+  drawer.value = false;
+}
 </script>
 
 <style scoped lang="scss">
