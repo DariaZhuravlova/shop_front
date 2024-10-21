@@ -8,8 +8,8 @@ const cartStore = useCartStore();
 </script>
 
 <template>
-  <div class="profile">
-    <h1>Профиль</h1>
+  <div class="profile pa-2">
+    <h1 class="d-flex justify-center ma-3">Профиль</h1>
     <organism-UserProfile v-if="appStore.profile" />
     <template v-if="appStore.profile">
       <organism-OrderAdmin v-if="appStore.profile.role === 'admin'" />

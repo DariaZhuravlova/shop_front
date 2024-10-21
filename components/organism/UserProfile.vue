@@ -15,53 +15,56 @@ const sendUserInfo = async () => {
 </script>
 
 <template>
-  <v-row>
-    <!-- <v-col cols="12">
-      <input
-        variant="solo"
-        v-model="appStore.profile.username"
-        label="userName"
-        placeholder="p"
-        disabled
-      />
-    </v-col> -->
-
-    <v-col cols="12">
-      <input
-        variant="solo"
-        v-model="appStore.profile.phone"
-        label="phone"
-        placeholder="phone"
-        disabled
-      />
-    </v-col>
-
-    <v-col cols="12">
-      <input
-        variant="solo"
-        v-model="appStore.profile.email"
-        label="phone"
-        placeholder="email"
-      />
-    </v-col>
-
-    <v-col cols="12">
-      <input
-        variant="solo"
-        v-model="appStore.profile.name"
-        label="Имя"
-        placeholder="Имя"
-      />
-    </v-col>
-
-    <v-col cols="12">
-      <input
-        variant="solo"
-        v-model="appStore.profile.surname"
-        label="Фамилия"
-        placeholder="Фамилия"
-      />
-    </v-col>
+  <div class="profile">
+    <v-row>
+      <v-col cols="5">
+        <span>Телефон</span>
+      </v-col>
+      <v-col cols="6">
+        <input
+          variant="solo"
+          v-model="appStore.profile.phone"
+          placeholder="phone"
+          disabled
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="5">
+        <span>Email</span>
+      </v-col>
+      <v-col cols="6">
+        <input
+          variant="solo"
+          v-model="appStore.profile.email"
+          placeholder="email"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="5">
+        <span>Имя</span>
+      </v-col>
+      <v-col cols="6">
+        <input
+          variant="solo"
+          v-model="appStore.profile.name"
+          placeholder="Имя"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="5">
+        <span>Фамилия</span>
+      </v-col>
+      <v-col cols="6">
+        <input
+          variant="solo"
+          v-model="appStore.profile.surname"
+          placeholder="Фамилия"
+        />
+      </v-col>
+    </v-row>
 
     <v-col cols="12">
       <v-btn
@@ -72,5 +75,12 @@ const sendUserInfo = async () => {
         @click="sendUserInfo"
       ></v-btn>
     </v-col>
-  </v-row>
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.profile {
+  max-width: 700px;
+  margin: 0 auto 20px auto;
+}
+</style>
