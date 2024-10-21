@@ -16,15 +16,15 @@ const sendUserInfo = async () => {
 
 <template>
   <v-row>
-    <v-col cols="12">
+    <!-- <v-col cols="12">
       <input
         variant="solo"
         v-model="appStore.profile.username"
         label="userName"
-        placeholder="neiunfei"
+        placeholder="p"
         disabled
       />
-    </v-col>
+    </v-col> -->
 
     <v-col cols="12">
       <input
