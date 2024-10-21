@@ -11,7 +11,7 @@ const orders = ref([]);
 
 const sendUserInfo = async () => {
   const result = await axios.put(
-    'http://localhost:3001/api/user',
+    `${envConfig.apiUrl}/api/user`,
     appStore.profile
   );
 };

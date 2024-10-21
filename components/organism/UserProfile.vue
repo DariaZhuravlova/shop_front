@@ -5,10 +5,10 @@ import { defineProps, ref, computed } from 'vue';
 import axios from 'axios';
 const appStore = useAppStore();
 const cartStore = useCartStore();
-
+const envConfig: any = useNuxtApp().$envConfig;
 const sendUserInfo = async () => {
   const result = await axios.put(
-    'http://localhost:3001/api/user',
+    `${envConfig.apiUrl}/api/user`,
     appStore.profile
   );
 };
