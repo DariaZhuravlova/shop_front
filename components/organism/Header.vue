@@ -32,6 +32,7 @@
           <Nuxt-Link to="/profile" class="icon-link">
             <v-btn icon="mdi-account-outline" variant="text"></v-btn>
           </Nuxt-Link>
+          <v-btn icon="mdi-logout" variant="text" @click="logout"></v-btn>
         </template>
         <div style="position: relative">
           <v-btn
@@ -70,16 +71,24 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { useCartStore } from '@/stores/CartStore';
+import { useRouter } from 'vue-router'; 
 
 const cartStore = useCartStore();
 const appStore = useAppStore();
 const drawer = ref(false);
+const router = useRouter();
+
 function closeMenu() {
   drawer.value = false;
 }
+
+const logout = () => {
+  appStore.profile = null;
+  router.push('/')
+};
 </script>
 
 <style scoped lang="scss">
