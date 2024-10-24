@@ -74,8 +74,7 @@
 import { ref } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { useCartStore } from '@/stores/CartStore';
-import { useRouter } from 'vue-router'; 
-
+import { useRouter } from 'vue-router';
 const cartStore = useCartStore();
 const appStore = useAppStore();
 const drawer = ref(false);
@@ -84,11 +83,13 @@ const router = useRouter();
 function closeMenu() {
   drawer.value = false;
 }
-
-const logout = () => {
-  appStore.profile = null;
-  router.push('/')
+const logout = async () => {
+  await appStore.logout();
+  await router.push('/');
+  location.reload();
 };
+
+if (!appStore.profile) appStore.getProfileInfo();
 </script>
 
 <style scoped lang="scss">

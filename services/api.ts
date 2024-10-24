@@ -105,6 +105,16 @@ const apiService = {
             return await axios.post(`${envConfig.apiUrl}/api/login`, loginData, option)
         }),
 
+    logout: async () =>
+        handleRequest(async (envConfig) => {
+            return await axios.get(`${envConfig.apiUrl}/api/logout`)
+        }),
+
+    getProfileInfo: async () =>
+        handleRequest(async (envConfig) => {
+            return await axios.get(`${envConfig.apiUrl}/api/profile`)
+        }),
+
     getUsers: async () =>
         handleRequest(async (envConfig) => {
             return await axios.get(`${envConfig.apiUrl}/api/users`)
