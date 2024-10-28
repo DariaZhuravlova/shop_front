@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { useAppStore } from './stores/AppStore';
 import { modalContent } from './data/devTest/modalContent';
+import socket from './socket-client';
 
 const appStore = useAppStore();
 
