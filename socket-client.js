@@ -1,8 +1,10 @@
 // client.js
 import { io } from 'socket.io-client';
-const envConfig = useNuxtApp().$envConfig;
-
-const socket = io(`${envConfig.apiUrl}`); // Адрес вашего сервера
+const apiUrl =
+    process.env.NODE_ENV === 'production'
+        ? 'https://shop-back-mh7t.onrender.com'
+        : 'http://localhost:3001';
+const socket = io(apiUrl); // Адрес вашего сервера
 
 // Функция для отправки сообщений на сервер
 export function sendMessage(message) {
