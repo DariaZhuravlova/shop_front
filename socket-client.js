@@ -4,7 +4,10 @@ const apiUrl =
     process.env.NODE_ENV === 'production'
         ? 'wss://shop-back-mh7t.onrender.com'
         : 'ws://localhost:3001';
-const socket = io(apiUrl); // Адрес вашего сервера
+
+const socket = io(apiUrl, {
+    transports: ['websocket'] // Явно указываем транспорт
+});
 
 // Функция для отправки сообщений на сервер
 export function sendMessage(message) {
