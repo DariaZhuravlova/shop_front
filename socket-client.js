@@ -5,7 +5,7 @@ const apiUrl =
         ? 'https://shop-back-mh7t.onrender.com'
         : 'http://localhost:3001';
 
-const socket = io(apiUrl, {
+const socket = io.connect(apiUrl, {
   transports: ['polling'], // Пробуем только polling
   reconnectionAttempts: 10, // Дополнительные попытки переподключения
   reconnectionDelay: 3000, // Задержка в 3 секунды
