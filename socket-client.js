@@ -6,9 +6,9 @@ const apiUrl =
         : 'http://localhost:3001';
 
 const socket = io(apiUrl, {
-    transports: ['websocket'],
-    reconnectionAttempts: 5,
-    reconnectionDelay: 2000,
+  transports: ['polling'], // Пробуем только polling
+  reconnectionAttempts: 10, // Дополнительные попытки переподключения
+  reconnectionDelay: 3000, // Задержка в 3 секунды
 });
 
 // Функция для отправки сообщений на сервер
