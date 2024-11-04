@@ -2,7 +2,7 @@
 import { io } from 'socket.io-client';
 const apiUrl =
     process.env.NODE_ENV === 'production'
-        ? 'https://shop-back-mh7t.onrender.com'
+        ? 'https://shop-back-mh7t.onrender.com:3001'
         : 'http://localhost:3001';
 const socket = io(apiUrl); // Адрес вашего сервера
 
