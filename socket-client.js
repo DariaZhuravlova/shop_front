@@ -1,5 +1,5 @@
 // client.js
-import { io } from 'socket.io-client';
+import  io  from 'socket.io-client';
 const apiUrl =
     process.env.NODE_ENV === 'production'
         ? 'https://shop-back-mh7t.onrender.com'
