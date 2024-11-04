@@ -22,13 +22,6 @@ socket.on('message', (msg) => {
 });
 
 
-// Логируем успешное подключение
-socket.on('connect', () => {
-    console.log('Соединение с socket сервером установлено');
-});
-
-// console.log('Соединение с socket сервером установлено');
-
 // console.log('coockie: ', document.cookie);
 
 export default socket;
