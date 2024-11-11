@@ -17,10 +17,14 @@
 <script setup lang="ts">
 import { useAppStore } from './stores/AppStore';
 import { modalContent } from './data/devTest/modalContent';
-import socket from './socket-client';
+import socket, { sendMessage } from './socket-client';
+import  io  from 'socket.io-client';
 
 const appStore = useAppStore();
 
+sendMessage("Hello from the client!");
+
 appStore.modalData = modalContent;
+
 
 </script>
