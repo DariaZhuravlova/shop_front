@@ -75,6 +75,8 @@ import { ref } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { useCartStore } from '@/stores/CartStore';
 import { useRouter } from 'vue-router';
+import socket, { sendUserInfo } from '@/socket-client';
+
 const cartStore = useCartStore();
 const appStore = useAppStore();
 const drawer = ref(false);
@@ -89,7 +91,16 @@ const logout = async () => {
   location.reload();
 };
 
-if (!appStore.profile) appStore.getProfileInfo();
+async function fetchProfileInfo() {
+  if (!appStore.profile) {
+    const result = await appStore.getProfileInfo();
+    sendUserInfo(result);
+  }
+}
+
+onMounted(() => {
+  fetchProfileInfo();
+});
 </script>
 
 <style scoped lang="scss">

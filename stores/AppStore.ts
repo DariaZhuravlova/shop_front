@@ -67,7 +67,10 @@ export const useAppStore = defineStore('app', {
             try {
                 const result = await apiService.getProfileInfo();
                 console.log('profile info: ', result);
-                if (result.data.data) this.profile = result.data.data;
+                if (result.data.data) {
+                    this.profile = result.data.data;
+                    return result.data.data
+                }
                 else this.profile = null
             } catch (error) {
                 console.error('Failed to fetch profile info:', error);
