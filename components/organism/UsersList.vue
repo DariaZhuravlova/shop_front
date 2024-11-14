@@ -33,7 +33,16 @@ onMounted(async () => {
             <span style="color: lightgreen">online</span>
           </td>
           <td>
-            <span v-if="item.user">{{ item.user.name }}</span>
+            <span v-if="item.user && appStore.profile.phone == item.user.phone"
+              >{{ item.user.name }}
+              <span style="color: lightgreen">(Вы)</span></span
+            >
+            <span
+              v-else-if="
+                item.user && appStore.profile.phone !== item.user.phone
+              "
+              >{{ item.user.name }}</span
+            >
             <span v-else>guest</span>
           </td>
           <td>
