@@ -1,39 +1,50 @@
 <script lang="ts" setup>
-import { useCartStore } from '@/stores/CartStore';
 import { ref, onMounted } from 'vue';
-const cartStore = useCartStore();
-const orders = ref([]);
+import socket, { getUserList, sendUserInfo } from '@/socket-client';
+
+import { useAppStore } from '@/stores/AppStore';
+const appStore = useAppStore();
+
+const userList = ref([]);
 
 onMounted(async () => {
-  const response = await cartStore.getOrders();
-  orders.value = response?.data;
+  sendUserInfo(appStore.profile);
+  userList.value = await getUserList();
+  console.log(userList.value);
 });
 </script>
 
 <template>
-  <div class="orders-admin">
-    <h1 class="title">Заказы админ</h1>
-    <v-table class="order-table" height="300px" fixed-header>
+  <div class="connected-users">
+    <h1 class="title">Подключенные пользователи</h1>
+    <v-table class="order-table" max-height="300px" fixed-header>
       <thead>
         <tr>
-          <th class="text-left">Номер заказа</th>
+          <th class="text-left">Статус</th>
           <th class="text-left">Имя Клиента</th>
           <th class="text-left">Телефон</th>
-          <th class="text-left">E-mail</th>
-          <th class="text-left">Итоговая сумма</th>
+          <th class="text-left">Роль</th>
+          <!-- <th class="text-left">Итоговая сумма</th> -->
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in orders" :key="item._id" class="order-row">
+        <tr v-for="item in userList" :key="item.id" class="order-row">
           <td>
-            <NuxtLink :to="`/admin/order/${item._id}`" class="order-link">{{
-              item.number
-            }}</NuxtLink>
+            <span style="color: lightgreen">online</span>
           </td>
-          <td>{{ item.guestContact.name }}</td>
-          <td>{{ item.guestContact.phone }}</td>
-          <td>{{ item.guestContact.email }}</td>
-          <td>{{ item.totalPrice }}₴</td>
+          <td>
+            <span v-if="item.user">{{ item.user.name }}</span>
+            <span v-else>guest</span>
+          </td>
+          <td>
+            <span v-if="item.user">{{ item.user.phone }}</span>
+            <span v-else>-</span>
+          </td>
+          <td>
+            <span v-if="item.user">{{ item.user.role }}</span>
+            <span v-else>-</span>
+          </td>
+          <!-- <td>{{ item.totalPrice }}₴</td> -->
         </tr>
       </tbody>
     </v-table>
@@ -41,7 +52,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.orders-admin {
+.connected-users {
   padding: 10px;
 
   .title {
@@ -90,7 +101,7 @@ onMounted(async () => {
 }
 
 @media (min-width: 768px) {
-  .orders-admin {
+  .connected-users {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
