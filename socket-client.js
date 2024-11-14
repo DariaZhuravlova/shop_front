@@ -1,12 +1,13 @@
 // client.js
-import  io  from 'socket.io-client';
+import io from 'socket.io-client';
+
 const apiUrl =
     process.env.NODE_ENV === 'production'
         ? 'https://shop-back-mh7t.onrender.com'
         : 'http://localhost:3001';
 
 console.log('apiUrl: ', apiUrl);
-        
+
 const socket = io.connect(apiUrl)
 
 // const socket = io.connect('https://shop-back-mh7t.onrender.com:3001')
@@ -17,6 +18,22 @@ const socket = io.connect(apiUrl)
 export function sendMessage(message) {
     socket.emit('message', message);
 }
+
+export function sendUserInfo(info) {
+    socket.emit('userInfo', info)
+
+}
+
+export function getUserList(payload) {
+    return new Promise((resolve, reject) => {
+        // Отправка запроса с использованием emit и ожиданием подтверждения
+        socket.emit('getUserList', payload, (response) => {
+            // Получаем ответ через callback
+            resolve(response);
+        });
+    });
+}
+
 socket.on('connect', () => {
     console.log('Socket connected:', socket.id);
 });

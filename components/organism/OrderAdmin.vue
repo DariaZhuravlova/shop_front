@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 import { useCartStore } from '@/stores/CartStore';
 import { ref, onMounted } from 'vue';
-
+import socket, { getUserList } from '@/socket-client';
 const cartStore = useCartStore();
 const orders = ref([]);
 
 onMounted(async () => {
   const response = await cartStore.getOrders();
   orders.value = response?.data;
+  const userList = await getUserList();
+  console.log(userList);
 });
 </script>
 
