@@ -1,10 +1,6 @@
 <script lang="ts" setup>
-import { useCartStore } from '@/stores/CartStore';
 import { useAppStore } from '../stores/AppStore';
-import { defineProps, ref, computed } from 'vue';
-import axios from 'axios';
 const appStore = useAppStore();
-const cartStore = useCartStore();
 </script>
 
 <template>
