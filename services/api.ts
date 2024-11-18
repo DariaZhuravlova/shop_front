@@ -12,7 +12,10 @@ async function handleRequest<T>(requestFunc: (envConfig: any, option: any) => Pr
     try {
         const envConfig: any = useNuxtApp().$envConfig;
 
-        const option = { headers: { 'Content-Type': 'application/json' } };
+        const option = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true, // Включаем отправку куков
+        };
         useAppStore().isLoading = true;
         return await requestFunc(envConfig, option);
     } catch (error) {
@@ -111,8 +114,8 @@ const apiService = {
         }),
 
     getProfileInfo: async () =>
-        handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/profile`)
+        handleRequest(async (envConfig, option) => {
+            return await axios.get(`${envConfig.apiUrl}/api/profile`, option)
         }),
 
     getUsers: async () =>

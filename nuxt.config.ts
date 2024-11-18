@@ -27,6 +27,8 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
           apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'http://localhost:3001',
+        //   apiUrl: process.env.NODE_ENV === 'production' ? 'https://shop-back-mh7t.onrender.com' : 'https://shop-back-mh7t.onrender.com',
+
         },
       },
 });
