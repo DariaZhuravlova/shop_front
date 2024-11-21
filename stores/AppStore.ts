@@ -49,11 +49,13 @@ export const useAppStore = defineStore('app', {
             }
         },
         async logout() {
-            try {
-                await apiService.logout();
-            } catch (error) {
-                console.error('Failed to logout:', error);
-            }
+            // try {
+            //     await apiService.logout();
+            // } catch (error) {
+            //     console.error('Failed to logout:', error);
+            // }
+            localStorage.clear();
+
         },
         async getUsers() {
             try {
@@ -66,12 +68,11 @@ export const useAppStore = defineStore('app', {
         async getProfileInfo() {
             try {
                 const result = await apiService.getProfileInfo();
-                console.log('profile info: ', result);
-                if (result.data.data) {
-                    this.profile = result.data.data;
-                    return result.data.data
+                if (result.data.user) {
+                    this.profile = result.data.user;
+                    return result.data.user
                 }
-                else this.profile = null
+                else this.logout()
             } catch (error) {
                 console.error('Failed to fetch profile info:', error);
             }

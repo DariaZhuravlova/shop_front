@@ -13,7 +13,7 @@ async function handleRequest<T>(requestFunc: (envConfig: any, option: any) => Pr
         const envConfig: any = useNuxtApp().$envConfig;
 
         const option = {
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'authorization': `Bearer ${localStorage.getItem('token')}` },
             withCredentials: true, // Включаем отправку куков
         };
         useAppStore().isLoading = true;
