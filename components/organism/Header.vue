@@ -92,7 +92,7 @@ const logout = async () => {
 };
 
 async function fetchProfileInfo() {
-  if (!appStore.profile) {
+  if (localStorage.getItem('token')) {
     const result = await appStore.getProfileInfo();
     sendUserInfo(result);
   }
