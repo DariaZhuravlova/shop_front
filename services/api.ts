@@ -1,141 +1,136 @@
-import axios from 'axios';
-import type { AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import type { RegisterData } from "@/types/registerData";
 import type { LoginData } from "@/types/loginData";
 import type { ProductData } from '@/types/productData';
 import { objectToQueryString } from '../utils/index.ts';
 import { useAppStore } from '../stores/AppStore';
 
-axios.defaults.withCredentials = true; // Включение передачи куки
+const baseURL: any =  process.env.NODE_ENV === 'production'
+? 'https://shop-back-mh7t.onrender.com'
+: 'http://localhost:3001';
 
-async function handleRequest<T>(requestFunc: (envConfig: any, option: any) => Promise<T>): Promise<T | AxiosResponse | undefined> {
-    try {
-        const envConfig: any = useNuxtApp().$envConfig;
+// Создание экземпляра Axios
+const apiClient = axios.create({
+    baseURL, // Задаём базовый URL
+    timeout: 10000, // Таймаут запросов
+    withCredentials: true, // Передача куков
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
 
-        const option = {
-            headers: { 'Content-Type': 'application/json', 'authorization': `Bearer ${localStorage.getItem('token')}` },
-            withCredentials: true, // Включаем отправку куков
-        };
-        useAppStore().isLoading = true;
-        return await requestFunc(envConfig, option);
-    } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            const status = error.response.status;
-            if (status >= 500 && status < 600) {
-                handleServerError(status)
-            } else {
-                return error.response;
+// Перехватчик запросов
+apiClient.interceptors.request.use(
+    (config: AxiosRequestConfig) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers = config.headers || {};
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        useAppStore().isLoading = true; // Включаем индикатор загрузки
+        return config;
+    },
+    (error) => {
+        useAppStore().isLoading = false; // Выключаем индикатор при ошибке
+        return Promise.reject(error);
+    }
+);
+
+// Перехватчик ответов
+apiClient.interceptors.response.use(
+    (response: AxiosResponse) => {
+        useAppStore().isLoading = false; // Выключаем индикатор загрузки
+
+        // Чтение токена из заголовков ответа
+        const token = response.headers['authorization'] || response.headers['Authorization'];
+        console.log('response.headers:', response.headers['Authorization']);
+        
+        console.log('New Token:', token);
+        if (token) {
+            console.log('New Token:', token);
+            localStorage.setItem('token', token); // Сохраняем токен в LocalStorage
+        }
+
+        return response; // Возвращаем успешный ответ
+    },
+    (error) => {
+        useAppStore().isLoading = false; // Выключаем индикатор загрузки
+
+        if (axios.isAxiosError(error)) {
+            const status = error.response?.status;
+            if (status) {
+                if (status >= 500 && status < 600) {
+                    handleServerError(status);
+                } else if (status === 401) {
+                    alert('Unauthorized. Please log in again.');
+                    window.location.href = '/login';
+                }
             }
         } else {
             console.error('Network error:', error);
             alert('Network error. Please try again later.');
         }
-    } finally {
-        const envConfig = useNuxtApp().$envConfig;
-        useAppStore().isLoading = false;
-    }
-}
 
+        return Promise.reject(error); // Пробрасываем ошибку для дальнейшей обработки
+    }
+);
+
+// Функция обработки серверных ошибок
 function handleServerError(status: number) {
-    switch (status) {
-        case 500:
-            alert('Internal Server Error. Please try again later.');
-            break;
-        case 501:
-            alert('Not Implemented. The server does not support the functionality required to fulfill the request.');
-            break;
-        case 502:
-            alert('Bad Gateway. The server received an invalid response from the upstream server.');
-            break;
-        case 503:
-            alert('Service Unavailable. The server is currently unable to handle the request due to maintenance.');
-            break;
-        case 504:
-            alert('Gateway Timeout. The server did not receive a timely response from the upstream server.');
-            break;
-        case 505:
-            alert('HTTP Version Not Supported. The server does not support the HTTP protocol version used in the request.');
-            break;
-        default:
-            alert('Server error. Please try again later.');
-            break;
-    }
+    const messages: Record<number, string> = {
+        500: 'Internal Server Error. Please try again later.',
+        501: 'Not Implemented. The server does not support the requested functionality.',
+        502: 'Bad Gateway. Invalid response from the upstream server.',
+        503: 'Service Unavailable. The server is currently unable to handle the request.',
+        504: 'Gateway Timeout. The server did not respond in time.',
+        505: 'HTTP Version Not Supported by the server.',
+    };
+    alert(messages[status] || 'Server error. Please try again later.');
 }
-
 const apiService = {
     getProducts: async (query = {}) =>
-        handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/products?${objectToQueryString(query)}`,
-            )
-        }),
+        apiClient.get(`/api/products?${objectToQueryString(query)}`),
 
     getUploadedFiles: async () =>
-        handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/uploaded-files?random=${Math.random()}`,
+        apiClient.get(`/api/uploaded-files?random=${Math.random()}`),
 
-            )
-        }),
     getProduct: async (id: string) =>
-        handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/product/${id}`)
-        }),
+        apiClient.get(`/api/product/${id}`),
 
     postProduct: async (product: ProductData) =>
-        handleRequest(async (envConfig, option) => {
-            return await axios.post(`${envConfig.apiUrl}/api/product`, product, option,
+        apiClient.post(`/api/product`, product),
 
-            )
-        }),
     editProduct: async (product: ProductData) =>
-        handleRequest(async (envConfig, option) => {
-            return await axios.put(`${envConfig.apiUrl}/api/product`, product, option,
-            )
-        }),
-
+        apiClient.put(`/api/product`, product),
 
     deleteProduct: async (productId: string) =>
-        handleRequest(async (envConfig) => {
-            return await axios.delete(`${envConfig.apiUrl}/api/product/${productId}`)
-        }),
+        apiClient.delete(`/api/product/${productId}`),
 
     register: async (registerData: RegisterData) =>
-        handleRequest(async (envConfig, option) => {
-            return await axios.post(`${envConfig.apiUrl}/api/register`, registerData, option)
-        }),
+        apiClient.post(`/api/register`, registerData),
 
     login: async (loginData: LoginData) =>
-        handleRequest(async (envConfig, option) => {
-            return await axios.post(`${envConfig.apiUrl}/api/login`, loginData, option)
-        }),
+        apiClient.post(`/api/login`, loginData),
 
     logout: async () =>
-        handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/logout`)
-        }),
+        apiClient.get(`/api/logout`),
 
     getProfileInfo: async () =>
-        handleRequest(async (envConfig, option) => {
-            return await axios.get(`${envConfig.apiUrl}/api/profile`, option)
-        }),
+        apiClient.get(`/api/profile`),
 
     getUsers: async () =>
-        handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/users`)
-        }),
+        apiClient.get(`/api/users`),
 
     postOrder: async (order: any) =>
-        handleRequest(async (envConfig, option) => {
-            return await axios.post(`${envConfig.apiUrl}/api/order`, order, option)
-        }),
+        apiClient.post(`/api/order`, order),
+
     getOrders: async () =>
-        handleRequest(async (envConfig) => {
-            return await axios.get(`${envConfig.apiUrl}/api/orders`)
-        }),
-    getOrder: async () =>
-        handleRequest(async (envConfig) => {
-            const phone: string = useAppStore().profile.phone
-            return await axios.get(`${envConfig.apiUrl}/api/order/phone/${phone}`)
-        }),
+        apiClient.get(`/api/orders`),
+
+    getOrder: async () => {
+        const phone: string = useAppStore().profile.phone;
+        return apiClient.get(`/api/order/phone/${phone}`);
+    },
 };
 
 export default apiService;
