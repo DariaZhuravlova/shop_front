@@ -5,9 +5,9 @@ import type { ProductData } from '@/types/productData';
 import { objectToQueryString } from '../utils/index.ts';
 import { useAppStore } from '../stores/AppStore';
 
-const baseURL: any =  process.env.NODE_ENV === 'production'
-? 'https://shop-back-mh7t.onrender.com'
-: 'http://localhost:3001';
+const baseURL: any = process.env.NODE_ENV === 'production'
+    ? 'https://shop-back-mh7t.onrender.com'
+    : 'http://localhost:3001';
 
 // Создание экземпляра Axios
 const apiClient = axios.create({
@@ -43,14 +43,10 @@ apiClient.interceptors.response.use(
 
         // Чтение токена из заголовков ответа
         const token = response.headers['authorization'] || response.headers['Authorization'];
-        console.log('response.headers:', response.headers['Authorization']);
-        
-        console.log('New Token:', token);
+
         if (token) {
-            console.log('New Token:', token);
             localStorage.setItem('token', token); // Сохраняем токен в LocalStorage
         }
-
         return response; // Возвращаем успешный ответ
     },
     (error) => {
@@ -62,15 +58,17 @@ apiClient.interceptors.response.use(
                 if (status >= 500 && status < 600) {
                     handleServerError(status);
                 } else if (status === 401) {
-                    alert('Unauthorized. Please log in again.');
-                    window.location.href = '/login';
+                    localStorage.clear();
+                    useAppStore().isShowModal = true;
+                    useAppStore().modalData.title = 'Время сессии истекло (((';
+                    useAppStore().modalData.icon = 'none';
+                    useAppStore().modalData.content = [{ type: 'text', text: 'Пройдите авторизацию заново' }]
                 }
             }
         } else {
             console.error('Network error:', error);
             alert('Network error. Please try again later.');
         }
-
         return Promise.reject(error); // Пробрасываем ошибку для дальнейшей обработки
     }
 );

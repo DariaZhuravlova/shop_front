@@ -148,7 +148,7 @@ const submitLogin = handleSubmit(async (values: any) => {
     appStore.snackbarText = result?.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
-    localStorage.setItem('token', result.token);
+    // localStorage.setItem('token', result.token);
     router.push('/');
     sendUserInfo(result.user);
   } else if (typeof result == 'string') {
