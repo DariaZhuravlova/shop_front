@@ -4,6 +4,9 @@ import type { LoginData } from "@/types/loginData";
 import type { ProductData } from '@/types/productData';
 import { objectToQueryString } from '../utils/index.ts';
 import { useAppStore } from '../stores/AppStore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const baseURL: any = process.env.NODE_ENV === 'production'
     ? 'https://shop-back-mh7t.onrender.com'
@@ -59,10 +62,12 @@ apiClient.interceptors.response.use(
                     handleServerError(status);
                 } else if (status === 401) {
                     localStorage.clear();
-                    useAppStore().isShowModal = true;
-                    useAppStore().modalData.title = 'Время сессии истекло (((';
-                    useAppStore().modalData.icon = 'none';
-                    useAppStore().modalData.content = [{ type: 'text', text: 'Пройдите авторизацию заново' }]
+                    useAppStore().profile = null;
+                    // useAppStore().isShowModal = true;
+                    // useAppStore().modalData.title = 'Время сессии истекло (((';
+                    // useAppStore().modalData.icon = 'none';
+                    // useAppStore().modalData.content = [{ type: 'text', text: 'Пройдите авторизацию заново' }]
+                    router.push('/auth')
                 }
             }
         } else {
