@@ -22,6 +22,7 @@ const apiClient = axios.create({
 
 // Перехватчик запросов
 apiClient.interceptors.request.use(
+
     (config: AxiosRequestConfig) => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -41,11 +42,10 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
     (response: AxiosResponse) => {
         useAppStore().isLoading = false; // Выключаем индикатор загрузки
-
         // Чтение токена из заголовков ответа
         const token = response.headers['authorization'] || response.headers['Authorization'];
 
-        if (token) {
+        if (token && response.config.url == '/api/login') {
             localStorage.setItem('token', token); // Сохраняем токен в LocalStorage
         }
         return response; // Возвращаем успешный ответ
