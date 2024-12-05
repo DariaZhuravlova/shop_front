@@ -49,11 +49,7 @@ export const useAppStore = defineStore('app', {
             }
         },
         async logout() {
-            // try {
-            //     await apiService.logout();
-            // } catch (error) {
-            //     console.error('Failed to logout:', error);
-            // }
+            this.profile = null;
             localStorage.clear();
 
         },

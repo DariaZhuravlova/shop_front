@@ -25,7 +25,6 @@ apiClient.interceptors.request.use(
 
     (config: AxiosRequestConfig) => {
         const token = localStorage.getItem('token');
-        console.log(token);
 
         if (token && token !== 'null') {
             config.headers = config.headers || {};
@@ -46,9 +45,6 @@ apiClient.interceptors.response.use(
         useAppStore().isLoading = false; // Выключаем индикатор загрузки
         // Чтение токена из заголовков ответа
         const token = response.headers['authorization'] || response.headers['Authorization'];
-        console.log(response.config.url, token);
-
-
 
         if (token && token !== 'null') {
             localStorage.setItem('token', token); // Сохраняем токен в LocalStorage
