@@ -17,14 +17,23 @@
 <script setup lang="ts">
 import { useAppStore } from './stores/AppStore';
 import { modalContent } from './data/devTest/modalContent';
-import socket, { sendMessage } from './socket-client';
-import  io  from 'socket.io-client';
 
 const appStore = useAppStore();
 
-sendMessage("Hello from the client!");
+// Динамический импорт для сокета
+let sendMessage: any;
+let socket: any;
+
+if (process.client) {
+  (async () => {
+    const socketModule = await import('./socket-client');
+    const socket = socketModule.default; // Если экспорт по умолчанию
+    const sendMessage = socketModule.sendMessage;
+
+    // Отправка сообщения только на клиенте
+    sendMessage("Hello from the client!");
+  })();
+}
 
 appStore.modalData = modalContent;
-
-
 </script>

@@ -23,7 +23,8 @@ export const useAppStore = defineStore('app', {
         isShowModal: false as boolean,
         modalData: {} as any,
         // ...
-        drawerCart: false as boolean
+        drawerCart: false as boolean,
+        userList: [] as any,
     }),
     actions: {
         async register(registerData: RegisterData) {

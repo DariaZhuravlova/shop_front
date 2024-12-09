@@ -1,5 +1,6 @@
 // client.js
 import io from 'socket.io-client';
+import { useAppStore } from '../stores/AppStore';
 
 const apiUrl =
     process.env.NODE_ENV === 'production'
@@ -29,19 +30,19 @@ export function getUserList(payload) {
         // Отправка запроса с использованием emit и ожиданием подтверждения
         socket.emit('getUserList', payload, (response) => {
             // Получаем ответ через callback
+            
             resolve(response);
         });
     });
 }
 
+socket.on('userList', (list) => {
+    useAppStore().userList = list;
+})
+
 socket.on('connect', () => {
     console.log('Socket connected:', socket.id);
 });
-
-// socket2.on('connect', () => {
-//     console.log('Socket2 connected:', socket2.id);
-// });
-
 
 // Слушаем сообщения от сервера
 socket.on('message', (msg) => {

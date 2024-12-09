@@ -17,14 +17,18 @@ onMounted(async () => {
 <template>
   <div class="connected-users">
     <h1 class="title">Подключенные пользователи</h1>
-    <v-table class="order-table" max-height="300px" fixed-header>
+    <div v-if="appStore.userList">
+      <div v-for="item in appStore.userList" :key="item.id">
+        <div>{{ item }}</div>
+      </div>
+    </div>
+    <!-- <v-table class="order-table" max-height="300px" fixed-header>
       <thead>
         <tr>
           <th class="text-left">Статус</th>
           <th class="text-left">Имя Клиента</th>
           <th class="text-left">Телефон</th>
           <th class="text-left">Роль</th>
-          <!-- <th class="text-left">Итоговая сумма</th> -->
         </tr>
       </thead>
       <tbody>
@@ -53,10 +57,9 @@ onMounted(async () => {
             <span v-if="item.user">{{ item.user.role }}</span>
             <span v-else>-</span>
           </td>
-          <!-- <td>{{ item.totalPrice }}₴</td> -->
         </tr>
       </tbody>
-    </v-table>
+    </v-table> -->
   </div>
 </template>
 
