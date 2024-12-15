@@ -28,10 +28,10 @@ export function sendUserInfo(info) {
 export function getUserList(payload) {
     return new Promise((resolve, reject) => {
         // Отправка запроса с использованием emit и ожиданием подтверждения
-        socket.emit('getUserList', payload, (response) => {
+        socket.emit('getUserList', payload, (data) => {
             // Получаем ответ через callback
-            
-            resolve(response);
+
+            resolve(data);
         });
     });
 }
