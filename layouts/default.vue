@@ -2,7 +2,7 @@
   <organism-Header>
     <v-row cols="12" class="d-flex justify-center">
       <organism-Aside class="d-none d-sm-block" />
-      <slot />
+      <slot />      
     </v-row>
   </organism-Header>
 </template>
