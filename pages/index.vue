@@ -9,6 +9,7 @@
       <organism-ProductList />
       <!-- </v-col>
     </v-row> -->
+    <organism-Chat />
   </div>
 </template>
 
