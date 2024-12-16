@@ -21,19 +21,18 @@ import { modalContent } from './data/devTest/modalContent';
 const appStore = useAppStore();
 
 // Динамический импорт для сокета
-let sendMessage: any;
-let socket: any;
+// let sendMessage: any;
+// let socket: any;
 
-if (process.client) {
-  (async () => {
-    const socketModule = await import('./socket-client');
-    const socket = socketModule.default; // Если экспорт по умолчанию
-    const sendMessage = socketModule.sendMessage;
+// if (process.client) {
+//   (async () => {
+//     const socketModule = await import('./socket-client');
+//     const socket = socketModule.default; 
+//     const sendMessage = socketModule.sendMessage;
 
-    // Отправка сообщения только на клиенте
-    sendMessage("Hello from the client!");
-  })();
-}
+//     sendMessage("Hello from the client!");
+//   })();
+// }
 
 appStore.modalData = modalContent;
 </script>

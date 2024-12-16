@@ -48,7 +48,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { io } from 'socket.io-client';
 import { useAppStore } from '@/stores/AppStore';
@@ -121,7 +121,7 @@ onUnmounted(() => {
   socket.off('receive_message', handleIncomingMessage);
   socket.emit('leave_chat', { user: 'ВашеИмя' });
 });
-</script>
+</script> -->
 
 <style scoped lang="scss">
 .chat-widget {

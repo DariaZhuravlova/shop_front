@@ -81,7 +81,11 @@ import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
 import type { dtoResponse } from '../types/dtoResponse';
 import { useRouter } from 'vue-router';
-import socket, { sendUserInfo } from '@/socket-client';
+// import socket, { sendUserInfo } from '@/socket-client';
+
+const sendUserInfo = async (info: any) => {
+  
+}
 
 const router = useRouter();
 definePageMeta({

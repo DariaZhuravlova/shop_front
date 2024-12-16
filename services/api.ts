@@ -135,6 +135,9 @@ const apiService = {
         const phone: string = useAppStore().profile.phone;
         return apiClient.get(`/api/order/phone/${phone}`);
     },
+    sendUserInfo: async (info: any) => {
+        return apiClient.put(`/api/user`, info);
+    }
 };
 
 export default apiService;

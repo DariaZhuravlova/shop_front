@@ -1,17 +1,37 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import socket, { getUserList, sendUserInfo } from '@/socket-client';
-
+import { useNuxtApp } from '#app';
+import { initSocketEvents, sendMessage } from '@/utils/socket-events';
 import { useAppStore } from '@/stores/AppStore';
-const appStore = useAppStore();
+// import socket, { getUserList, sendUserInfo } from '@/socket-client';
 
+const appStore = useAppStore();
+const { $socket } = useNuxtApp();
 const userList = ref([]);
 
+
 onMounted(async () => {
-  sendUserInfo(appStore.profile);
-  userList.value = await getUserList();
-  console.log(userList.value);
+  // Подключаемся к сокету
+  if (!$socket.connected) {
+    $socket.connect();
+    sendUserInfo($socket, appStore.profile);
+    userList.value = await getUserList($socket, null) as any;
+    console.log(userList.value);
+  }
+
+  // Инициализируем события
+  initSocketEvents($socket);
+
+  // Пример отправки сообщения
+  sendMessage($socket, 'Hello, server!');
 });
+
+
+// onMounted(async () => {
+//   sendUserInfo(appStore.profile);
+//   userList.value = await getUserList();
+//   console.log(userList.value);
+// });
 </script>
 
 <template>

@@ -73,6 +73,16 @@ export const useAppStore = defineStore('app', {
             } catch (error) {
                 console.error('Failed to fetch profile info:', error);
             }
+        },
+        async sendUserInfo(info: any) {
+            try {
+                const result = await apiService.sendUserInfo(info);
+                await this.getProfileInfo()
+                return result?.data;
+
+            } catch (error) {
+                console.error('Failed to send user info:', error);
+            }
         }
     },
 });

@@ -7,9 +7,10 @@
           variant="text"
           @click.stop="drawer = !drawer"
         ></v-app-bar-nav-icon>
-        <Nuxt-Link to="/" class="icon-link">
+        <NuxtLink to="/" class="icon-link">
           <v-toolbar-title class="logo">SHOP</v-toolbar-title>
-        </Nuxt-Link>
+        </NuxtLink>
+
         <v-spacer></v-spacer>
 
         <v-btn
@@ -24,14 +25,14 @@
         ></v-btn>
         <span v-if="appStore.profile">{{ appStore.profile.name }}</span>
         <template v-if="!appStore.profile">
-          <Nuxt-Link to="/auth" class="icon-link">
+          <NuxtLink to="/auth" class="icon-link">
             <v-btn icon="mdi-account-outline" variant="text"></v-btn>
-          </Nuxt-Link>
+          </NuxtLink>
         </template>
         <template v-else>
-          <Nuxt-Link to="/profile" class="icon-link">
+          <NuxtLink to="/profile" class="icon-link">
             <v-btn icon="mdi-account-outline" variant="text"></v-btn>
-          </Nuxt-Link>
+          </NuxtLink>
           <v-btn icon="mdi-logout" variant="text" @click="logout"></v-btn>
         </template>
         <div style="position: relative">
@@ -75,7 +76,10 @@ import { ref } from 'vue';
 import { useAppStore } from '../stores/AppStore';
 import { useCartStore } from '@/stores/CartStore';
 import { useRouter } from 'vue-router';
-import socket, { sendUserInfo } from '@/socket-client';
+import { useNuxtApp } from '#app';
+import { initSocketEvents, sendMessage, sendUserInfo } from '@/utils/socket-events';
+
+const { $socket } = useNuxtApp();
 
 const cartStore = useCartStore();
 const appStore = useAppStore();
@@ -94,7 +98,7 @@ const logout = async () => {
 async function fetchProfileInfo() {
   if (localStorage.getItem('token')) {
     const result = await appStore.getProfileInfo();
-    sendUserInfo(result);
+    sendUserInfo($socket, result);
   }
 }
 

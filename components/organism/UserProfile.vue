@@ -6,11 +6,15 @@ import axios from 'axios';
 const appStore = useAppStore();
 const cartStore = useCartStore();
 const envConfig: any = useNuxtApp().$envConfig;
+// const sendUserInfo = async () => {
+//   const result = await axios.put(
+//     `${envConfig.apiUrl}/api/user`,
+//     appStore.profile
+//   );
+// };
+
 const sendUserInfo = async () => {
-  const result = await axios.put(
-    `${envConfig.apiUrl}/api/user`,
-    appStore.profile
-  );
+  const result = await appStore.sendUserInfo(appStore.profile)
 };
 </script>
 
