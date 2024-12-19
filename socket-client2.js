@@ -36,9 +36,9 @@ export function getUserList(payload) {
     });
 }
 
-socket.on('userList', (list) => {
-    useAppStore().userList = list;
-})
+// socket.on('userList', (list) => {
+//     useAppStore().userList = list;
+// })
 
 socket.on('connect', () => {
     console.log('Socket connected:', socket.id);
