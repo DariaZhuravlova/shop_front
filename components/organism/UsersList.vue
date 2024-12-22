@@ -27,22 +27,18 @@ onMounted(async () => {
 <template>
   <div class="connected-users">
     <h1 class="title">Подключенные пользователи</h1>
-    <div v-if="appStore.userList">
-      <div v-for="item in appStore.userList" :key="item.id">
-        <div>{{ item }}</div>
-      </div>
-    </div>
-    <!-- <v-table class="order-table" max-height="300px" fixed-header>
+    <v-table class="order-table" max-height="300px" fixed-header>
       <thead>
         <tr>
           <th class="text-left">Статус</th>
           <th class="text-left">Имя Клиента</th>
           <th class="text-left">Телефон</th>
           <th class="text-left">Роль</th>
+          <th class="text-left">Девайс</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in userList" :key="item.id" class="order-row">
+        <tr v-for="item in appStore.userList" :key="item.id" class="order-row">
           <td>
             <span style="color: lightgreen">online</span>
           </td>
@@ -67,9 +63,12 @@ onMounted(async () => {
             <span v-if="item.user">{{ item.user.role }}</span>
             <span v-else>-</span>
           </td>
+          <td>
+            <span>{{ item.agent.device }}</span>
+          </td>
         </tr>
       </tbody>
-    </v-table> -->
+    </v-table>
   </div>
 </template>
 
