@@ -43,28 +43,32 @@ onMounted(async () => {
             <span style="color: lightgreen">online</span>
           </td>
           <td>
-            <span v-if="item.user && appStore.profile.phone == item.user.phone"
+            <span
+              v-if="item.user.name && appStore.profile.phone == item.user.phone"
               >{{ item.user.name }}
               <span style="color: lightgreen">(Вы)</span></span
             >
             <span
               v-else-if="
-                item.user && appStore.profile.phone !== item.user.phone
+                item.user.name && appStore.profile.phone !== item.user.phone
               "
               >{{ item.user.name }}</span
             >
             <span v-else>guest</span>
           </td>
           <td>
-            <span v-if="item.user">{{ item.user.phone }}</span>
+            <span v-if="item.user.phone">{{ item.user.phone }}</span>
             <span v-else>-</span>
           </td>
           <td>
-            <span v-if="item.user">{{ item.user.role }}</span>
+            <span v-if="item.user.role">{{ item.user.role }}</span>
             <span v-else>-</span>
           </td>
           <td>
-            <span>{{ item.agent.device }}</span>
+            <span
+              >{{ item.agent.type }} (<span>{{ item.agent.os }}</span
+              >)</span
+            >
           </td>
         </tr>
       </tbody>
