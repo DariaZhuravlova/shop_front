@@ -25,6 +25,7 @@ export const useAppStore = defineStore('app', {
         // ...
         drawerCart: false as boolean,
         userList: [] as any,
+        isOpenChat: false as boolean
     }),
     actions: {
         async register(registerData: RegisterData) {

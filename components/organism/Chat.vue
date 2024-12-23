@@ -6,7 +6,7 @@
     </v-btn>
 
     <!-- Дровер для чата -->
-    <v-navigation-drawer v-model="isOpen" location="end" width="320" app>
+    <v-navigation-drawer v-model="appStore.isOpenChat" location="end" width="320" app>
       <v-card elevation="0" class="chat-widget">
         <v-card-title class="chat-header">
           Служба поддержки
@@ -48,7 +48,7 @@
   </div>
 </template>
 
-<!-- <script lang="ts" setup>
+<script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { io } from 'socket.io-client';
 import { useAppStore } from '@/stores/AppStore';
@@ -65,7 +65,7 @@ const messages = ref<{ sender: string; text: string; timestamp: string }[]>([]);
 const newMessage = ref('');
 
 function toggleChat() {
-  isOpen.value = !isOpen.value;
+  appStore.isOpenChat = !appStore.isOpenChat;
 }
 
 function sendMessage() {
@@ -121,7 +121,7 @@ onUnmounted(() => {
   socket.off('receive_message', handleIncomingMessage);
   socket.emit('leave_chat', { user: 'ВашеИмя' });
 });
-</script> -->
+</script>
 
 <style scoped lang="scss">
 .chat-widget {

@@ -10,6 +10,10 @@ const pause = (ms: Number) => new Promise((resolve) => setTimeout(resolve, ms));
 const appStore = useAppStore();
 const { $socket } = useNuxtApp();
 
+function toggleChat() {
+  appStore.isOpenChat = !appStore.isOpenChat;
+}
+
 onMounted(async () => {
   if ($socket.connected) {
     sendUserInfo($socket, appStore.profile);
@@ -38,7 +42,7 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in appStore.userList" :key="item.user?._id" class="order-row">
+        <tr v-for="item in appStore.userList" :key="item.user?._id" class="order-row" @click="toggleChat">
           <td>
             <span style="color: lightgreen">online</span>
           </td>
