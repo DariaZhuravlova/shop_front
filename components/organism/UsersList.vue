@@ -38,35 +38,35 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in appStore.userList" :key="item.id" class="order-row">
+        <tr v-for="item in appStore.userList" :key="item.user?._id" class="order-row">
           <td>
             <span style="color: lightgreen">online</span>
           </td>
           <td>
             <span
-              v-if="item.user.name && appStore.profile.phone == item.user.phone"
+              v-if="item.user?.name && appStore.profile.phone == item.user.phone"
               >{{ item.user.name }}
               <span style="color: lightgreen">(Вы)</span></span
             >
             <span
               v-else-if="
-                item.user.name && appStore.profile.phone !== item.user.phone
+                item.user?.name && appStore.profile.phone !== item.user.phone
               "
               >{{ item.user.name }}</span
             >
             <span v-else>guest</span>
           </td>
           <td>
-            <span v-if="item.user.phone">{{ item.user.phone }}</span>
+            <span v-if="item.user?.phone">{{ item.user?.phone }}</span>
             <span v-else>-</span>
           </td>
           <td>
-            <span v-if="item.user.role">{{ item.user.role }}</span>
+            <span v-if="item.user?.role">{{ item.user?.role }}</span>
             <span v-else>-</span>
           </td>
           <td>
             <span
-              >{{ item.agent.type }} (<span>{{ item.agent.os }}</span
+              >{{ item.connections[0].agent.type }} (<span>{{ item.connections[0].agent.os }}</span
               >)</span
             >
           </td>
