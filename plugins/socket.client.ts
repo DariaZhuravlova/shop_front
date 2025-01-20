@@ -1,8 +1,12 @@
 import { defineNuxtPlugin } from '#app';
 import { io, Socket } from 'socket.io-client';
+import { generateFingerPrint } from '../utils';
+
 
 export default defineNuxtPlugin(() => {
   let socket: Socket | null = null;
+  const fingerprint = localStorage.getItem('fingerprint') || localStorage.setItem('fingerprint', generateFingerPrint());
+
 
   const apiUrl =
     process.env.NODE_ENV === 'production'
@@ -13,6 +17,7 @@ export default defineNuxtPlugin(() => {
     socket = io(apiUrl);
 
     socket.on('connect', () => {
+      socket?.emit("setFingerPrint", fingerprint);
       console.log('Socket connected:', socket?.id);
     });
 
