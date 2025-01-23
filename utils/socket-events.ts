@@ -3,13 +3,11 @@ import { useAppStore } from '@/stores/AppStore';
 
 // Инициализация событий
 export function initSocketEvents(socket: Socket) {
-    console.log('activation event');
 
     const appStore = useAppStore();
 
     socket.on('userList', (list) => {
-        console.log('Получен список пользователей:', list);
-        appStore.userList = list; // Обновляем хранилище
+        appStore.userList = list.filter((item) => item.sign);
     });
 
     socket.on('message', (msg) => {

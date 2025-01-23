@@ -52,7 +52,8 @@ export const useAppStore = defineStore('app', {
         },
         async logout() {
             this.profile = null;
-            localStorage.clear();
+            // localStorage.clear();
+            localStorage.removeItem('token');
 
         },
         async getUsers() {
