@@ -81,11 +81,6 @@ import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
 import type { dtoResponse } from '../types/dtoResponse';
 import { useRouter } from 'vue-router';
-// import socket, { sendUserInfo } from '@/socket-client';
-
-const sendUserInfo = async (info: any) => {
-  
-}
 
 const router = useRouter();
 definePageMeta({
@@ -152,9 +147,7 @@ const submitLogin = handleSubmit(async (values: any) => {
     appStore.snackbarText = result?.message;
     appStore.snackbarColor = 'success';
     appStore.isOpenSnackbar = true;
-    // localStorage.setItem('token', result.token);
     router.push('/');
-    sendUserInfo(result.user);
   } else if (typeof result == 'string') {
     appStore.snackbarText = result;
     appStore.snackbarColor = 'error';

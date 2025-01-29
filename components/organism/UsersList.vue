@@ -22,9 +22,6 @@ onMounted(async () => {
 
   // Инициализируем события
   initSocketEvents($socket);
-
-  // Пример отправки сообщения
-  sendMessage($socket, 'Hello, server!');
 });
 </script>
 
@@ -42,13 +39,20 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in appStore.userList" :key="item.user?._id" class="order-row" @click="toggleChat">
+        <tr
+          v-for="item in appStore.userList"
+          :key="item.user?._id"
+          class="order-row"
+          @click="toggleChat"
+        >
           <td>
             <span style="color: lightgreen">online</span>
           </td>
           <td>
             <span
-              v-if="item.user?.name && appStore.profile.phone == item.user.phone"
+              v-if="
+                item.user?.name && appStore.profile.phone == item.user.phone
+              "
               >{{ item.user.name }}
               <span style="color: lightgreen">(Вы)</span></span
             >
@@ -70,7 +74,9 @@ onMounted(async () => {
           </td>
           <td>
             <span
-              >{{ item.connections[0].agent.type }} (<span>{{ item.connections[0].agent.os }}</span
+              >{{ item.connections[0].agent.type }} (<span>{{
+                item.connections[0].agent.os
+              }}</span
               >)</span
             >
           </td>
