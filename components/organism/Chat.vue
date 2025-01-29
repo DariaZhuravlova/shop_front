@@ -6,7 +6,12 @@
     </v-btn>
 
     <!-- Дровер для чата -->
-    <v-navigation-drawer v-model="appStore.isOpenChat" location="end" width="320" app>
+    <v-navigation-drawer
+      v-model="appStore.isOpenChat"
+      location="end"
+      width="320"
+      app
+    >
       <v-card elevation="0" class="chat-widget">
         <v-card-title class="chat-header">
           Служба поддержки
@@ -71,13 +76,14 @@ function toggleChat() {
 function sendMessage() {
   if (newMessage.value.trim()) {
     const message = {
-      sender: userName,
       text: newMessage.value,
       timestamp: new Date().toISOString(),
+      fingerPrint: localStorage.getItem('fingerprint'),
+      direction: 'from user',
     };
 
     // Отправка сообщения на сервер
-    socket.emit('send_message', message);
+    socket.emit('message', message);
 
     // Отображение сообщения в чате
     messages.value.push(message);
@@ -187,18 +193,16 @@ onUnmounted(() => {
 }
 
 .my-message {
-  background-color: #e4fbed; 
-  align-self: flex-end; 
-  margin-left: auto; 
-  color: #086b29; 
+  background-color: #e4fbed;
+  align-self: flex-end;
+  margin-left: auto;
+  color: #086b29;
 }
 
 .other-message {
-  background-color: #f1f1f1; 
-  align-self: flex-start; 
+  background-color: #f1f1f1;
+  align-self: flex-start;
   margin-right: auto;
-  color: #333; 
+  color: #333;
 }
-
-
 </style>

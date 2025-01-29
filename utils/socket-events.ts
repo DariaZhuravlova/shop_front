@@ -13,6 +13,11 @@ export function initSocketEvents(socket: Socket) {
     socket.on('message', (msg) => {
         console.log('Сообщение от сервера:', msg);
     });
+
+    socket.on('allChatMessages', (msgs) => {
+        console.log('allChatMessages', msgs);
+
+    })
 }
 
 export function getUserListKick(socket: Socket) {
