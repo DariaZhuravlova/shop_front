@@ -4,6 +4,7 @@ import type { LoginData } from '@/types/loginData';
 import type { userData } from '@/types/userData';
 import apiService from '@/services/api';
 import type { dtoResponse } from '@/types/dtoResponse.ts';
+import { generateFingerPrint } from '@/utils/index';
 
 export const useAppStore = defineStore('app', {
     state: () => ({
@@ -43,6 +44,7 @@ export const useAppStore = defineStore('app', {
         async login(loginData: LoginData) {
             try {
                 const res = await apiService.login(loginData);
+                localStorage.setItem('fingerprint', generateFingerPrint());
                 this.profile = res.data.user;
                 return res.data;
 
@@ -52,8 +54,8 @@ export const useAppStore = defineStore('app', {
         },
         async logout() {
             this.profile = null;
-            // localStorage.clear();
-            localStorage.removeItem('token');
+            localStorage.clear();
+            // localStorage.removeItem('token');
 
         },
         async getUsers() {

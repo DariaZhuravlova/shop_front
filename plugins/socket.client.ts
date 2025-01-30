@@ -18,13 +18,7 @@ export default defineNuxtPlugin(() => {
 
         socket.on('connect', () => {
             socket?.emit("setFingerPrint", fingerprint);
-            console.log('Socket connected:', socket?.id);
         });
-
-        // socket.on('allChatMessages', (msgs) => {
-        //     console.log(msgs);
-
-        // })
 
         socket.on('connect_error', (error) => {
             console.error('Connection error:', error);
@@ -33,10 +27,7 @@ export default defineNuxtPlugin(() => {
         socket.on('reconnect_attempt', () => {
             console.log('Reconnecting...');
         });
-        socket.on('allChatMessages', (msgs) => {
-            console.log('allChatMessages', msgs);
 
-        })
     }
 
     // Возвращаем сокет как плагин для Nuxt

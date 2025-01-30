@@ -22,7 +22,15 @@ export function initSocketEvents(socket: Socket) {
 
 export function getUserListKick(socket: Socket) {
     socket.emit('getUserListKick');
+}
 
+export function getAllMsgsKick(socket: Socket) {
+    const appStore = useAppStore();
+    const data = {};
+    appStore.profile
+        ? (data.userId = appStore.profile._id)
+        : (data.fingerPrint = localStorage.getItem('fingerprint'));
+    socket.emit('getAllMsgsKick', data);
 }
 
 // Функция для отправки сообщения

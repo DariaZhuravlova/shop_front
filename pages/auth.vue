@@ -81,6 +81,7 @@ import { useAppStore } from '../stores/AppStore';
 import { useField, useForm } from 'vee-validate';
 import type { dtoResponse } from '../types/dtoResponse';
 import { useRouter } from 'vue-router';
+import { generateFingerPrint } from '@/utils/index';
 
 const router = useRouter();
 definePageMeta({

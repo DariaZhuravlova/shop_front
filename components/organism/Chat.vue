@@ -57,6 +57,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { io } from 'socket.io-client';
 import { useAppStore } from '@/stores/AppStore';
+import { initSocketEvents, getAllMsgsKick } from '@/utils/socket-events';
 
 const appStore = useAppStore();
 
@@ -64,6 +65,7 @@ const apiUrl = useRuntimeConfig().public.apiUrl;
 const userName = appStore.profile?.name || 'Вы';
 
 const socket = io(apiUrl);
+initSocketEvents(socket);
 
 const isOpen = ref(false);
 const messages = ref<{ sender: string; text: string; timestamp: string }[]>([]);
@@ -71,6 +73,7 @@ const newMessage = ref('');
 
 function toggleChat() {
   appStore.isOpenChat = !appStore.isOpenChat;
+  if (appStore.isOpenChat) getAllMsgsKick(socket);
 }
 
 function sendMessage() {
@@ -78,13 +81,13 @@ function sendMessage() {
     const message = {
       text: newMessage.value,
       timestamp: new Date().toISOString(),
-      fingerPrint: localStorage.getItem('fingerprint'),
       direction: 'from user',
     };
-
+    appStore.profile
+      ? (message.userId = appStore.profile._id)
+      : (message.fingerPrint = localStorage.getItem('fingerprint'));
     // Отправка сообщения на сервер
     socket.emit('message', message);
-
     // Отображение сообщения в чате
     messages.value.push(message);
     newMessage.value = '';
@@ -95,6 +98,8 @@ function handleIncomingMessage(data: {
   sender: string;
   text: string;
   timestamp: string;
+  userId: string;
+  fingerPrint: string;
 }) {
   messages.value.push(data);
 }
