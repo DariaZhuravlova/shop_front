@@ -27,17 +27,8 @@ export default defineNuxtPlugin(() => {
         socket.on('reconnect_attempt', () => {
             console.log('Reconnecting...');
         });
-        socket.on('allChatMessages', (msgs) => {
-            console.log('allChatMessages', msgs);
 
-        })
-
-        socket.on('test', (x) => {
-            console.log(x);
-
-        })
     }
-
 
     // Возвращаем сокет как плагин для Nuxt
     return {
