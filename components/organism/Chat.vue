@@ -20,8 +20,8 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <div class="chat-messages">
-            <template v-for="(message, index) in messages" :key="index">
+          <div class="chat-messages" v-if="appStore.allChatMessages">
+            <template v-for="(message, index) in appStore.allChatMessages" :key="index" >
               <!-- Отображение даты -->
               <div v-if="shouldShowDate(index)" class="date-separator">
                 {{ formatDate(message.timestamp) }}
@@ -30,8 +30,8 @@
               <div
                 class="message"
                 :class="{
-                  'my-message': message.sender === userName,
-                  'other-message': message.sender !== userName,
+                  'my-message': message.direction === 'from user',
+                  'other-message': message.direction !== 'from user',
                 }"
               >
                 <span class="time">{{ formatTime(message.timestamp) }}</span>
@@ -67,8 +67,7 @@ const userName = appStore.profile?.name || 'Вы';
 const socket = io(apiUrl);
 initSocketEvents(socket);
 
-const isOpen = ref(false);
-const messages = ref<{ sender: string; text: string; timestamp: string }[]>([]);
+// const messages = appStore.allChatMessages;
 const newMessage = ref('');
 
 function toggleChat() {
@@ -77,7 +76,8 @@ function toggleChat() {
 }
 
 function sendMessage() {
-  if (newMessage.value.trim()) {
+  if(appStore.profile.role !== 'admin') {  // может не быть профайла null
+    if (newMessage.value.trim()) {
     const message = {
       text: newMessage.value,
       timestamp: new Date().toISOString(),
@@ -89,9 +89,29 @@ function sendMessage() {
     // Отправка сообщения на сервер
     socket.emit('message', message);
     // Отображение сообщения в чате
-    messages.value.push(message);
+    appStore.allChatMessages.push(message);
+    newMessage.value = '';
+  } else {
+    if (newMessage.value.trim()) {
+    const message = {
+      text: newMessage.value,
+      timestamp: new Date().toISOString(),
+      direction: 'to user',
+      phone: appStore.selectedChatUser.phone,
+    };
+
+
+    // где взять признаак юзера?
+
+    // Отправка сообщения на сервер
+    socket.emit('message', message);
+    // Отображение сообщения в чате
+    appStore.allChatMessages.push(message);
     newMessage.value = '';
   }
+  }
+  }
+  
 }
 
 function handleIncomingMessage(data: {
@@ -101,7 +121,7 @@ function handleIncomingMessage(data: {
   userId: string;
   fingerPrint: string;
 }) {
-  messages.value.push(data);
+  appStore.allChatMessages.push(data);
 }
 
 function formatDate(timestamp: string): string {
@@ -116,9 +136,9 @@ function formatTime(timestamp: string): string {
 
 function shouldShowDate(index: number): boolean {
   if (index === 0) return true;
-  const currentDate = new Date(messages.value[index].timestamp).toDateString();
+  const currentDate = new Date(appStore.allChatMessages[index].timestamp).toDateString();
   const previousDate = new Date(
-    messages.value[index - 1].timestamp
+    appStore.allChatMessages[index - 1].timestamp
   ).toDateString();
   return currentDate !== previousDate;
 }

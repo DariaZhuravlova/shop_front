@@ -10,8 +10,9 @@ const pause = (ms: Number) => new Promise((resolve) => setTimeout(resolve, ms));
 const appStore = useAppStore();
 const { $socket } = useNuxtApp();
 
-function toggleChat() {
+function toggleChat(phone: string) {
   appStore.isOpenChat = !appStore.isOpenChat;
+  appStore.selectedChatUser = {phone};
 }
 
 onMounted(async () => {

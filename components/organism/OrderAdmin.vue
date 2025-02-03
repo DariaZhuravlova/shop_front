@@ -1,8 +1,21 @@
 <script lang="ts" setup>
 import { useCartStore } from '@/stores/CartStore';
 import { ref, onMounted } from 'vue';
+import { useAppStore } from '@/stores/AppStore';
+import type { Order } from '@/types/order';
+
+const appStore = useAppStore();
+
 const cartStore = useCartStore();
-const orders = ref([]);
+
+
+const orders = ref<Order[]>([]);
+
+function toggleChat(phone: string) {
+  appStore.isOpenChat = !appStore.isOpenChat;
+  appStore.selectedChatUser = { phone };
+
+}
 
 onMounted(async () => {
   const response = await cartStore.getOrders();
@@ -24,7 +37,7 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in orders" :key="item._id" class="order-row">
+        <tr v-for="item in orders" :key="item._id" class="order-row" @click="toggleChat(item.guestContact.phone)">
           <td>
             <NuxtLink :to="`/admin/order/${item._id}`" class="order-link">{{
               item.number

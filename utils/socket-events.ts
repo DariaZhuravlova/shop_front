@@ -7,7 +7,7 @@ export function initSocketEvents(socket: Socket) {
     const appStore = useAppStore();
 
     socket.on('userList', (list) => {
-        appStore.userList = list.filter((item) => item.sign);
+        appStore.userList = list.filter((item: { sign: any; }) => item.sign);
     });
 
     socket.on('message', (msg) => {
@@ -16,6 +16,7 @@ export function initSocketEvents(socket: Socket) {
 
     socket.on('allChatMessages', (msgs) => {
         console.log('allChatMessages', msgs);
+        appStore.allChatMessages = msgs
 
     })
 }
@@ -26,10 +27,10 @@ export function getUserListKick(socket: Socket) {
 
 export function getAllMsgsKick(socket: Socket) {
     const appStore = useAppStore();
-    const data = {};
+    const data: { userId?: string; fingerPrint?: string } = {};
     appStore.profile
         ? (data.userId = appStore.profile._id)
-        : (data.fingerPrint = localStorage.getItem('fingerprint'));
+        : (data.fingerPrint = localStorage.getItem('fingerprint') || '');
     socket.emit('getAllMsgsKick', data);
 }
 
