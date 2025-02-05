@@ -3,18 +3,23 @@ import { useCartStore } from '@/stores/CartStore';
 import { ref, onMounted } from 'vue';
 import { useAppStore } from '@/stores/AppStore';
 import type { Order } from '@/types/order';
+import { io } from 'socket.io-client';
+import { initSocketEvents, getAllMsgsKick } from '@/utils/socket-events';
 
 const appStore = useAppStore();
+const apiUrl = useRuntimeConfig().public.apiUrl;
 
+const socket = io(apiUrl);
+initSocketEvents(socket);
 const cartStore = useCartStore();
-
 
 const orders = ref<Order[]>([]);
 
 function toggleChat(phone: string) {
-  appStore.isOpenChat = !appStore.isOpenChat;
   appStore.selectedChatUser = { phone };
+  appStore.allChatMessages = null;
 
+  getAllMsgsKick(socket);
 }
 
 onMounted(async () => {
@@ -37,7 +42,12 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in orders" :key="item._id" class="order-row" @click="toggleChat(item.guestContact.phone)">
+        <tr
+          v-for="item in orders"
+          :key="item._id"
+          class="order-row"
+          @click="toggleChat(item.guestContact.phone)"
+        >
           <td>
             <NuxtLink :to="`/admin/order/${item._id}`" class="order-link">{{
               item.number

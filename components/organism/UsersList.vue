@@ -12,7 +12,10 @@ const { $socket } = useNuxtApp();
 
 function toggleChat(phone: string) {
   appStore.isOpenChat = !appStore.isOpenChat;
-  appStore.selectedChatUser = {phone};
+  appStore.allChatMessages = null;
+  appStore.selectedChatUser = { phone };
+
+  getAllMsgsKick($socket);
 }
 
 onMounted(async () => {

@@ -27,10 +27,15 @@ export function getUserListKick(socket: Socket) {
 
 export function getAllMsgsKick(socket: Socket) {
     const appStore = useAppStore();
-    const data: { userId?: string; fingerPrint?: string } = {};
-    appStore.profile
-        ? (data.userId = appStore.profile._id)
-        : (data.fingerPrint = localStorage.getItem('fingerprint') || '');
+    const data: { phone?: string; fingerPrint?: string } = {};
+    if (appStore.profile && appStore.profile.role == 'admin') {
+        data.phone = appStore.selectedChatUser.phone;
+    } else {
+        appStore.profile
+            ? (data.phone = appStore.profile.phone)
+            : (data.fingerPrint = localStorage.getItem('fingerprint') || '');
+    }
+
     socket.emit('getAllMsgsKick', data);
 }
 
