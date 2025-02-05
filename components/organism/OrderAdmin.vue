@@ -16,6 +16,7 @@ const cartStore = useCartStore();
 const orders = ref<Order[]>([]);
 
 function toggleChat(phone: string) {
+  appStore.isOpenChat = true;
   appStore.selectedChatUser = { phone };
   appStore.allChatMessages = null;
 

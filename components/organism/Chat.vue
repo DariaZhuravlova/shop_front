@@ -34,17 +34,15 @@
                 class="message"
                 :class="{
                   'my-message':
-                    message.phone == appStore.profile.phone ||
-                    message.fingerPrint ==
-                      localStorage.getItem('fingerprint') ||
+                    (message.phone == appStore.profile.phone &&
+                      message.direction == 'from user') ||
+                    message.fingerPrint == fingerprint ||
                     (appStore.profile.role == 'admin' &&
-                      message.direction == 'from user'),
-                  'other-message': !(
-                    message.phone === appStore.profile.phone ||
-                    message.fingerPrint ===
-                      localStorage.getItem('fingerprint') ||
-                    appStore.profile.role === 'admin'
-                  ),
+                      message.direction == 'to user'),
+                  'other-message':
+                    message.phone != appStore.profile.phone &&
+                    message.fingerPrint === fingerprint &&
+                    message.direction == 'from user',
                 }"
               >
                 <span class="time">{{ formatTime(message.timestamp) }}</span>
@@ -81,6 +79,9 @@ const socket = io(apiUrl);
 initSocketEvents(socket);
 
 const newMessage = ref('');
+const fingerprint = ref(
+  typeof window !== 'undefined' ? localStorage.getItem('fingerprint') : null
+);
 
 function toggleChat() {
   appStore.isOpenChat = !appStore.isOpenChat;
