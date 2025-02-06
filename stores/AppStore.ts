@@ -29,7 +29,7 @@ export const useAppStore = defineStore('app', {
         isOpenChat: false as boolean,
         allChatMessages: [] as any,
         selectedChatUser: null as any,
-        msgsList: null as any
+        msgsList: [] as any
     }),
     actions: {
         async register(registerData: RegisterData) {
