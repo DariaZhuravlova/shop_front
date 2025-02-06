@@ -91,7 +91,11 @@ function sendMessage() {
     message.direction = 'from user';
   } else {
     message.direction = 'to user';
-    message.phone = appStore.selectedChatUser.phone;
+    if (appStore.selectedChatUser.phone) {
+      message.phone = appStore.selectedChatUser.phone;
+    } else if (appStore.selectedChatUser.fingerPrint) {
+      message.fingerPrint = appStore.selectedChatUser.fingerPrint;
+    }
   }
 
   socket.emit('message', message);
