@@ -11,6 +11,7 @@ const appStore = useAppStore();
       <organism-UsersList v-if="appStore.profile.role === 'admin'" />
       <organism-OrderAdmin v-if="appStore.profile.role === 'admin'" />
       <organism-OrderUser v-if="appStore.profile.role === 'customer'" />
+      <organism-AdminMessages v-if="appStore.profile.role === 'admin'" />
     </template>
   </div>
 </template>

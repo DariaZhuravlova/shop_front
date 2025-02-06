@@ -19,6 +19,12 @@ export function initSocketEvents(socket: Socket) {
         appStore.allChatMessages = msgs
 
     })
+
+    socket.on('getMsgsList', (list) => {
+        console.log('getMsgsList', list);
+        appStore.msgsList = list
+
+    })
 }
 
 export function getUserListKick(socket: Socket) {
@@ -37,6 +43,11 @@ export function getAllMsgsKick(socket: Socket) {
     }
 
     socket.emit('getAllMsgsKick', data);
+}
+
+
+export function getMsgsListKick(socket: Socket) {
+    socket.emit('getMsgsListKick');
 }
 
 // Функция для отправки сообщения
