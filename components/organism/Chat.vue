@@ -30,21 +30,7 @@
                 {{ formatDate(message.timestamp) }}
               </div>
               <!-- Сообщение -->
-              <div
-                class="message"
-                :class="{
-                  'my-message':
-                    (message.phone == appStore.profile.phone &&
-                      message.direction == 'from user') ||
-                    message.fingerPrint == fingerprint ||
-                    (appStore.profile.role == 'admin' &&
-                      message.direction == 'to user'),
-                  'other-message':
-                    message.phone != appStore.profile.phone &&
-                    message.fingerPrint === fingerprint &&
-                    message.direction == 'from user',
-                }"
-              >
+              <div class="message" :class="messageClass(message)">
                 <span class="time">{{ formatTime(message.timestamp) }}</span>
                 <strong>{{ message.sender }}: </strong>{{ message.text }}
               </div>
@@ -142,6 +128,37 @@ function shouldShowDate(index: number): boolean {
     appStore.allChatMessages[index - 1].timestamp
   ).toDateString();
   return currentDate !== previousDate;
+}
+
+function messageClass(message) {
+  if (!appStore.profile && message.direction == 'from user') {
+    return 'my-message';
+  } else if (!appStore.profile && message.direction == 'to user') {
+    return 'other-message';
+  } else if (appStore.profile) {
+    if (appStore.profile.role == 'admin' && message.direction == 'to user') {
+      return 'my-message';
+    } else if (
+      appStore.profile.role == 'admin' &&
+      message.direction == 'from user'
+    ) {
+      return 'other-message';
+    } else if (
+      appStore.profile.role != 'admin' &&
+      appStore.profile.phone &&
+      message.direction == 'from user'
+    ) {
+      return 'my-message';
+    } else if (
+      appStore.profile.role != 'admin' &&
+      appStore.profile.phone &&
+      message.direction == 'to user'
+    ) {
+      return 'other-message';
+    }
+  }
+
+  console.log(message);
 }
 
 onMounted(() => {
