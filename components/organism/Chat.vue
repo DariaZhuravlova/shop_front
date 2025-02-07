@@ -32,7 +32,8 @@
               <!-- Сообщение -->
               <div class="message" :class="messageClass(message)">
                 <span class="time">{{ formatTime(message.timestamp) }}</span>
-                <strong>{{ message.sender }}: </strong>{{ message.text }}
+                
+                <span><strong>{{ getSenderName(message.direction) }}:<br> </strong>{{ message.text }}</span>
               </div>
             </template>
           </div>
@@ -102,6 +103,19 @@ function sendMessage() {
   appStore.allChatMessages.push(message);
   newMessage.value = '';
 }
+
+function getSenderName(direction) {
+  if (!appStore.profile || appStore.profile.role !== 'admin') {
+    return direction === 'from user' ? userName : 'Служба поддержки';
+  } else {
+    return direction === 'to user'
+      ? "Служба поддержки"
+      : (appStore.selectedChatUser && appStore.selectedChatUser.phone 
+          ? appStore.selectedChatUser.phone 
+          : "Гость");
+  }
+}
+
 
 function handleIncomingMessage(data: {
   sender: string;
@@ -247,7 +261,6 @@ onUnmounted(() => {
   align-self: flex-end;
   margin-left: auto;
   color: #086b29;
-  text-align: right;
 }
 
 .other-message {
@@ -255,6 +268,5 @@ onUnmounted(() => {
   align-self: flex-start;
   margin-right: auto;
   color: #333;
-  text-align: left;
 }
 </style>
