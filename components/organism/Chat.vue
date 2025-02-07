@@ -191,6 +191,9 @@ onUnmounted(() => {
   }
 
   .chat-messages {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     flex: 1;
     overflow-y: auto;
     margin-bottom: 10px;
@@ -244,12 +247,14 @@ onUnmounted(() => {
   align-self: flex-end;
   margin-left: auto;
   color: #086b29;
+  text-align: right;
 }
 
 .other-message {
-  background-color: #f1f1f1;
+  background-color: rgb(240, 216, 240);
   align-self: flex-start;
   margin-right: auto;
   color: #333;
+  text-align: left;
 }
 </style>
