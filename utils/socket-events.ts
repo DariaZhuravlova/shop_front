@@ -2,6 +2,7 @@ import { Socket } from 'socket.io-client';
 import { useAppStore } from '@/stores/AppStore';
 
 // Инициализация событий
+// бывает не работает нужно дублировать в плагине
 export function initSocketEvents(socket: Socket) {
 
     const appStore = useAppStore();
@@ -12,6 +13,7 @@ export function initSocketEvents(socket: Socket) {
 
     socket.on('message', (msg) => {
         console.log('Сообщение от сервера:', msg);
+        alert(msg);
     });
 
     socket.on('allChatMessages', (msgs) => {
