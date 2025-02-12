@@ -46,6 +46,7 @@ export const useAppStore = defineStore('app', {
         // сделать универсальный хендлер
         async login(loginData: LoginData) {
             try {
+                this.allChatMessages = []
                 const res = await apiService.login(loginData);
                 localStorage.setItem('fingerprint', generateFingerPrint());
                 this.profile = res.data.user;
@@ -59,6 +60,7 @@ export const useAppStore = defineStore('app', {
             this.profile = null;
             localStorage.clear();
             // localStorage.removeItem('token');
+            this.selectedChatUser = null;
 
         },
         async getUsers() {

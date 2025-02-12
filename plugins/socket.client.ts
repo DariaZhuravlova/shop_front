@@ -2,7 +2,7 @@ import { defineNuxtPlugin } from '#app';
 import { io, Socket } from 'socket.io-client';
 import { generateFingerPrint } from '../utils';
 import { useAppStore } from '@/stores/AppStore';
-
+import { getMsgsListKick } from "@/utils/socket-events";
 export default defineNuxtPlugin(() => {
     let socket: Socket | null = null;
     let fingerprint = localStorage.getItem('fingerprint');
@@ -39,11 +39,25 @@ export default defineNuxtPlugin(() => {
 
         socket.on('sendToAdmins', (msg) => {
             if (msg.direction == 'from user') playNotice()
-            useAppStore().allChatMessages.push(msg);
+            let currentUser = "";
+            const currentMsgSign: string = msg.phone ? 'phone' : 'fingerPrint';
+            const currentMsgValue: string = msg.phone || msg.fingerPrint;
+            const user = useAppStore().msgsList.find((user: {}) => {
+                return user[currentMsgSign] === currentMsgValue
+            })
+
+            if (!user) getMsgsListKick(socket)
+
+            if (useAppStore().selectedChatUser) {
+                currentUser = useAppStore().selectedChatUser.phone || useAppStore().selectedChatUser.fingerPrint || null;
+            }
+
+            if (currentMsgValue == currentUser) useAppStore().allChatMessages.push(msg);
+
         });
 
         function playNotice() {
-            const audio = new Audio('/sounds/notice.mp3'); // Укажи путь к файлу
+            const audio = new Audio('/sounds/notice.mp3');
             audio.play().catch((e) => console.error('Audio play error:', e));
         };
 
