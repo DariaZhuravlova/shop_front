@@ -32,8 +32,12 @@
               <!-- Сообщение -->
               <div class="message" :class="messageClass(message)">
                 <span class="time">{{ formatTime(message.timestamp) }}</span>
-                
-                <span><strong>{{ getSenderName(message.direction) }}:<br> </strong>{{ message.text }}</span>
+
+                <span
+                  ><strong
+                    >{{ getSenderName(message.direction) }}:<br /> </strong
+                  >{{ message.text }}</span
+                >
               </div>
             </template>
           </div>
@@ -100,7 +104,6 @@ function sendMessage() {
   }
 
   socket.emit('message', message);
-  appStore.allChatMessages.push(message);
   newMessage.value = '';
 }
 
@@ -109,13 +112,12 @@ function getSenderName(direction) {
     return direction === 'from user' ? userName : 'Служба поддержки';
   } else {
     return direction === 'to user'
-      ? "Служба поддержки"
-      : (appStore.selectedChatUser && appStore.selectedChatUser.phone 
-          ? appStore.selectedChatUser.phone 
-          : "Гость");
+      ? 'Служба поддержки'
+      : appStore.selectedChatUser && appStore.selectedChatUser.phone
+      ? appStore.selectedChatUser.phone
+      : 'Гость';
   }
 }
-
 
 function handleIncomingMessage(data: {
   sender: string;

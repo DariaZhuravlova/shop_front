@@ -11,13 +11,12 @@ export function initSocketEvents(socket: Socket) {
         appStore.userList = list.filter((item: { sign: any; }) => item.sign);
     });
 
-    socket.on('message', (msg) => {
-        console.log('Сообщение от сервера:', msg);
-        alert(msg);
-    });
+    // socket.on('message', (msg) => {
+    //     console.log('Сообщение от сервера:', msg);
+    //     alert(msg);
+    // });
 
     socket.on('allChatMessages', (msgs) => {
-        console.log('allChatMessages', msgs);
         appStore.allChatMessages = msgs
 
     })
