@@ -22,7 +22,6 @@ export function initSocketEvents(socket: Socket) {
     })
 
     socket.on('getMsgsList', (list) => {
-        console.log('getMsgsList', list);
         appStore.msgsList = list
 
     })

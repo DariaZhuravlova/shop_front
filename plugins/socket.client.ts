@@ -36,6 +36,11 @@ export default defineNuxtPlugin(() => {
             useAppStore().allChatMessages.push(msg);
 
         });
+
+        socket.on('sendToAdmins', (msg) => {
+            useAppStore().allChatMessages.push(msg);
+        });
+
     }
 
     // Возвращаем сокет как плагин для Nuxt
