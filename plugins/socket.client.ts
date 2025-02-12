@@ -33,13 +33,19 @@ export default defineNuxtPlugin(() => {
         });
 
         socket.on('message', (msg) => {
+            if (msg.direction == 'to user') playNotice()
             useAppStore().allChatMessages.push(msg);
-
         });
 
         socket.on('sendToAdmins', (msg) => {
+            if (msg.direction == 'from user') playNotice()
             useAppStore().allChatMessages.push(msg);
         });
+
+        function playNotice() {
+            const audio = new Audio('/sounds/notice.mp3'); // Укажи путь к файлу
+            audio.play().catch((e) => console.error('Audio play error:', e));
+        };
 
     }
 
