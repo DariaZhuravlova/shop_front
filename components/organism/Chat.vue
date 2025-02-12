@@ -8,9 +8,9 @@
     <!-- Дровер для чата -->
     <v-navigation-drawer
       v-model="appStore.isOpenChat"
-      location="end"
+      location="right"
+      temporary
       width="320"
-      app
     >
       <v-card elevation="0" class="chat-widget">
         <v-card-title class="chat-header">
