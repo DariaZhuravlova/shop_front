@@ -16,6 +16,9 @@ function toggleChat(data) {
   appStore.allChatMessages = [];
 
   socket.emit('getAllMsgsKick', data);
+  setTimeout(() => {
+    socket.emit('readAllAdminMsgs', data);
+  }, 1000);
 }
 
 onMounted(() => {
@@ -43,8 +46,20 @@ onMounted(() => {
           class="order-row"
           @click="toggleChat(item)"
         >
-          <td>rrrr</td>
-          <td v-if="item.phone">{{ item.phone }}</td>
+          <td
+            style="
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            rrrr
+            <div :class="{ 'is-read': !item.isRead }"></div>
+          </td>
+          <td v-if="item.phone">
+            {{ item.phone }}
+          </td>
           <td v-else>{{ item.fingerPrint }}</td>
 
           <td>rrrrr</td>
@@ -125,6 +140,21 @@ onMounted(() => {
       padding: 15px;
       font-size: 16px;
     }
+  }
+}
+.is-read {
+  width: 10px;
+  height: 10px;
+  background-color: lightgreen;
+  border-radius: 50%;
+  animation: blink 0.5s infinite alternate;
+}
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 </style>

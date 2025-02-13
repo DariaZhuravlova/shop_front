@@ -1,7 +1,13 @@
 <template>
   <div>
     <!-- Кнопка для открытия дровера -->
-    <v-btn class="chat-button" color="primary" fab @click="toggleChat">
+    <v-btn
+      v-if="appStore.profile?.role !== 'admin'"
+      class="chat-button"
+      color="primary"
+      fab
+      @click="toggleChat"
+    >
       <v-icon size="32">mdi-chat</v-icon>
     </v-btn>
 
@@ -15,7 +21,7 @@
       <v-card elevation="0" class="chat-widget">
         <v-card-title class="chat-header">
           Служба поддержки
-          <v-btn icon @click="toggleChat">
+          <v-btn icon @click="closeChat">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
@@ -81,6 +87,11 @@ function toggleChat() {
       getAllMsgsKick(socket);
     }
   }
+}
+
+function closeChat() {
+  appStore.selectedChatUser = null;
+  appStore.isOpenChat = !appStore.isOpenChat;
 }
 
 function sendMessage() {
@@ -177,8 +188,6 @@ function messageClass(message) {
       return 'other-message';
     }
   }
-
-  console.log(message);
 }
 
 onMounted(() => {

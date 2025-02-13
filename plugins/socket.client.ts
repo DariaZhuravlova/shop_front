@@ -39,6 +39,7 @@ export default defineNuxtPlugin(() => {
 
         socket.on('sendToAdmins', (msg) => {
             if (msg.direction == 'from user') playNotice()
+            getMsgsListKick(socket)
             let currentUser = "";
             const currentMsgSign: string = msg.phone ? 'phone' : 'fingerPrint';
             const currentMsgValue: string = msg.phone || msg.fingerPrint;
@@ -52,7 +53,10 @@ export default defineNuxtPlugin(() => {
                 currentUser = useAppStore().selectedChatUser.phone || useAppStore().selectedChatUser.fingerPrint || null;
             }
 
-            if (currentMsgValue == currentUser) useAppStore().allChatMessages.push(msg);
+            if (currentMsgValue == currentUser) {
+                socket?.emit('readAllAdminMsgs', { [currentMsgSign]: currentMsgValue });
+                useAppStore().allChatMessages.push(msg);
+            }
 
         });
 
