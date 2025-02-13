@@ -84,7 +84,6 @@ function toggleChat() {
   appStore.isOpenChat = !appStore.isOpenChat;
   if (appStore.isOpenChat) {
     if (!appStore.profile || appStore.profile.role !== 'admin') {
-      getAllMsgsKick(socket);
     }
   }
 }
@@ -191,14 +190,20 @@ function messageClass(message) {
 }
 
 onMounted(() => {
-  socket.on('receive_message', handleIncomingMessage);
-  socket.emit('join_chat', { user: 'ВашеИмя' });
+  if (!appStore.profile || appStore.profile.role !== 'admin') {
+    setTimeout(() => {
+      getAllMsgsKick(socket);
+    }, 400);
+  }
+
+  //   socket.on('receive_message', handleIncomingMessage);
+  //   socket.emit('join_chat', { user: 'ВашеИмя' });
 });
 
-onUnmounted(() => {
-  socket.off('receive_message', handleIncomingMessage);
-  socket.emit('leave_chat', { user: 'ВашеИмя' });
-});
+// onUnmounted(() => {
+//   socket.off('receive_message', handleIncomingMessage);
+//   socket.emit('leave_chat', { user: 'ВашеИмя' });
+// });
 </script>
 
 <style scoped lang="scss">
