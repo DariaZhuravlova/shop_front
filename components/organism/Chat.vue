@@ -195,15 +195,7 @@ onMounted(() => {
       getAllMsgsKick(socket);
     }, 400);
   }
-
-  //   socket.on('receive_message', handleIncomingMessage);
-  //   socket.emit('join_chat', { user: 'ВашеИмя' });
 });
-
-// onUnmounted(() => {
-//   socket.off('receive_message', handleIncomingMessage);
-//   socket.emit('leave_chat', { user: 'ВашеИмя' });
-// });
 </script>
 
 <style scoped lang="scss">
@@ -224,6 +216,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    height: 300px;
     flex: 1;
     overflow-y: auto;
     margin-bottom: 10px;
