@@ -55,7 +55,8 @@ onMounted(() => {
             "
           >
             rrrr
-            <div :class="{ 'is-read': !item.isRead }"></div>
+            <!-- <div :class="{ 'is-read': !item.isRead }"></div> -->
+            <span v-if="!item.isRead" class="new-message-badge">NEW</span>
           </td>
           <td v-if="item.phone">
             {{ item.phone }}
@@ -142,19 +143,37 @@ onMounted(() => {
     }
   }
 }
-.is-read {
-  width: 10px;
-  height: 10px;
-  background-color: lightgreen;
-  border-radius: 50%;
-  animation: blink 0.5s infinite alternate;
+// .is-read {
+//   width: 10px;
+//   height: 10px;
+//   background-color: lightgreen;
+//   border-radius: 50%;
+//   animation: blink 0.5s infinite alternate;
+// }
+// @keyframes blink {
+//   0% {
+//     opacity: 1;
+//   }
+//   100% {
+//     opacity: 0;
+//   }
+// }
+
+.new-message-badge {
+  background-color: red;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  animation: pulse 1s infinite;
 }
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
 }
+
 </style>
