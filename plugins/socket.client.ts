@@ -33,7 +33,24 @@ export default defineNuxtPlugin(() => {
         });
 
         socket.on('message', (msg) => {
-            if (msg.direction == 'to user') playNotice()
+            console.log(msg)
+            const data = {};
+            if (!useAppStore().profile || useAppStore().profile.role !== 'admin') {
+                useAppStore().profile
+                ? (data.phone = useAppStore().profile.phone)
+                : (data.fingerPrint = localStorage.getItem('fingerprint'));
+            }   
+            // if (msg.direction == 'to user') playNotice()
+            if (useAppStore().isOpenChat == true){
+                socket?.emit('readAllUserMsgs', data);
+                useAppStore().allChatMessages[useAppStore().allChatMessages.length - 1].isRead = true;
+                console.log("testtttttt")
+                console.log("data", data)   
+                console.log(useAppStore().allChatMessages[useAppStore().allChatMessages.length - 1] );
+                
+
+            }
+
             useAppStore().allChatMessages.push(msg);
         });
 

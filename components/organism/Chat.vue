@@ -4,6 +4,7 @@
     <v-btn
       v-if="appStore.profile?.role !== 'admin'"
       class="chat-button"
+      :class="{ 'new-message': !!checkNewMessage() }"
       color="primary"
       fab
       @click="toggleChat"
@@ -81,9 +82,16 @@ const fingerprint = ref(
 );
 
 function toggleChat() {
-  appStore.isOpenChat = !appStore.isOpenChat;
-  if (appStore.isOpenChat) {
-    if (!appStore.profile || appStore.profile.role !== 'admin') {
+  const data = {};
+  if (!appStore.profile || appStore.profile.role !== 'admin') {
+    appStore.profile
+      ? (data.phone = appStore.profile.phone)
+      : (data.fingerPrint = localStorage.getItem('fingerprint'));
+    appStore.isOpenChat = !appStore.isOpenChat;
+    if (appStore.isOpenChat) {
+      if (!appStore.profile || appStore.profile.role !== 'admin') {
+        socket.emit('readAllUserMsgs', data);
+      }
     }
   }
 }
@@ -127,6 +135,15 @@ function getSenderName(direction) {
       ? appStore.selectedChatUser.phone
       : 'Гость';
   }
+}
+
+function checkNewMessage() {
+  if (appStore.allChatMessages.length > 0) {
+    const lastMessage =
+      appStore.allChatMessages[appStore.allChatMessages.length - 1];
+    return lastMessage.direction === 'to user' && !lastMessage.isRead;
+  }
+  return false;
 }
 
 function handleIncomingMessage(data: {
@@ -277,5 +294,9 @@ onMounted(() => {
   align-self: flex-start;
   margin-right: auto;
   color: #333;
+}
+
+.new-message {
+  background-color: #f44336 !important;
 }
 </style>

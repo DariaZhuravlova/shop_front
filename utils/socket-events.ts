@@ -31,19 +31,42 @@ export function getUserListKick(socket: Socket) {
     socket.emit('getUserListKick');
 }
 
+// export function getAllMsgsKick(socket: Socket) {
+//     const appStore = useAppStore();
+//     const data: { phone?: string; fingerPrint?: string } = {};
+//     if (appStore.profile && appStore.profile.role == 'admin') {
+//         data.phone = appStore.selectedChatUser.phone;
+//     } else {
+//         appStore.profile
+//             ? (data.phone = appStore.profile.phone)
+//             : (data.fingerPrint = localStorage.getItem('fingerprint') || '');
+//     }
+
+//     socket.emit('getAllMsgsKick', data);
+// }
+
 export function getAllMsgsKick(socket: Socket) {
     const appStore = useAppStore();
     const data: { phone?: string; fingerPrint?: string } = {};
-    if (appStore.profile && appStore.profile.role == 'admin') {
-        data.phone = appStore.selectedChatUser.phone;
+
+    if (appStore.profile && appStore.profile.role === 'admin') {
+        if (appStore.selectedChatUser) {
+            data.phone = appStore.selectedChatUser.phone;
+        } else {
+            console.error('selectedChatUser is null or undefined');
+            return;
+        }
     } else {
-        appStore.profile
-            ? (data.phone = appStore.profile.phone)
-            : (data.fingerPrint = localStorage.getItem('fingerprint') || '');
+        if (appStore.profile) {
+            data.phone = appStore.profile.phone;
+        } else {
+            data.fingerPrint = localStorage.getItem('fingerprint') || '';
+        }
     }
 
     socket.emit('getAllMsgsKick', data);
 }
+
 
 
 export function getMsgsListKick(socket: Socket) {
