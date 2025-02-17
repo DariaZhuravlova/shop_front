@@ -2,7 +2,7 @@ import { defineNuxtPlugin } from '#app';
 import { io, Socket } from 'socket.io-client';
 import { generateFingerPrint } from '../utils';
 import { useAppStore } from '@/stores/AppStore';
-import { getMsgsListKick } from "@/utils/socket-events";
+import { getMsgsListKick, initSocketEvents } from "@/utils/socket-events";
 export default defineNuxtPlugin(() => {
     let socket: Socket | null = null;
     let fingerprint = localStorage.getItem('fingerprint');
@@ -32,24 +32,21 @@ export default defineNuxtPlugin(() => {
             console.log('Reconnecting...');
         });
 
+        socket.on('allChatMessages', (msgs) => {
+            useAppStore().allChatMessages = msgs
+
+        })
+
         socket.on('message', (msg) => {
-            console.log(msg)
             const data = {};
             if (!useAppStore().profile || useAppStore().profile.role !== 'admin') {
                 useAppStore().profile
-                ? (data.phone = useAppStore().profile.phone)
-                : (data.fingerPrint = localStorage.getItem('fingerprint'));
-            }   
-            // if (msg.direction == 'to user') playNotice()
-            if (useAppStore().isOpenChat == true){
-                socket?.emit('readAllUserMsgs', data);
-                useAppStore().allChatMessages[useAppStore().allChatMessages.length - 1].isRead = true;
-                console.log("testtttttt")
-                console.log("data", data)   
-                console.log(useAppStore().allChatMessages[useAppStore().allChatMessages.length - 1] );
-                
-
+                    ? (data.phone = useAppStore().profile.phone)
+                    : (data.fingerPrint = localStorage.getItem('fingerprint'));
             }
+            if (msg.direction == 'to user') playNotice()
+
+            if (useAppStore().isOpenChat == true) socket?.emit('readAllUserMsgs', data);
 
             useAppStore().allChatMessages.push(msg);
         });

@@ -10,40 +10,19 @@ export function initSocketEvents(socket: Socket) {
     socket.on('userList', (list) => {
         appStore.userList = list.filter((item: { sign: any; }) => item.sign);
     });
-
-    // socket.on('message', (msg) => {
-    //     console.log('Сообщение от сервера:', msg);
-    //     alert(msg);
-    // });
-
     socket.on('allChatMessages', (msgs) => {
-        appStore.allChatMessages = msgs
+        useAppStore().allChatMessages = msgs
 
     })
 
     socket.on('getMsgsList', (list) => {
         appStore.msgsList = list
-
     })
 }
 
 export function getUserListKick(socket: Socket) {
     socket.emit('getUserListKick');
 }
-
-// export function getAllMsgsKick(socket: Socket) {
-//     const appStore = useAppStore();
-//     const data: { phone?: string; fingerPrint?: string } = {};
-//     if (appStore.profile && appStore.profile.role == 'admin') {
-//         data.phone = appStore.selectedChatUser.phone;
-//     } else {
-//         appStore.profile
-//             ? (data.phone = appStore.profile.phone)
-//             : (data.fingerPrint = localStorage.getItem('fingerprint') || '');
-//     }
-
-//     socket.emit('getAllMsgsKick', data);
-// }
 
 export function getAllMsgsKick(socket: Socket) {
     const appStore = useAppStore();
