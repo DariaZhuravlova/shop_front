@@ -10,6 +10,7 @@
       @click="toggleChat"
     >
       <v-icon size="32">mdi-chat</v-icon>
+      <span v-if="checkNewMessage()" class="new-message-badge">NEW</span>
     </v-btn>
 
     <!-- Дровер для чата -->
@@ -296,7 +297,24 @@ onMounted(() => {
   color: #333;
 }
 
-.new-message {
-  background-color: #f44336 !important;
+.new-message-badge {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  animation: pulse 1s infinite;
 }
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 </style>
