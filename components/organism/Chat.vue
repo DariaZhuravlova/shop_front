@@ -56,7 +56,19 @@
             outlined
             @keyup.enter="sendMessage"
           />
-          <v-btn color="primary" block @click="sendMessage"> Отправить </v-btn>
+          <v-btn
+            style="overflow: hidden"
+            color="primary"
+            block
+            @click="sendMessage"
+          >
+            <div class="send-button">
+              <div class="icon-wrapper">
+                <v-icon size="20">mdi-send</v-icon>
+              </div>
+              <span> Отправить </span>
+            </div>
+          </v-btn>
         </v-card-text>
       </v-card>
     </v-navigation-drawer>
@@ -312,9 +324,77 @@ onMounted(() => {
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
+.send-button {
+  display: flex;
+  align-items: center;
+  padding-left: 0.9em;
+  transition: all 0.2s;
+  width: 100%;
+  height: 30px;
+  span {
+    display: block;
+    margin-left: 0.3em;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .icon-wrapper {
+    i {
+      display: block;
+      transform-origin: center center;
+      margin-bottom: 4px;
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+}
+
+.send-button:hover .icon-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.send-button:hover i {
+  transform: translateX(1.2em) rotate(0) scale(1.3);
+}
+
+.send-button:hover span {
+  transform: translateX(13em);
+}
+.send-button:active {
+  transform: scale(0.95);
+}
+
+.send-button:active i {
+  animation: fly-2 0.3s ease-in-out forwards;
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(1em);
+  }
+}
+
+@keyframes fly-2 {
+  from {
+    transform: translateX(0em);
+  }
+  to {
+    transform: translateX(12em);
+  }
+}
 </style>
