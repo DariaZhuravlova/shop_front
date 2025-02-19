@@ -17,7 +17,7 @@
                   :error-messages="
                     phone.errorMessage.value || errorResponseRegister
                   "
-                  label="User Name"
+                  label="phone"
                   @input="errorResponseRegister = ''"
                 ></v-text-field>
                 <v-text-field
@@ -46,7 +46,7 @@
                     phone.errorMessage.value || errorResponseLogin
                   "
                   @input="errorResponseLogin = ''"
-                  label="User Name"
+                  label="phone"
                 ></v-text-field>
                 <v-text-field
                   variant="solo"
