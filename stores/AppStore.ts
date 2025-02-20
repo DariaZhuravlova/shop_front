@@ -29,7 +29,9 @@ export const useAppStore = defineStore('app', {
         isOpenChat: false as boolean,
         allChatMessages: [] as any,
         selectedChatUser: null as any,
-        msgsList: [] as any
+        msgsList: [] as any,
+        isSocketConnected: false as boolean,
+        socketError: null as string | null,
     }),
     actions: {
         async register(registerData: RegisterData) {
@@ -92,6 +94,19 @@ export const useAppStore = defineStore('app', {
             } catch (error) {
                 console.error('Failed to send user info:', error);
             }
-        }
+        },
+        setSocketStatus(status: boolean) {
+            this.isSocketConnected = status;
+            if (status) {
+                this.socketError = null;
+            }
+        },
+
+        setSocketError(error: string | null) {
+            this.socketError = error;
+            if (error) {
+                this.isSocketConnected = false;
+            }
+        },
     },
 });
