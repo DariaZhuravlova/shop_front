@@ -1,7 +1,9 @@
 <template>
   <organism-Header>  
         <slot />   
+  <organism-Chat />
   </organism-Header>
+  
 </template>
 
 <script setup>

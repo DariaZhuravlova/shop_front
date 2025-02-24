@@ -20,6 +20,7 @@ const sendUserInfo = async () => {
 
 <template>
   <div class="profile">
+    <h1 class="title">Профиль</h1>
     <v-row>
       <v-col cols="5">
         <span>Телефон</span>
@@ -87,4 +88,11 @@ const sendUserInfo = async () => {
   max-width: 700px;
   margin: 0 auto 20px auto;
 }
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    // color: #333;
+  }
 </style>
