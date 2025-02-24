@@ -77,7 +77,7 @@ import { useAppStore } from '../stores/AppStore';
 import { useCartStore } from '@/stores/CartStore';
 import { useRouter } from 'vue-router';
 import { useNuxtApp } from '#app';
-import { initSocketEvents, sendMessage, sendUserInfo } from '@/utils/socket-events';
+import { sendUserInfo } from '@/utils/socket-events';
 
 const { $socket } = useNuxtApp();
 

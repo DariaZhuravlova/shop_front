@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { useNuxtApp } from '#app';
-import { initSocketEvents, sendMessage } from '@/utils/socket-events';
 import { useAppStore } from '@/stores/AppStore';
-import { getUserListKick } from '@/utils/socket-events';
+import { getUserListKick, getAllMsgsKick } from '@/utils/socket-events';
 
 const pause = (ms: Number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -11,7 +9,6 @@ const appStore = useAppStore();
 const { $socket } = useNuxtApp();
 
 function toggleChat(phone: string) {
-  //   appStore.isOpenChat = !appStore.isOpenChat;
   appStore.allChatMessages = [];
   appStore.selectedChatUser = { phone };
 
@@ -23,9 +20,6 @@ onMounted(async () => {
     sendUserInfo($socket, appStore.profile);
     getUserListKick($socket);
   }
-
-  // Инициализируем события
-  initSocketEvents($socket);
 });
 </script>
 

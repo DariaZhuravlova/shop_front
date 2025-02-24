@@ -3,14 +3,12 @@ import { useCartStore } from '@/stores/CartStore';
 import { ref, onMounted } from 'vue';
 import { useAppStore } from '@/stores/AppStore';
 import type { Order } from '@/types/order';
-import { io } from 'socket.io-client';
-import { initSocketEvents, getAllMsgsKick } from '@/utils/socket-events';
+import { getAllMsgsKick } from '@/utils/socket-events';
 
 const appStore = useAppStore();
-const apiUrl = useRuntimeConfig().public.apiUrl;
 
-const socket = io(apiUrl);
-initSocketEvents(socket);
+const { $socket } = useNuxtApp();
+const socket = $socket;
 const cartStore = useCartStore();
 
 const orders = ref<Order[]>([]);
@@ -20,7 +18,10 @@ function toggleChat(phone: string) {
   appStore.selectedChatUser = { phone };
   appStore.allChatMessages = [];
 
-  getAllMsgsKick(socket);
+  socket.emit('getAllMsgsKick', appStore.selectedChatUser);
+  setTimeout(() => {
+    socket.emit('readAllAdminMsgs', appStore.selectedChatUser);
+  }, 1000);
 }
 
 onMounted(async () => {

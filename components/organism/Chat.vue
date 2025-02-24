@@ -77,17 +77,19 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { io } from 'socket.io-client';
 import { useAppStore } from '@/stores/AppStore';
-import { initSocketEvents, getAllMsgsKick } from '@/utils/socket-events';
-
+import { getAllMsgsKick } from '@/utils/socket-events';
+const { $socket } = useNuxtApp();
+const socket = $socket;
 const appStore = useAppStore();
 
-const apiUrl = useRuntimeConfig().public.apiUrl;
 const userName = appStore.profile?.name || 'Вы';
 
-const socket = io(apiUrl);
-initSocketEvents(socket);
+// if (!socket) {
+//   console.error('Socket.io не инициализирован');
+// } else {
+//   initSocketEvents(socket);
+// }
 
 const newMessage = ref('');
 const fingerprint = ref(
