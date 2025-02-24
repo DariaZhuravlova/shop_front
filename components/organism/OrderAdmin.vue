@@ -18,7 +18,10 @@ function toggleChat(phone: string) {
   appStore.selectedChatUser = { phone };
   appStore.allChatMessages = [];
 
-  //   getAllMsgsKick(socket);
+  socket.emit('getAllMsgsKick', appStore.selectedChatUser);
+  setTimeout(() => {
+    socket.emit('readAllAdminMsgs', appStore.selectedChatUser);
+  }, 1000);
 }
 
 onMounted(async () => {

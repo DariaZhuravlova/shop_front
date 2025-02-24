@@ -6,8 +6,6 @@ const appStore = useAppStore();
 const { $socket } = useNuxtApp();
 const socket = $socket;
 
-// initSocketEvents(socket);
-
 function toggleChat(data) {
   appStore.isOpenChat = true;
   appStore.selectedChatUser = data;
