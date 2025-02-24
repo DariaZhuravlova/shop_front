@@ -10,7 +10,6 @@ function toggleChat(data) {
   appStore.isOpenChat = true;
   appStore.selectedChatUser = data;
   appStore.allChatMessages = [];
-  console.log(data);
 
   socket.emit('getAllMsgsKick', data);
   setTimeout(() => {

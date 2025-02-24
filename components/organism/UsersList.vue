@@ -8,11 +8,23 @@ const pause = (ms: Number) => new Promise((resolve) => setTimeout(resolve, ms));
 const appStore = useAppStore();
 const { $socket } = useNuxtApp();
 
-function toggleChat(phone: string) {
+function toggleChat(item) {
   appStore.allChatMessages = [];
-  appStore.selectedChatUser = { phone };
+  const data = {};
+  if (item.user && item.user.role == 'admin') return;
+  else {
+    appStore.isOpenChat = true;
+    item.user.phone
+      ? (data.phone = item.user.phone)
+      : (data.fingerPrint = item.sign);
+  }
 
-  getAllMsgsKick($socket);
+  appStore.selectedChatUser = data;
+  $socket.emit('getAllMsgsKick', data);
+  setTimeout(() => {
+    $socket.emit('readAllAdminMsgs', data);
+  }, 1000);
+  //   getAllMsgsKick($socket);
 }
 
 onMounted(async () => {
@@ -41,7 +53,7 @@ onMounted(async () => {
           v-for="item in appStore.userList"
           :key="item.user?._id"
           class="order-row"
-          @click="toggleChat"
+          @click="toggleChat(item)"
         >
           <td>
             <span style="color: lightgreen">online</span>
