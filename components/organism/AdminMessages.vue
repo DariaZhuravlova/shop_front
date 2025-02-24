@@ -1,19 +1,18 @@
 <script lang="ts" setup>
-import { io } from 'socket.io-client';
 import { useAppStore } from '@/stores/AppStore';
-import { initSocketEvents, getMsgsListKick } from '@/utils/socket-events';
+import { getMsgsListKick } from '@/utils/socket-events';
 
 const appStore = useAppStore();
+const { $socket } = useNuxtApp();
+const socket = $socket;
 
-const apiUrl = useRuntimeConfig().public.apiUrl;
-
-const socket = io(apiUrl);
-initSocketEvents(socket);
+// initSocketEvents(socket);
 
 function toggleChat(data) {
   appStore.isOpenChat = true;
   appStore.selectedChatUser = data;
   appStore.allChatMessages = [];
+  console.log(data);
 
   socket.emit('getAllMsgsKick', data);
   setTimeout(() => {
@@ -55,7 +54,6 @@ onMounted(() => {
             "
           >
             rrrr
-            <!-- <div :class="{ 'is-read': !item.isRead }"></div> -->
             <span v-if="!item.isRead" class="new-message-badge">NEW</span>
           </td>
           <td v-if="item.phone">
@@ -169,11 +167,19 @@ onMounted(() => {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   animation: pulse 1s infinite;
 }
-  
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
-}
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 </style>
